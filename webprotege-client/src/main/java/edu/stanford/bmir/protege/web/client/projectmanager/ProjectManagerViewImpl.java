@@ -37,6 +37,13 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
     @UiField
     protected Button createProjectButton;
 
+    /**
+     * @author: nenad.krdzavac@tib.eu
+     * Button for creating project from Git repository
+     */
+    @UiField
+    protected Button createGitRepoProjectButton ;
+
     @UiField
     SimplePanel loggedInUserButton;
 
@@ -55,6 +62,8 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
 
     private CreateProjectRequestHandler createProjectRequestHandler = () -> {};
 
+    private CreateProjectRequestHandler createGithubProjectRequestHandler = () -> {};
+
     private ViewFilterChangedHandler viewFilterChangedHandler = () -> {};
 
     @Inject
@@ -63,6 +72,10 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
         setCreateProjectEnabled(false);
+        /**
+         * @author nenad.krdzavac@tib.eu
+         */
+        setCreateGitRepoProjectEnabled(false);
     }
 
     @Override
@@ -83,6 +96,19 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
     public void setCreateProjectEnabled(boolean enabled) {
         createProjectButton.setEnabled(enabled);
         createProjectButton.setVisible(enabled);
+    }
+
+
+    /**
+     * @author nenad.krdzavac@tib.eu
+     * @param enabled
+     */
+    @Override
+    public void setCreateGitRepoProjectEnabled(boolean enabled){
+
+        createGitRepoProjectButton.setEnabled(enabled);
+        createGitRepoProjectButton.setVisible(enabled);
+
     }
 
     @Override
@@ -128,6 +154,11 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
         createProjectRequestHandler.handleCreateProjectRequest();
     }
 
+    @UiHandler("createGitRepoProjectButton")
+    protected void handleCreateGithubProject(ClickEvent clickEvent){
+      createGithubProjectRequestHandler.handleCreateProjectRequest();
+    }
+
     @UiHandler("sharedWithMeCheckBox")
     protected void handleSharedWithMeCheckBoxClicked(ClickEvent event) {
         viewFilterChangedHandler.handleViewFilterChanged();
@@ -146,6 +177,11 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
     @Override
     public void setCreateProjectRequestHandler(CreateProjectRequestHandler handler) {
         this.createProjectRequestHandler = handler;
+    }
+
+    @Override
+    public void setCreateProjectEnabled(CreateProjectRequestHandler handler) {
+        this.createGithubProjectRequestHandler = handler;
     }
 
     @Override

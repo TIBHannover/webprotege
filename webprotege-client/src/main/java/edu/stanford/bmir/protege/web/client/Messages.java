@@ -1,13 +1,11 @@
 package edu.stanford.bmir.protege.web.client;
 
-
 import com.google.gwt.safehtml.shared.SafeHtml;
 
 import static com.google.gwt.i18n.client.LocalizableResource.*;
 
 @DefaultLocale()
 public interface Messages extends com.google.gwt.i18n.client.Messages {
-
     
     @DefaultMessage("About")
     @Key("about")
@@ -156,11 +154,18 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @DefaultMessage("Enter one name per line (press CTRL+ENTER to accept and close panel)")
     @Key("createEntityInstructions")
     String createEntityInstructions();
-
     
     @DefaultMessage("Create New Project")
     @Key("createProject")
     String createProject();
+
+    /**
+     * @author nenad.krdzavac@tib.eu
+     * @return A message that appears on Github button
+     */
+    @DefaultMessage("Create New Project from Github")
+    @Key("createProjectFromGithub")
+    String createProjectFromGithub();
 
     @DefaultMessage("Add")
     @Key("add")
@@ -692,6 +697,13 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("projectName")
     String projectName();
 
+    /**
+     * @author nenad.krdzavac@tib.eu
+     * @return String
+     */
+    @DefaultMessage("Remote source Git repository")
+    @Key("remoteSourceGitRepository")
+    String remoteSourceGitRepository();
     
     @DefaultMessage("Please enter a project name")
     @Key("projectNameMissingErrorMessage")

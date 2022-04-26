@@ -116,6 +116,4 @@ public class CreateNewProjectActionHandler implements ApplicationActionHandler<C
                                        projectResource,
                                        singleton(LAYOUT_EDITOR.getRoleId()));
     }
-
-
 }

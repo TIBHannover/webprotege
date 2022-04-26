@@ -9,4 +9,11 @@ package edu.stanford.bmir.protege.web.client.projectmanager;
 public interface HasCreateProjectRequestHandler {
 
     void setCreateProjectRequestHandler(CreateProjectRequestHandler handler);
+
+    /**
+     * @author nenad.krdzavaC@tib.eu
+     * @param handler
+     */
+//    void setCreateGitRepoProjectEnabled(CreateProjectRequestHandler handler);
+
 }

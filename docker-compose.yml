@@ -1,3 +1,28 @@
+#version: "3"
+
+#services:
+
+#  wpmongo:
+#    container_name: webprotege-mongodb
+#    image: mongo:4.1-bionic
+#    restart: unless-stopped
+#    volumes:
+#      - ./.protegedata/mongodb:/data/db
+
+#  webprotege:
+#    container_name: webprotege
+#    build: .
+#    image: protegeproject/webprotege
+#    depends_on:
+#      - wpmongo
+#    restart: unless-stopped
+#    environment:
+#      - webprotege.mongodb.host=wpmongo
+#    volumes:
+#      - ./.protegedata/protege:/srv/webprotege
+#    ports:
+#      - 5000:8080
+
 version: "3"
 
 services:
@@ -6,7 +31,7 @@ services:
     container_name: webprotege-mongodb
     image: mongo:4.1-bionic
     restart: unless-stopped
-    volumes: 
+    volumes:
       - ./.protegedata/mongodb:/data/db
 
   webprotege:
@@ -17,7 +42,7 @@ services:
     restart: unless-stopped
     environment:
       - webprotege.mongodb.host=wpmongo
-    volumes: 
+    volumes:
     - ./.protegedata/protege:/srv/webprotege
     ports:
       - 5000:8080

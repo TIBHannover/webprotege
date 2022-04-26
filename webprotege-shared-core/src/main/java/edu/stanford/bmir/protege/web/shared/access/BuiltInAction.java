@@ -14,6 +14,11 @@ public enum BuiltInAction {
 
     CREATE_EMPTY_PROJECT,
 
+    /**
+     * @author nenad.krdzavac@tib.eu
+     */
+    CREATE_EMPTY_PROJECT_FROM_GIT,
+
     UPLOAD_PROJECT,
 
     VIEW_ANY_USER_DETAILS,

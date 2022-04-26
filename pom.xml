@@ -457,5 +457,7 @@
         <module>webprotege-cli</module>
         <module>webprotege-server-lucene</module>
         <module>webprotege-github</module>
+        <module>webprotege-github-client</module>
+        <module>webprotege-github-server</module>
     </modules>
 </project>

@@ -19,11 +19,19 @@ public interface ProjectManagerView extends HasCreateProjectRequestHandler, HasS
 
     void setSelectedProject(ProjectId projectId);
 
+    void setCreateProjectEnabled(CreateProjectRequestHandler handler);
+
     void setAvailableProjects(List<AvailableProject> data);
 
     void addAvailableProject(AvailableProject availableProject);
 
     void setCreateProjectEnabled(boolean enabled);
+
+    /**
+     * @author nenad.krdzavac@tib.eu
+     * @param enabled
+     */
+    void setCreateGitRepoProjectEnabled(boolean enabled);
 
     void setViewFilters(List<ProjectManagerViewFilter> viewFilters);
 
@@ -34,4 +42,7 @@ public interface ProjectManagerView extends HasCreateProjectRequestHandler, HasS
     void setSortByKeyChangeHandler(ChangeHandler changedHandler);
 
     AcceptsOneWidget getLoggedInUserButton();
+
+
+
 }

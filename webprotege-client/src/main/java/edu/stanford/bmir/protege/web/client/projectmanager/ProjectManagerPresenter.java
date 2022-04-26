@@ -27,6 +27,7 @@ import static edu.stanford.bmir.protege.web.client.events.UserLoggedOutEvent.ON_
 import static edu.stanford.bmir.protege.web.client.projectmanager.ProjectCreatedEvent.ON_PROJECT_CREATED;
 import static edu.stanford.bmir.protege.web.client.projectmanager.ProjectManagerViewFilter.*;
 import static edu.stanford.bmir.protege.web.shared.access.BuiltInAction.CREATE_EMPTY_PROJECT;
+import static edu.stanford.bmir.protege.web.shared.access.BuiltInAction.CREATE_EMPTY_PROJECT_FROM_GIT;
 import static edu.stanford.bmir.protege.web.shared.event.ProjectMovedFromTrashEvent.ON_PROJECT_MOVED_FROM_TRASH;
 import static edu.stanford.bmir.protege.web.shared.event.ProjectMovedToTrashEvent.ON_PROJECT_MOVED_TO_TRASH;
 import static edu.stanford.bmir.protege.web.shared.project.AvailableProject.UNKNOWN;
@@ -98,6 +99,11 @@ public class ProjectManagerPresenter implements Presenter {
         eventBus.addHandler(ON_PROJECT_SETTINGS_CHANGED, event -> reloadFromServer());
 
         projectManagerView.setCreateProjectRequestHandler(createProjectRequestHandler);
+
+        /**
+         * @author nenad.krdzavac@tib.eu
+         */
+//        projectManagerView.setCreateGitRepoProjectEnabled(createProjectRequestHandler);
 
         loggedInUserPresenter.start(projectManagerView.getLoggedInUserButton(), eventBus);
         container.setWidget(projectManagerView);
@@ -217,10 +223,13 @@ public class ProjectManagerPresenter implements Presenter {
     }
 
     private void updateView() {
+
         projectManagerView.setCreateProjectEnabled(loggedInUserManager.isAllowedApplicationAction(CREATE_EMPTY_PROJECT));
+        /**
+         * @author nenad.krdzavac@tib.eu
+         */
+        projectManagerView.setCreateGitRepoProjectEnabled(loggedInUserManager.isAllowedApplicationAction(CREATE_EMPTY_PROJECT_FROM_GIT));
+
         reloadFromServer();
     }
-
-
-
 }
