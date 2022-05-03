@@ -1,17 +1,13 @@
 FROM maven:3.6.0-jdk-11-slim AS build
 
-#RUN apt-get update && \
-#    apt-get install -y git mongodb
-
 COPY . /webprotege
 
 WORKDIR /webprotege
 
-#RUN #mkdir -p /data/db \
-#    && mongod --fork --syslog \
-#    && mvn clean package
-
 FROM tomcat:8-jre11-slim
+
+RUN apt-get update && \
+    apt-get install -y git
 
 RUN rm -rf /usr/local/tomcat/webapps/* \
     && mkdir -p /srv/webprotege \
