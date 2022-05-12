@@ -353,6 +353,17 @@ public class ClientApplicationModule {
         return impl;
     }
 
+    /**
+     * author: nenad.krdzavac@tib.eu
+     * @param impl
+     * @return
+     */
+    @Provides
+    CreateGithubProjectRequestHandler provideCreateGithubProjectRequestHandler(CreateGithubProjectRequestHandlerImpl impl){
+
+        return impl;
+    }
+
     @Provides
     CommentedEntitiesView provideCommentedEntitiesView(CommentedEntitiesViewImpl impl) {
         return impl;
@@ -397,6 +408,17 @@ public class ClientApplicationModule {
     CreateNewProjectView providesCreateNewProjectView(CreateNewProjectViewImpl impl) {
         return impl;
     }
+
+    /**
+     * author: nenad.krdzavac@tib.eu
+     * @param impl
+     * @return
+     */
+    @Provides
+    CreateNewGithubProjectView providesCreateNewGithubProjectView(CreateNewGithubProjectViewImpl impl){
+        return impl;
+    }
+
 
     @Provides
     ProjectPrefixDeclarationsView provideProjectPrefixesView(ProjectPrefixDeclarationsViewImpl impl) {

@@ -62,7 +62,7 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
 
     private CreateProjectRequestHandler createProjectRequestHandler = () -> {};
 
-    private CreateProjectRequestHandler createGithubProjectRequestHandler = () -> {};
+    private CreateGithubProjectRequestHandler createGithubProjectRequestHandler = () -> {};
 
     private ViewFilterChangedHandler viewFilterChangedHandler = () -> {};
 
@@ -97,10 +97,8 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
         createProjectButton.setEnabled(enabled);
         createProjectButton.setVisible(enabled);
     }
-
-
     /**
-     * @author nenad.krdzavac@tib.eu
+     * author nenad.krdzavac@tib.eu
      * @param enabled
      */
     @Override
@@ -156,7 +154,7 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
 
     @UiHandler("createGitRepoProjectButton")
     protected void handleCreateGithubProject(ClickEvent clickEvent){
-      createGithubProjectRequestHandler.handleCreateProjectRequest();
+      createGithubProjectRequestHandler.handleGithubProjectRequestHandler();
     }
 
     @UiHandler("sharedWithMeCheckBox")
@@ -179,9 +177,19 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
         this.createProjectRequestHandler = handler;
     }
 
+    /**
+     * author: nenad.krdzavac@tib.eu
+     * @param handler
+     */
+    @Override
+    public void setCreateGithubProjectRequestHandler (CreateGithubProjectRequestHandler handler){
+
+        this.createGithubProjectRequestHandler = handler;
+    }
+
     @Override
     public void setCreateProjectEnabled(CreateProjectRequestHandler handler) {
-        this.createGithubProjectRequestHandler = handler;
+        this.createProjectRequestHandler = handler;
     }
 
     @Override

@@ -14,6 +14,6 @@ public interface HasCreateProjectRequestHandler {
      * @author nenad.krdzavaC@tib.eu
      * @param handler
      */
-//    void setCreateGitRepoProjectEnabled(CreateProjectRequestHandler handler);
+    void setCreateGithubProjectRequestHandler(CreateGithubProjectRequestHandler handler);
 
 }

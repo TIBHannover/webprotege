@@ -167,6 +167,26 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("createProjectFromGithub")
     String createProjectFromGithub();
 
+    @DefaultMessage("Github Repository URI")
+    @Key("addGithubURI")
+    String addGithubURI();
+
+    @DefaultMessage("Source Github repository")
+    @Key("sourceGithubRepository")
+    String sourceGithubRepository();
+
+    @DefaultMessage("Github User Name")
+    @Key("githubUserName")
+    String githubUserName();
+
+    @DefaultMessage("Github Password")
+    @Key("githubPassword")
+    String githubPassword();
+
+    @DefaultMessage("Github Access Token")
+    @Key("githubAccessToken")
+    String githubAccessToken();
+
     @DefaultMessage("Add")
     @Key("add")
     String add();

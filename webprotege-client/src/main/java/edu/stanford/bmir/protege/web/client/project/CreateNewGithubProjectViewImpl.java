@@ -7,51 +7,63 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
 import edu.stanford.bmir.protege.web.client.library.msgbox.MessageBox;
-import edu.stanford.bmir.protege.web.client.primitive.DefaultLanguageEditor;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.gwt.user.client.ui.FormPanel.ENCODING_MULTIPART;
-import static com.google.gwt.user.client.ui.FormPanel.METHOD_POST;
 
 /**
  * Nenad Krdzavac TIB-Leibniz Information Centre for Science and Technology and University Library 26 April 2022
  * nenad.krdzavac@tib.eu
  */
-public class CreateNewGithubProjectViewImpl extends Composite implements CreateNewProjectView {
+public class CreateNewGithubProjectViewImpl extends Composite implements CreateNewGithubProjectView {
 
     interface CreateNewGithubProjectViewImplUiBinder extends UiBinder<HTMLPanel, CreateNewGithubProjectViewImpl> {
     }
 
-    private static CreateNewGithubProjectViewImplUiBinder ourUiBinder = GWT.create(CreateNewGithubProjectViewImplUiBinder.class);
+    private static CreateNewGithubProjectViewImplUiBinder ourGithubUiBinder = GWT.create(CreateNewGithubProjectViewImplUiBinder.class);
 
-    @UiField
-    TextBox projectNameField;
+    /**
+     * automatically generated
+     * @return
+     */
+//    @Override
+//    public Optional<HasRequestFocus> getInitialFocusable() {
+//        return Optional.empty();
+//    }
 
     /**
      * author: nenad.krdzavac@tib.eu
      * Project Github URI
      */
     @UiField
-    TextBox projetNameGithubField;
+    TextBox remoteGithubRepositoryURL;
+
+//    @UiField
+//    TextBox githubUserName;
+
+//    @UiField
+//    TextBox githubPassword;
 
     @UiField
-    TextArea projectDescriptionField;
+    TextBox githubAccessToken;
 
-    @UiField
-    FileUpload fileUpload;
+//    @UiField
+//    TextArea projectDescriptionField;
 
-    @UiField
-    FormPanel formPanel;
+//    @UiField
+//    FileUpload fileUpload;
 
-    @UiField
-    HTMLPanel fileUploadArea;
+//    @UiField
+//    FormPanel formPanel;
 
-    @UiField(provided = true)
-    DefaultLanguageEditor projectLanguageField;
+//    @UiField
+//    HTMLPanel fileUploadArea;
+
+//    @UiField(provided = true)
+//    DefaultLanguageEditor projectLanguageField;
 
     @Nonnull
     private final MessageBox messageBox;
@@ -60,81 +72,116 @@ public class CreateNewGithubProjectViewImpl extends Composite implements CreateN
 
 
     @Inject
-    public CreateNewGithubProjectViewImpl(@Nonnull DefaultLanguageEditor languageEditor,
-                                          @Nonnull MessageBox messageBox) {
-        this.projectLanguageField = checkNotNull(languageEditor);
-        this.messageBox = messageBox;
-        initWidget(ourUiBinder.createAndBindUi(this));
+    public CreateNewGithubProjectViewImpl(@Nonnull MessageBox messageBox) {
+        this.messageBox = checkNotNull(messageBox);
+//        this.projectLanguageField = checkNotNull(languageEditor);
+//        this.messageBox = messageBox;
+        initWidget(ourGithubUiBinder.createAndBindUi(this));
     }
 
     @Nonnull
     @Override
-    public String getProjectName() {
-        return projectNameField.getText().trim();
+    public String getRemoteGithubRepositoryURL(){
+
+        return remoteGithubRepositoryURL.getText().trim();
     }
+
+//    @Nonnull
+////    @Override
+////    public String getGithubUserName(){
+////
+////        return githubUserName.getText().trim();
+////    }
+
+//    @Nonnull
+//    @Override
+//    public String getGithubPassword(){
+//
+//        return githubPassword.getText().trim();
+//    }
 
     @Nonnull
     @Override
-    public String getProjectDescription() {
-        return projectDescriptionField.getText().trim();
+    public String getGithubAccessToken(){
+
+        return githubAccessToken.getText().trim();
     }
 
-    @Nonnull
-    @Override
-    public String getProjectLanguage() {
-        return projectLanguageField.getValue().orElse("").trim();
-    }
+//    @Nonnull
+//    @Override
+//    public String getRemoteSourceGitRepository() {
+//        return null;
+//    }
 
-    @Override
-    public void setFileUploadEnabled(boolean enabled) {
-        fileUpload.setEnabled(enabled);
-        fileUploadArea.setVisible(enabled);
-    }
+//    @Nonnull
+//    @Override
+//    public String getProjectDescription() {
+//        return projectDescriptionField.getText().trim();
+//    }
 
-    @Override
-    public void setFileUploadPostUrl(@Nonnull String url) {
-        fileUpload.setName("file");
-        formPanel.setMethod(METHOD_POST);
-        formPanel.setEncoding(ENCODING_MULTIPART);
-        formPanel.setAction(checkNotNull(url));
-    }
+//    @Nonnull
+//    @Override
+//    public String getProjectLanguage() {
+//        return projectLanguageField.getValue().orElse("").trim();
+//    }
 
-    @Override
-    public boolean isFileUploadSpecified() {
-        String filename = fileUpload.getFilename();
-        return !filename.trim().isEmpty();
-    }
+//    @Override
+//    public void setFileUploadEnabled(boolean enabled) {
+//        fileUpload.setEnabled(enabled);
+//        fileUploadArea.setVisible(enabled);
+//    }
 
-    @Override
-    public void setSubmitCompleteHandler(@Nonnull FormPanel.SubmitCompleteHandler handler) {
-        submitCompleteHandlerRegistraion.removeHandler();
-        submitCompleteHandlerRegistraion = formPanel.addSubmitCompleteHandler(handler);
-    }
+//    @Override
+//    public void setFileUploadPostUrl(@Nonnull String url) {
+//        fileUpload.setName("file");
+//        formPanel.setMethod(METHOD_POST);
+//        formPanel.setEncoding(ENCODING_MULTIPART);
+//        formPanel.setAction(checkNotNull(url));
+//    }
 
-    @Override
-    public void submitFormData() {
-        formPanel.submit();
-    }
+//    @Override
+//    public boolean isFileUploadSpecified() {
+//        String filename = fileUpload.getFilename();
+//        return !filename.trim().isEmpty();
+//    }
+
+//    @Override
+//    public void setSubmitCompleteHandler(@Nonnull FormPanel.SubmitCompleteHandler handler) {
+//        submitCompleteHandlerRegistraion.removeHandler();
+//        submitCompleteHandlerRegistraion = formPanel.addSubmitCompleteHandler(handler);
+//    }
+
+//    @Override
+//    public void submitFormData() {
+//        formPanel.submit();
+//    }
 
     @Override
     public void showProjectNameMissingMessage() {
         messageBox.showAlert("Project name missing", "Please enter a project name");
     }
 
+//    @Override
+//    public void showRemoteGithubRepositoryMissingMessage(){
+//
+//        messageBox.showAlert("Remote Github repository URL is missing", "Please enter Github repository URL");
+//    }
+
     @Override
     public void clear() {
-        projectNameField.setText("");
-        projectDescriptionField.setText("");
+        remoteGithubRepositoryURL.setText("");
+//        githubUserName.setText("");
+
     }
 
     @Override
     public Optional<HasRequestFocus> getInitialFocusable() {
-        return Optional.of(() -> projectNameField.setFocus(true));
+        return Optional.of(() -> remoteGithubRepositoryURL.setFocus(true));
     }
 
-    @Override
-    protected void onAttach() {
-        super.onAttach();
-        projectNameField.setFocus(true);
-    }
+//    @Override
+//    protected void onAttach() {
+//        super.onAttach();
+//        projectNameField.setFocus(true);
+//    }
 }
