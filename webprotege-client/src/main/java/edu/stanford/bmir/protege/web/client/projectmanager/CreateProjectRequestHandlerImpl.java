@@ -6,6 +6,8 @@ import edu.stanford.bmir.protege.web.client.library.modal.ModalManager;
 import edu.stanford.bmir.protege.web.client.library.modal.ModalPresenter;
 import edu.stanford.bmir.protege.web.client.project.CreateNewProjectPresenter;
 
+import com.allen_sauer.gwt.log.client.Log;
+
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -47,6 +49,10 @@ public class CreateProjectRequestHandlerImpl implements CreateProjectRequestHand
         modalPresenter.setEscapeButton(DialogButton.CANCEL);
         DialogButton createProjectButton = DialogButton.get(messages.createProject());
         modalPresenter.setPrimaryButton(createProjectButton);
+
+        Log.info("handleCreateProjectRequest():");
+        Log.info("  - resenter.getView().getProjectDescription() : " + presenter.getView().getProjectDescription());
+
         modalPresenter.setView(presenter.getView());
         modalPresenter.setButtonHandler(createProjectButton, closer -> {
             presenter.validateAndCreateProject(closer::closeModal);

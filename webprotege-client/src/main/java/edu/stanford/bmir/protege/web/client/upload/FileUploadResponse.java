@@ -7,6 +7,9 @@ import com.google.gwt.json.client.JSONValue;
 import edu.stanford.bmir.protege.web.shared.csv.DocumentId;
 import edu.stanford.bmir.protege.web.shared.upload.FileUploadResponseAttributes;
 
+import com.allen_sauer.gwt.log.client.Log;
+
+
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
@@ -22,6 +25,9 @@ public class FileUploadResponse {
     private JSONObject jsonObject;
 
     public FileUploadResponse(String rawResult) {
+
+        Log.info("rawResult in FileUploadResponse method: " + rawResult);
+
         this.rawResult = rawResult;
         jsonObject = parseResult();
     }
@@ -60,6 +66,7 @@ public class FileUploadResponse {
             return UNKNOWN_REASON_MESSAGE;
         }
         JSONString string = value.isString();
+        Log.info("JSONString inside getUploadRejectedMessage: " + string );
         if(string == null) {
             return UNKNOWN_REASON_MESSAGE;
         }

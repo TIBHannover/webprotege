@@ -10,6 +10,7 @@ import edu.stanford.bmir.protege.web.server.inject.project.ProjectModule;
 import edu.stanford.bmir.protege.web.server.project.ProjectCacheManager;
 import edu.stanford.bmir.protege.web.server.project.ProjectDisposablesManager;
 import edu.stanford.bmir.protege.web.server.upload.FileUploadServlet;
+import edu.stanford.bmir.protege.web.server.upload.GitFileUploadServlet;
 import edu.stanford.bmir.protege.web.server.user.UserDetailsManager;
 import edu.stanford.bmir.protege.web.server.util.DisposableObjectManager;
 import edu.stanford.bmir.protege.web.shared.inject.ApplicationSingleton;
@@ -44,6 +45,8 @@ public interface ServerComponent {
     AccessManager getAccessManager();
 
     FileUploadServlet getFileUploadServlet();
+
+    GitFileUploadServlet getGitFileUploadServlet();
 
     ServletContainer getJerseyServletContainer();
 

@@ -4,17 +4,19 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import edu.stanford.bmir.protege.web.client.dispatch.DispatchErrorMessageDisplay;
-import edu.stanford.bmir.protege.web.client.dispatch.ProgressDisplay;
-import edu.stanford.bmir.protege.web.shared.csv.DocumentId;
 import edu.stanford.bmir.protege.web.client.dispatch.DispatchServiceCallbackWithProgressDisplay;
 import edu.stanford.bmir.protege.web.client.dispatch.DispatchServiceManager;
+import edu.stanford.bmir.protege.web.client.dispatch.ProgressDisplay;
 import edu.stanford.bmir.protege.web.client.library.msgbox.MessageBox;
 import edu.stanford.bmir.protege.web.client.progress.ProgressMonitor;
 import edu.stanford.bmir.protege.web.client.projectmanager.ProjectCreatedEvent;
 import edu.stanford.bmir.protege.web.client.upload.FileUploadResponse;
 import edu.stanford.bmir.protege.web.client.user.LoggedInUserManager;
+import edu.stanford.bmir.protege.web.shared.csv.DocumentId;
 import edu.stanford.bmir.protege.web.shared.permissions.PermissionDeniedException;
 import edu.stanford.bmir.protege.web.shared.project.*;
+
+import com.allen_sauer.gwt.log.client.Log;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -105,6 +107,8 @@ public class CreateNewProjectPresenter {
     }
 
     private void createEmptyProject(ProjectCreatedHandler projectCreatedHandler) {
+
+
         NewProjectSettings newProjectSettings = NewProjectSettings.get(
                 loggedInUserManager.getLoggedInUserId(),
                 view.getProjectName(),
@@ -117,6 +121,11 @@ public class CreateNewProjectPresenter {
     private void uploadSourcesAndCreateProject(@Nonnull ProjectCreatedHandler projectCreatedHandler) {
         checkNotNull(projectCreatedHandler);
         String postUrl = GWT.getModuleBaseURL() + "submitfile";
+
+        Log.info("GWT.getModuleBaseURL(): " + GWT.getModuleBaseURL().toString());
+        Log.info("postUrl: " + postUrl);
+        Log.info("");
+
         view.setFileUploadPostUrl(postUrl);
         ProgressMonitor.get().showProgressMonitor("Uploading sources", "Uploading file");
         view.setSubmitCompleteHandler(event -> {
@@ -129,6 +138,7 @@ public class CreateNewProjectPresenter {
     private void handleSourcesUploadComplete(FormPanel.SubmitCompleteEvent event,
                                              ProjectCreatedHandler projectCreatedHandler) {
         FileUploadResponse response = new FileUploadResponse(event.getResults());
+
         if (response.wasUploadAccepted()) {
             DocumentId documentId = response.getDocumentId();
             NewProjectSettings newProjectSettings = NewProjectSettings.get(
@@ -162,6 +172,7 @@ public class CreateNewProjectPresenter {
 
                     @Override
                     public void handleSuccess(CreateNewProjectResult result) {
+                        Log.info("result.getProjectDetails().getOwner().toString(): " + result.getProjectDetails().getOwner().toString());
                         projectCreatedHandler.handleProjectCreated();
                         eventBus.fireEvent(new ProjectCreatedEvent(result.getProjectDetails()));
                     }

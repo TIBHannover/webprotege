@@ -42,6 +42,15 @@ public class WebProtegeServletContextListener implements ServletContextListener 
             servletContext.addServlet("FileUploadServlet", serverComponent.getFileUploadServlet())
                           .addMapping("/webprotege/submitfile");
 
+            /**
+             * author Nenad Krdzavac
+             * email nenad.krdzavac@tib.eu
+             * TIB-Leibniz Information Centre for Science and Technology and University Library
+             * 27.06.2022
+             */
+            servletContext.addServlet("GitFileUploadServlet", serverComponent.getGitFileUploadServlet())
+                            .addMapping("/webprotege/submitgitfile");
+
             servletContext.addServlet("JerseyContainerServlet", serverComponent.getJerseyServletContainer())
                           .addMapping("/data/*");
 

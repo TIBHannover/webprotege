@@ -2,10 +2,13 @@ package edu.stanford.bmir.protege.web.server.session;
 
 import com.google.common.base.MoreObjects;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
+import org.openjdk.tools.sjavac.Log;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
+
+
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -20,6 +23,9 @@ public class WebProtegeSessionImpl implements WebProtegeSession {
 
     @Inject
     public WebProtegeSessionImpl(HttpSession httpSession) {
+
+        Log.info("WebProtegeSessionImpl(HttpSession httpSession): " + httpSession.toString());
+
         this.httpSession = checkNotNull(httpSession);
     }
 

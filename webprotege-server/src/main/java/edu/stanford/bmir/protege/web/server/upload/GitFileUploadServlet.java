@@ -1,9 +1,5 @@
 package edu.stanford.bmir.protege.web.server.upload;
 
-import edu.stanford.bmir.protege.web.server.util.FileContentsSizeCalculator;
-import edu.stanford.bmir.protege.web.server.util.ZipInputStreamChecker;
-import edu.stanford.bmir.protege.web.shared.inject.ApplicationSingleton;
-import edu.stanford.bmir.protege.web.shared.upload.FileUploadResponseAttributes;
 import edu.stanford.bmir.protege.web.server.access.AccessManager;
 import edu.stanford.bmir.protege.web.server.access.ApplicationResource;
 import edu.stanford.bmir.protege.web.server.access.Subject;
@@ -11,7 +7,11 @@ import edu.stanford.bmir.protege.web.server.app.ApplicationNameSupplier;
 import edu.stanford.bmir.protege.web.server.inject.UploadsDirectory;
 import edu.stanford.bmir.protege.web.server.session.WebProtegeSession;
 import edu.stanford.bmir.protege.web.server.session.WebProtegeSessionImpl;
+import edu.stanford.bmir.protege.web.server.util.FileContentsSizeCalculator;
+import edu.stanford.bmir.protege.web.server.util.ZipInputStreamChecker;
 import edu.stanford.bmir.protege.web.shared.access.BuiltInAction;
+import edu.stanford.bmir.protege.web.shared.inject.ApplicationSingleton;
+import edu.stanford.bmir.protege.web.shared.upload.FileUploadResponseAttributes;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -38,14 +38,18 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.stanford.bmir.protege.web.server.logging.RequestFormatter.formatAddr;
 
+
 /**
- * Author: Matthew Horridge<br>
- * Stanford University<br>
- * Bio-Medical Informatics Research Group<br>
- * Date: 19/01/2012
+ * author Nenad Krdzavac
+ * email nenad.krdzavac@tib.eu
+ * TIB-Leibniz Information Centre for Science and Technology and University Library
+ * 27.06.2022
+ *
  * <p>
- * A servlet for uploading files to web protege.
+ * A servlet for cloning ontologies from Github and uploading it into Webprotege as ontology project.
  * </p>
+ *
+ * Comment provided by
  * <p>
  *     If the upload succeeds then the server returns an HTTP 201 response (indicating that a new resource was created
  *     on the server) and the body of the response consists of the name of the file resource.  The upload will fail if
@@ -56,9 +60,9 @@ import static edu.stanford.bmir.protege.web.server.logging.RequestFormatter.form
  * </p>
  */
 @ApplicationSingleton
-public class FileUploadServlet extends HttpServlet {
+public class GitFileUploadServlet extends HttpServlet {
 
-    public static final Logger logger = LoggerFactory.getLogger(FileUploadServlet.class);
+    public static final Logger logger = LoggerFactory.getLogger(GitFileUploadServlet.class);
 
     public static final String TEMP_FILE_PREFIX = "upload-";
 
@@ -77,7 +81,7 @@ public class FileUploadServlet extends HttpServlet {
     private final MaxUploadSizeSupplier maxUploadSizeSupplier;
 
     @Inject
-    public FileUploadServlet(
+    public GitFileUploadServlet(
             @Nonnull AccessManager accessManager,
             @Nonnull ApplicationNameSupplier applicationNameSupplier,
             @Nonnull MaxUploadSizeSupplier maxUploadSizeSupplier,
@@ -92,9 +96,7 @@ public class FileUploadServlet extends HttpServlet {
     @SuppressWarnings("unchecked")
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        logger.info("This is doPost method located in FileUploadServlet!");
-
-        logger.info("req.getSession() in doPost method located in FileUploadServlet : " + req.getSession());
+        logger.info("This is doPost method in servlet GitFileUploadServlet!");
 
         WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
         UserId userId = webProtegeSession.getUserInSession();
@@ -103,12 +105,6 @@ public class FileUploadServlet extends HttpServlet {
                                     BuiltInAction.UPLOAD_PROJECT)) {
             sendErrorMessage(resp, "You do not have permission to upload files to " + applicationNameSupplier.get());
         }
-
-        logger.info("req in doPost FileUploadServlet: " + req + " formatAddr(req): " +formatAddr(req));
-
-        logger.info("Received upload request from {} at {}" + webProtegeSession.getUserInSession() +
-                formatAddr(req));
-
 
         logger.info("Received upload request from {} at {}",
                     webProtegeSession.getUserInSession(),
@@ -121,12 +117,6 @@ public class FileUploadServlet extends HttpServlet {
                 upload.setFileSizeMax(maxUploadSizeSupplier.get());
                 List<FileItem> items = upload.parseRequest(req);
 
-                logger.info("---------------------------------------");
-                for(FileItem f: items){
-
-                    logger.info("f.getName(): " + f.getName() + "");
-                }
-                logger.info("---------------------------------------");
                 for (FileItem item : items) {
                     if (!item.isFormField()) {
                         File uploadedFile = createServerSideFile();
@@ -140,7 +130,6 @@ public class FileUploadServlet extends HttpServlet {
                         else {
                             logger.info("Stored uploaded file with name {}", uploadedFile.getName());
                             resp.setStatus(HttpServletResponse.SC_CREATED);
-                            logger.info("resp.getStatus(): " + resp.getStatus());
                             sendSuccessMessage(resp, uploadedFile.getName());
                         }
                         return;
@@ -182,9 +171,6 @@ public class FileUploadServlet extends HttpServlet {
     }
 
     private void sendSuccessMessage(HttpServletResponse response, String fileName) throws IOException {
-
-        logger.info("fileName in sendSuccessMessage : " + fileName);
-
         PrintWriter writer = response.getWriter();
         writeJSONPairs(writer,
                 new Pair(FileUploadResponseAttributes.RESPONSE_TYPE_ATTRIBUTE.name(), FileUploadResponseAttributes.RESPONSE_TYPE_VALUE_UPLOAD_ACCEPTED.name()),
@@ -193,9 +179,6 @@ public class FileUploadServlet extends HttpServlet {
     }
 
     private void sendErrorMessage(HttpServletResponse response, String errorMessage) throws IOException {
-
-        logger.info("response.toString() in sendErrorMessage: " + response.toString());
-
         writeJSONPairs(response.getWriter(), 
                 new Pair(FileUploadResponseAttributes.RESPONSE_TYPE_ATTRIBUTE.name(), FileUploadResponseAttributes.RESPONSE_TYPE_VALUE_UPLOAD_REJECTED.name()),
                 new Pair(FileUploadResponseAttributes.UPLOAD_REJECTED_MESSAGE_ATTRIBUTE.name(), errorMessage)
@@ -234,9 +217,6 @@ public class FileUploadServlet extends HttpServlet {
      * @throws IOException If there was a problem creating the file.
      */
     private File createServerSideFile() throws IOException {
-
-        logger.info("uploadsDirectory.getAbsolutePath() in createServerSideFile() method : " + uploadsDirectory.getAbsolutePath());
-
         uploadsDirectory.mkdirs();
         return File.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX, uploadsDirectory);
     }

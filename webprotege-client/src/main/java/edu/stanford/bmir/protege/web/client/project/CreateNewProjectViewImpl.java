@@ -9,6 +9,8 @@ import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
 import edu.stanford.bmir.protege.web.client.library.msgbox.MessageBox;
 import edu.stanford.bmir.protege.web.client.primitive.DefaultLanguageEditor;
 
+import com.allen_sauer.gwt.log.client.Log;
+
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import java.util.Optional;
@@ -85,6 +87,8 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
 
     @Override
     public void setFileUploadPostUrl(@Nonnull String url) {
+
+        Log.info("url in method setFileUploadPostUrl of CreateNewProjectViewImpl class : " + url);
         fileUpload.setName("file");
         formPanel.setMethod(METHOD_POST);
         formPanel.setEncoding(ENCODING_MULTIPART);
