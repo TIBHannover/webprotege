@@ -104,7 +104,7 @@ public class FileUploadServlet extends HttpServlet {
             sendErrorMessage(resp, "You do not have permission to upload files to " + applicationNameSupplier.get());
         }
 
-        logger.info("req in doPost FileUploadServlet: " + req + " formatAddr(req): " +formatAddr(req));
+        logger.info("req in doPost FileUploadServlet: " + req + " formatAddr(req): " + formatAddr(req));
 
         logger.info("Received upload request from {} at {}" + webProtegeSession.getUserInSession() +
                 formatAddr(req));
@@ -113,7 +113,9 @@ public class FileUploadServlet extends HttpServlet {
         logger.info("Received upload request from {} at {}",
                     webProtegeSession.getUserInSession(),
                     formatAddr(req));
+
         resp.setHeader("Content-Type", RESPONSE_MIME_TYPE);
+
         try {
             if (ServletFileUpload.isMultipartContent(req)) {
                 FileItemFactory factory = new DiskFileItemFactory();

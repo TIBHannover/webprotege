@@ -108,8 +108,24 @@ public class AvailableProjectPresenter {
         addOpenInNewWindowAction();
         addDowloadAction();
         addTrashAction();
+        addGithubAction();
     }
 
+    /**
+     * author Nenad Krdzavac
+     * email nenad.krdzavac@tib.eu
+     * 30.06.2022.
+     * Adde an Github option on the right side of project in main menu
+     */
+    private void addGithubAction(){
+
+        view.addAction(new AbstractUiAction("Github") {
+            @Override
+            public void execute() {
+
+            }
+        });
+    }
     private void addOpenAction() {
         view.addAction(new AbstractUiAction("Open") {
             @Override

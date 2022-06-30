@@ -119,6 +119,7 @@ public class CreateNewProjectPresenter {
 
 
     private void uploadSourcesAndCreateProject(@Nonnull ProjectCreatedHandler projectCreatedHandler) {
+
         checkNotNull(projectCreatedHandler);
         String postUrl = GWT.getModuleBaseURL() + "submitfile";
 
@@ -127,11 +128,14 @@ public class CreateNewProjectPresenter {
         Log.info("");
 
         view.setFileUploadPostUrl(postUrl);
+
         ProgressMonitor.get().showProgressMonitor("Uploading sources", "Uploading file");
+
         view.setSubmitCompleteHandler(event -> {
             ProgressMonitor.get().hideProgressMonitor();
             handleSourcesUploadComplete(event, projectCreatedHandler);
         });
+
         view.submitFormData();
     }
 

@@ -1,5 +1,6 @@
 package edu.stanford.bmir.protege.web.client.upload;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.FileUpload;
 import edu.stanford.bmir.protege.web.client.library.dlg.ValidationState;
@@ -21,6 +22,9 @@ public class UploadFileDialogForm extends WebProtegeDialogForm {
     public static final String FILE_NAME_FIELD_LABEL = "File";
 
     public UploadFileDialogForm() {
+
+        Log.info("SUBMIT_FILE_URL" + SUBMIT_FILE_URL);
+
         setPostURL(SUBMIT_FILE_URL);
         fileUpload = new FileUpload();
         fileUpload.setName("file");

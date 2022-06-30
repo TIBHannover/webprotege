@@ -119,6 +119,10 @@ public class CreateNewGithubProjectPresenter  {
     private void submitCreateProjectRequest(GithubProjectCreatedHandler handler) {
 
 //        uploadSourcesAndCreateGitProject(handler);
+        Log.info("submitCreateProjectRequest: ");
+        Log.info("   - view.getRemoteGithubRepositoryURL(): " + view.getRemoteGithubRepositoryURL());
+        Log.info("   - view.getRemoteGithubRepositoryURL(): " + view.getGithubAccessToken());
+
 
             if (view.isGitFileUploadSpecified()) {
 
@@ -146,7 +150,9 @@ public class CreateNewGithubProjectPresenter  {
 
     private void createEmptyGitProject(GithubProjectCreatedHandler projectCreatedHandler) {
 
-        Log.info("");
+        Log.info("createEmptyGitProject: " );
+        Log.info("  - view.getProjectName(): " + view.getProjectName());
+
         NewProjectSettings newProjectSettings = NewProjectSettings.get(
                 loggedInUserManager.getLoggedInUserId(),
                 view.getProjectName(),
@@ -157,6 +163,7 @@ public class CreateNewGithubProjectPresenter  {
 
     private void uploadSourcesAndCreateGitProject(@Nonnull GithubProjectCreatedHandler projectCreatedHandler) {
         checkNotNull(projectCreatedHandler);
+
         String postUrl = GWT.getModuleBaseURL() + "submitgitfile";
 
         Log.info("postUrl: " + postUrl);
@@ -183,9 +190,6 @@ public class CreateNewGithubProjectPresenter  {
                     "",
                     documentId
             );
-
-
-            System.out.println("handleGitSourcesUploadComplete: view.getRemoteGithubRepositoryURL(): " + view.getRemoteGithubRepositoryURL());
 
             Log.info("handleGitSourcesUploadComplete: view.getRemoteGithubRepositoryURL(): " + view.getRemoteGithubRepositoryURL());
             Log.info("handleGitSourcesUploadComplete: view.getGithubAccessToken(): " + view.getGithubAccessToken());

@@ -31,6 +31,9 @@ public class CreateNewGithubProjectViewImpl extends Composite implements CreateN
 
 
     String projectNameField;
+    String remoteGithubOntologyFileURL;
+
+    String githubAccessTokenKey;
 
     /**
      * automatically generated
@@ -47,6 +50,8 @@ public class CreateNewGithubProjectViewImpl extends Composite implements CreateN
      */
     @UiField
     TextBox remoteGithubRepositoryURL;
+
+
 
 //  @UiField
 //  TextBox githubUserName;
@@ -113,6 +118,26 @@ public class CreateNewGithubProjectViewImpl extends Composite implements CreateN
         projectNameField = getRemoteGithubRepositoryURL().substring(getRemoteGithubRepositoryURL().lastIndexOf("/")+1);
         return projectNameField;
     }
+
+    @Nonnull
+    @Override
+    public String getRemoteGithubOntologyFileURL(){
+
+        remoteGithubOntologyFileURL = getRemoteGithubRepositoryURL().toString();
+
+        return remoteGithubOntologyFileURL;
+    }
+
+
+    @Nonnull
+    @Override
+    public String getGithubAccessTokenKey(){
+
+        githubAccessTokenKey = getGithubAccessToken().toString();
+
+        return githubAccessTokenKey;
+    };
+
 
     @Nonnull
     @Override

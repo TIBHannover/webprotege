@@ -410,7 +410,8 @@ public class ClientApplicationModule {
     }
 
     /**
-     * author: nenad.krdzavac@tib.eu
+     * author Nenad Krdzavac
+     * email nenad.krdzavac@tib.eu
      * @param impl
      * @return
      */
