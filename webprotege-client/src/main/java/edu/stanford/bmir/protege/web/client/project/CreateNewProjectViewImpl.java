@@ -89,6 +89,7 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     public void setFileUploadPostUrl(@Nonnull String url) {
 
         Log.info("url in method setFileUploadPostUrl of CreateNewProjectViewImpl class : " + url);
+
         fileUpload.setName("file");
         formPanel.setMethod(METHOD_POST);
         formPanel.setEncoding(ENCODING_MULTIPART);

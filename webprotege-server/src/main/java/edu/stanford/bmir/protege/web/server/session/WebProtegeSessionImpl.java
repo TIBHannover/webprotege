@@ -23,9 +23,6 @@ public class WebProtegeSessionImpl implements WebProtegeSession {
 
     @Inject
     public WebProtegeSessionImpl(HttpSession httpSession) {
-
-        Log.info("WebProtegeSessionImpl(HttpSession httpSession): " + httpSession.toString());
-
         this.httpSession = checkNotNull(httpSession);
     }
 

@@ -8,4 +8,6 @@ package edu.stanford.bmir.protege.web.client.project;
 public interface UploadAndMergeHandler {
 
     void handleUploadAndMerge();
+
+    void handleUploadAndMergeGitProject();
 }

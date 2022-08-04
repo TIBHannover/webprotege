@@ -1,9 +1,11 @@
 package edu.stanford.bmir.protege.web.client.project;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
 import edu.stanford.bmir.protege.web.client.library.msgbox.MessageBox;
@@ -51,8 +53,6 @@ public class CreateNewGithubProjectViewImpl extends Composite implements CreateN
     @UiField
     TextBox remoteGithubRepositoryURL;
 
-
-
 //  @UiField
 //  TextBox githubUserName;
 
@@ -65,14 +65,14 @@ public class CreateNewGithubProjectViewImpl extends Composite implements CreateN
 //  @UiField
 //  TextArea projectDescriptionField;
 
-    //  @UiField
+    @UiField
     FileUpload gitFileUpload;
 
-    //  @UiField
+    @UiField
     FormPanel formPanel;
 
-//  @UiField
-//  HTMLPanel fileUploadArea;
+    @UiField
+     HTMLPanel fileUploadArea;
 
 //  @UiField(provided = true)
 //  DefaultLanguageEditor projectLanguageField;
@@ -165,10 +165,17 @@ public class CreateNewGithubProjectViewImpl extends Composite implements CreateN
 //    }
 
 //    @Override
-//    public void setFileUploadEnabled(boolean enabled) {
-//        fileUpload.setEnabled(enabled);
-//        fileUploadArea.setVisible(enabled);
-//    }
+    public void setFileUploadEnabled(boolean enabled) {
+
+        gitFileUpload.setEnabled(true);
+        gitFileUpload.setVisible(false);
+
+//        gitFileUpload.getElement().<InputElement>cast().click();
+
+//      FileUpload f = new FileUpload();
+//      f.getElement().<InputElement>cast().click();
+    }
+
 
 //    @Override
 //    public void setFileUploadPostUrl(@Nonnull String url) {
@@ -181,13 +188,15 @@ public class CreateNewGithubProjectViewImpl extends Composite implements CreateN
     @Override
     public void setGitFileUploadPostUrl(@Nonnull String url){
 
-        GWT.log("setGitFileUploadPostUrl: " + url);
+        Log.info("setGitFileUploadPostUrl: " + url);
 
         gitFileUpload.setName("gitfile");
 
         formPanel.setMethod(FormPanel.METHOD_POST);
         formPanel.setEncoding(FormPanel.ENCODING_URLENCODED);
         formPanel.setAction(checkNotNull(url));
+        formPanel.setVisible(false);
+
     }
 //    @Override
 //    public boolean isFileUploadSpecified() {

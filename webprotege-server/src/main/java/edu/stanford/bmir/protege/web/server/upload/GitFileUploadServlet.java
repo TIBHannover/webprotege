@@ -13,12 +13,19 @@ import edu.stanford.bmir.protege.web.shared.access.BuiltInAction;
 import edu.stanford.bmir.protege.web.shared.inject.ApplicationSingleton;
 import edu.stanford.bmir.protege.web.shared.upload.FileUploadResponseAttributes;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
+import eu.tib.protege.github.commands.GitCommandsService;
+import eu.tib.protege.github.commands.impl.GitCommandsServiceImpl;
+import org.apache.commons.collections4.map.MultiValueMap;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,15 +35,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.io.*;
+import java.util.*;
+
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.stanford.bmir.protege.web.server.logging.RequestFormatter.formatAddr;
+
 
 
 /**
@@ -49,15 +54,6 @@ import static edu.stanford.bmir.protege.web.server.logging.RequestFormatter.form
  * A servlet for cloning ontologies from Github and uploading it into Webprotege as ontology project.
  * </p>
  *
- * Comment provided by
- * <p>
- *     If the upload succeeds then the server returns an HTTP 201 response (indicating that a new resource was created
- *     on the server) and the body of the response consists of the name of the file resource.  The upload will fail if
- *     the content encoding is not multi-part. In this case, the server will return an HTTP 400 response code
- *     (indicating that the request was not well formed).  If the file could not be created on the server for what ever
- *     reason, the server will return an HTTP 500 response code (internal server error) and the body of the response
- *     will contain an message that describes the problem.
- * </p>
  */
 @ApplicationSingleton
 public class GitFileUploadServlet extends HttpServlet {
@@ -96,7 +92,11 @@ public class GitFileUploadServlet extends HttpServlet {
     @SuppressWarnings("unchecked")
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        logger.info("This is doPost method in servlet GitFileUploadServlet!");
+        logger.info("GitFileUploadServlet: This is doPost method in servlet GitFileUploadServlet!");
+
+        GitCommandsService gitCommandsService = new GitCommandsServiceImpl();
+        gitCommandsService.gitCloneGitHub("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",
+                "nenadkrdzavac","test","C:/srv/webprotege/uploads/test");
 
         WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
         UserId userId = webProtegeSession.getUserInSession();
@@ -109,18 +109,17 @@ public class GitFileUploadServlet extends HttpServlet {
         logger.info("Received upload request from {} at {}",
                     webProtegeSession.getUserInSession(),
                     formatAddr(req));
-        resp.setHeader("Content-Type", RESPONSE_MIME_TYPE);
-        try {
-            if (ServletFileUpload.isMultipartContent(req)) {
-                FileItemFactory factory = new DiskFileItemFactory();
-                ServletFileUpload upload = new ServletFileUpload(factory);
-                upload.setFileSizeMax(maxUploadSizeSupplier.get());
-                List<FileItem> items = upload.parseRequest(req);
 
-                for (FileItem item : items) {
-                    if (!item.isFormField()) {
-                        File uploadedFile = createServerSideFile();
-                        item.write(uploadedFile);
+        resp.setHeader("Content-Type", RESPONSE_MIME_TYPE);
+
+        try {
+
+            if(true){
+
+                    if(true){
+
+                      File uploadedFile = createServerSideGitFile();
+
                         long sizeInBytes = uploadedFile.length();
                         long computedFileSizeInBytes = computeFileSize(uploadedFile);
                         logger.info("File size is {} bytes.  Computed file size is {} bytes.", sizeInBytes, computedFileSizeInBytes);
@@ -132,31 +131,33 @@ public class GitFileUploadServlet extends HttpServlet {
                             resp.setStatus(HttpServletResponse.SC_CREATED);
                             sendSuccessMessage(resp, uploadedFile.getName());
                         }
+
                         return;
                     }
-                }
+//                }
+
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Could not find form file item");
+
             }
             else {
                 logger.info("Bad upload request: POST must be multipart encoding.");
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "POST must be multipart encoding.");
             }
-
-        }
-        catch (FileUploadBase.FileSizeLimitExceededException | FileUploadBase.SizeLimitExceededException e) {
-            sendFileSizeTooLargeResponse(resp);
-        }
-        catch (FileUploadBase.FileUploadIOException | FileUploadBase.IOFileUploadException e) {
-            logger.info("File upload failed because an IOException occurred: {}", e.getMessage(), e);
-            sendErrorMessage(resp, "File upload failed because of an IOException");
-        }
-        catch (FileUploadBase.InvalidContentTypeException e) {
-            logger.info("File upload failed because the content type was invalid: {}", e.getMessage());
-            sendErrorMessage(resp, "File upload failed because the content type is invalid");
-        }
-        catch (FileUploadException e) {
-            logger.info("File upload failed: {}", e.getMessage());
-            sendErrorMessage(resp, "File upload failed");
+//        }
+//        catch (FileUploadBase.FileSizeLimitExceededException | FileUploadBase.SizeLimitExceededException e) {
+//            sendFileSizeTooLargeResponse(resp);
+//        }
+//        catch (FileUploadBase.FileUploadIOException | FileUploadBase.IOFileUploadException e) {
+//            logger.info("File upload failed because an IOException occurred: {}", e.getMessage(), e);
+//            sendErrorMessage(resp, "File upload failed because of an IOException");
+//        }
+//        catch (FileUploadBase.InvalidContentTypeException e) {
+//            logger.info("File upload failed because the content type was invalid: {}", e.getMessage());
+//            sendErrorMessage(resp, "File upload failed because the content type is invalid");
+//        }
+//        catch (FileUploadException e) {
+//            logger.info("File upload failed: {}", e.getMessage());
+//            sendErrorMessage(resp, "File upload failed");
         } catch (Exception e) {
             logger.info("File upload failed because of an error when trying to write the file item: {}", e.getMessage(), e);
             sendErrorMessage(resp, "File upload failed");
@@ -216,6 +217,34 @@ public class GitFileUploadServlet extends HttpServlet {
      * @return The file.
      * @throws IOException If there was a problem creating the file.
      */
+    private File createServerSideGitFile() throws IOException {
+
+        uploadsDirectory.mkdirs();
+
+        File tempFile = File.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX, uploadsDirectory);
+
+        File ontologyFile = new File("C:/srv/webprotege/uploads/test/ontologies/pizza/pizza.ttl");
+
+        FileInputStream in = new FileInputStream(ontologyFile);
+        FileOutputStream out = new FileOutputStream(tempFile);
+
+        try {
+            int n;
+            while ((n = in.read()) != -1) {
+                out.write(n);
+            }
+        }
+        finally {
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+        }
+        return tempFile;
+    }
+
     private File createServerSideFile() throws IOException {
         uploadsDirectory.mkdirs();
         return File.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX, uploadsDirectory);

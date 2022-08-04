@@ -126,10 +126,13 @@ public class FileUploadServlet extends HttpServlet {
                 logger.info("---------------------------------------");
                 for(FileItem f: items){
 
-                    logger.info("f.getName(): " + f.getName() + "");
+                    logger.info("f.getName(): " + f.getName() + " ");
                 }
                 logger.info("---------------------------------------");
+
                 for (FileItem item : items) {
+
+
                     if (!item.isFormField()) {
                         File uploadedFile = createServerSideFile();
                         item.write(uploadedFile);

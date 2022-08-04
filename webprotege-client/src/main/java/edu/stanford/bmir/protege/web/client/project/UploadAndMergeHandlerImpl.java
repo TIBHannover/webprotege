@@ -34,4 +34,16 @@ public class UploadAndMergeHandlerImpl implements UploadAndMergeHandler {
         UploadAndMergeProjectWorkflow workflow = workflowProvider.get();
         workflow.start(projectId);
     }
+    /**
+     * Author Nenad Krdzavac<br>
+     * email nenad.krdzavac@tib.eu <br>
+     * TIB-Leibniz Information Centre for Science and Technology and University Library<br>
+     * Date 01.08.2022
+     */
+    @Override
+    public void handleUploadAndMergeGitProject(){
+        UploadAndMergeProjectWorkflow workflow = workflowProvider.get();
+        workflow.startGit(projectId);
+    }
+
 }

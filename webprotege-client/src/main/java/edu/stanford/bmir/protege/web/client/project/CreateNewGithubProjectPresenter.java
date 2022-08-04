@@ -82,13 +82,18 @@ public class CreateNewGithubProjectPresenter  {
 
     public void start() {
         view.clear();
-        if (loggedInUserManager.isAllowedApplicationAction(UPLOAD_PROJECT)) {
 
-            view.getRemoteGithubRepositoryURL();
-        }
-        else {
-            view.getRemoteGithubRepositoryURL();
-        }
+        Log.info("public void start()");
+
+        view.setFileUploadEnabled(true);
+
+//        if (loggedInUserManager.isAllowedApplicationAction(UPLOAD_PROJECT)) {
+//
+//            view.setFileUploadEnabled(true);
+//        }
+//        else {
+//            view.setFileUploadEnabled(false);
+//        }
     }
 
     private boolean validate() {
@@ -124,20 +129,20 @@ public class CreateNewGithubProjectPresenter  {
         Log.info("   - view.getRemoteGithubRepositoryURL(): " + view.getGithubAccessToken());
 
 
-            if (view.isGitFileUploadSpecified()) {
+//            if (view.isGitFileUploadSpecified()) {
 
 //            logger.log(Level.SEVERE, "submitCreateGitProjectRequest (if) : submitCreateGitProjectRequest: Creates new github empty project");
 
-                Log.info("submitCreateGitProjectRequest (if) : submitCreateGitProjectRequest: Creates new github empty project");
-                createEmptyGitProject(handler);
-//                uploadSourcesAndCreateGitProject(handler);
+//                Log.info("submitCreateGitProjectRequest (if) : submitCreateGitProjectRequest: call uploadSourcesAndCreateGitProject(handler)");
+//                createEmptyGitProject(handler);
+                uploadSourcesAndCreateGitProject(handler);
 
-            }
-            else {
-                Log.info("submitCreateGitProjectRequest (else) : submitCreateGitProjectRequest: Creates new github empty project");
-                createEmptyGitProject(handler);
-
-            }
+//            }
+//            else {
+//                Log.info("submitCreateGitProjectRequest (else) : submitCreateGitProjectRequest: Creates new github empty project");
+//                createEmptyGitProject(handler);
+//
+//            }
         }
 
 //        if (view.isFileUploadSpecified()) {

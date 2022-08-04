@@ -1,6 +1,7 @@
 package edu.stanford.bmir.protege.web.client.merge;
 
 import com.google.gwt.core.client.GWT;
+import edu.stanford.bmir.protege.web.client.upload.UploadGitFileDialogController;
 import edu.stanford.bmir.protege.web.shared.csv.DocumentId;
 import edu.stanford.bmir.protege.web.client.library.dlg.WebProtegeDialog;
 import edu.stanford.bmir.protege.web.client.upload.UploadFileDialogController;
@@ -31,6 +32,18 @@ public class UploadAndMergeProjectWorkflow {
         uploadProject(projectId);
     }
 
+    /**
+     * Author: Nenad Krdzavac<br>
+     * email: nenad.krdzavac@tib.eu <br>
+     * TIB-Leibniz Information Centre for Science and Technology and University Library<br>
+     * Date: 01.08.2022.
+     */
+    public void startGit(ProjectId projectId){
+
+        uploadGitProject(projectId);
+    }
+
+
     private void uploadProject(final ProjectId projectId) {
         UploadFileDialogController uploadFileDialogController = new UploadFileDialogController("Upload ontologies", new UploadFileResultHandler() {
             @Override
@@ -45,6 +58,30 @@ public class UploadAndMergeProjectWorkflow {
         });
         WebProtegeDialog.showDialog(uploadFileDialogController);
     }
+
+    /**
+     * Author Nenad Krdzavac <br>
+     * email nenad.krdzavac@tib.eu <br>
+     * TIB-Leibniz Information Centre for Science and Technology and University Library<br>
+     *
+     * @param projectId
+     *
+     */
+    private void uploadGitProject(final ProjectId projectId) {
+        UploadGitFileDialogController uploadFileDialogController = new UploadGitFileDialogController("Upload ontologies", new UploadFileResultHandler() {
+            @Override
+            public void handleFileUploaded(DocumentId fileDocumentId) {
+                startMergeWorkflow(projectId, fileDocumentId);
+            }
+
+            @Override
+            public void handleFileUploadFailed(String errorMessage) {
+                GWT.log("Upload failed");
+            }
+        });
+        WebProtegeDialog.showDialog(uploadFileDialogController);
+    }
+
 
     private void startMergeWorkflow(ProjectId projectId, DocumentId documentId) {
         mergeWorkflow.start(projectId, documentId);

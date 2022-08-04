@@ -49,6 +49,7 @@
     <dependencyManagement>
         <dependencies>
 
+
             <!-- https://mvnrepository.com/artifact/com.allen-sauer.gwt.log/gwt-log -->
             <dependency>
                 <groupId>com.allen-sauer.gwt.log</groupId>

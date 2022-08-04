@@ -57,7 +57,7 @@ public interface CreateNewGithubProjectView extends HasInitialFocusable, IsWidge
      * Specified whether the file upload section of the view should be enabled/visible.
      * @param enabled true if the file upload section should be enabled/visible, otherwise false.
      */
-//    void setFileUploadEnabled(boolean enabled);
+    void setFileUploadEnabled(boolean enabled);
 
     /**
      * Sets the URL that the upload should be posted to.  This is the URL that would be set in the "action" field
