@@ -79,7 +79,13 @@ public class GetAvailableProjectsHandler implements ApplicationActionHandler<Get
                                                                                 boolean trashable = details.getOwner().equals(userId)
                                                                                         || accessManager.hasPermission(user, projectResource, MOVE_ANY_PROJECT_TO_TRASH);
                                                                                 long lastOpened = lastOpenedMap.getOrDefault(details.getProjectId(), 0L);
-                                                                                return AvailableProject.get(details, downloadable, trashable, lastOpened);
+                                                                                /**
+                                                                                 * Author Nenad Krdzavac
+                                                                                 * Email nenad.krdzavac@tib.eu
+                                                                                 *
+                                                                                 * assign false to canBeCommitted and canBePushed
+                                                                                 */
+                                                                                return AvailableProject.get(details, downloadable, trashable, false, false,lastOpened);
                                                                             })
                                                                             .collect(toList());
         return new GetAvailableProjectsResult(availableProjects);

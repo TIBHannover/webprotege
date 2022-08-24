@@ -61,11 +61,19 @@ public class ProjectDetailsManagerImpl implements ProjectDetailsManager {
     @Override
     public void registerProject(ProjectId projectId, NewProjectSettings settings) {
         long now = System.currentTimeMillis();
+        /**
+         * Author Nenad Krdzavac
+         * Email neand.krdzavac@tib.eu
+         *
+         * Assigned false to isCmmitted and isPushed.
+         */
         ProjectDetails record = ProjectDetails.get(
                 projectId,
                 settings.getDisplayName(),
                 settings.getProjectDescription(),
                 settings.getProjectOwner(),
+                false,
+                false,
                 false,
                 DictionaryLanguage.rdfsLabel(settings.getLangTag()),
                 displayNameSettingsFactory.getDefaultDisplayNameSettings(settings.getLangTag()),

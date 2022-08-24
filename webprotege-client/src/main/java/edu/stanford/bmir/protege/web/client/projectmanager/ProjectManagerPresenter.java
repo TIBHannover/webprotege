@@ -71,8 +71,10 @@ public class ProjectManagerPresenter implements Presenter {
                                    @Nonnull LoggedInUserPresenter loggedInUserPresenter,
                                    @Nonnull CreateProjectRequestHandler createProjectRequestHandler,
                                    /**
-                                        * author: nenad.krdzavac@tib.eu
-                                        * github project request handler
+                                        * Author Nenad Krdzavac
+                                        * Email nenad.krdzavac@tib.eu
+                                        *
+                                        * Github project request handler
                                         */
                                    @Nonnull CreateGithubProjectRequestHandler createGithubProjectRequestHandler) {
         this.projectManagerView = projectManagerView;
@@ -81,8 +83,10 @@ public class ProjectManagerPresenter implements Presenter {
         this.loggedInUserPresenter = loggedInUserPresenter;
         this.createProjectRequestHandler = createProjectRequestHandler;
         /**
-         * author: nenad.krdzavac@tib.eu
-         * github project request handler
+         * Author Nenad Krdzavac
+         * Email nenad.krdzavac@tib.eu
+         *
+         * Github project request handler
          */
         this.createGithubProjectRequestHandler = createGithubProjectRequestHandler;
 
@@ -113,7 +117,10 @@ public class ProjectManagerPresenter implements Presenter {
         projectManagerView.setCreateProjectRequestHandler(createProjectRequestHandler);
 
         /**
-         * author nenad.krdzavac@tib.eu
+         * Author Nenad Krdzavac
+         * Email  nenad.krdzavac@tib.eu
+         *
+         * set Github project request handler.
          */
         projectManagerView.setCreateGithubProjectRequestHandler(createGithubProjectRequestHandler);
 
@@ -135,7 +142,13 @@ public class ProjectManagerPresenter implements Presenter {
     }
 
     private void handleProjectCreated(ProjectCreatedEvent event) {
-        AvailableProject availableProject = AvailableProject.get(event.getProjectDetails(), true, true, UNKNOWN);
+        /**
+         * Author Nenad Krdzavac
+         * Email nenad.krdzavac@tib.eu
+         *
+         * Assigned false to canBeCommitted and canBePushed
+         */
+        AvailableProject availableProject = AvailableProject.get(event.getProjectDetails(), true, true, false, false,UNKNOWN);
         insertAndSelectAvailableProject(availableProject, event.getProjectId());
     }
 
@@ -238,7 +251,8 @@ public class ProjectManagerPresenter implements Presenter {
 
         projectManagerView.setCreateProjectEnabled(loggedInUserManager.isAllowedApplicationAction(CREATE_EMPTY_PROJECT));
         /**
-         * @author nenad.krdzavac@tib.eu
+         * Author Nenad Krdzavac
+         * Email nenad.krdzavac@tib.eu
          */
         projectManagerView.setCreateGitRepoProjectEnabled(true);
 

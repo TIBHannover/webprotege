@@ -38,6 +38,10 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
 
     public static final String IN_TRASH = "inTrash";
 
+    public static final String IS_COMMITTED ="isCommitted";
+
+    public static final String IS_PUSHED = "isPushed";
+
     public static final String CREATED_AT = "createdAt";
 
     public static final String CREATED_BY = "createdBy";
@@ -58,6 +62,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
      * @param owner          The owner of the project. Not {@code null}.
      * @param description    A description of the project.  Not {@code null}. May be empty.
      * @param inTrash        A flag that specifies whether the project is in the trash.
+     * @param isCommitted    A flat that specifies whether the project is committed.
+     * @param isPushed       A flag that specifies whether the project is pushed.
      * @param createdAt      A timestamp that specifies when the project was created.  A zero value stands for unknown.
      * @param createdBy      A {@link UserId} that identifies the user that created the project.
      * @param lastModifiedAt A timestamp that specifies when the project was last modified.  A zero value indicates
@@ -70,6 +76,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                      @Nonnull String description,
                                      @Nonnull UserId owner,
                                      boolean inTrash,
+                                     boolean isCommitted,
+                                     boolean isPushed,
                                      @Nonnull DictionaryLanguage dictionaryLanguage,
                                      @Nonnull DisplayNameSettings displayNameSettings,
                                      long createdAt,
@@ -81,6 +89,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                             description,
                                             owner,
                                             inTrash,
+                                            isCommitted,
+                                            isPushed,
                                             dictionaryLanguage,
                                             displayNameSettings,
                                             createdAt,
@@ -101,6 +111,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                          @Nullable @JsonProperty(DESCRIPTION) String description,
                                          @Nonnull @JsonProperty(OWNER) UserId owner,
                                          @JsonProperty(IN_TRASH) boolean inTrash,
+                                         @JsonProperty(IS_COMMITTED) boolean isCommitted,
+                                         @JsonProperty(IS_PUSHED) boolean isPushed,
                                          @Nullable @JsonProperty(DEFAULT_LANGUAGE) DictionaryLanguage dictionaryLanguage,
                                          @Nullable @JsonProperty(DEFAULT_DISPLAY_NAME_SETTINGS) DisplayNameSettings displayNameSettings,
                                          @JsonProperty(CREATED_AT) Instant createdAt,
@@ -115,6 +127,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                    desc,
                    owner,
                    inTrash,
+                   isCommitted,
+                   isPushed,
                    dl,
                    dns,
                    createdAt.toEpochMilli(),
@@ -133,6 +147,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getDescription(),
                        getOwner(),
                        isInTrash(),
+                       isCommitted(),
+                       isPushed(),
                        getDefaultDictionaryLanguage(),
                        getDefaultDisplayNameSettings(),
                        getCreatedAt(),
@@ -152,6 +168,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        description,
                        getOwner(),
                        isInTrash(),
+                       isCommitted(),
+                       isPushed(),
                        getDefaultDictionaryLanguage(),
                        getDefaultDisplayNameSettings(),
                        getCreatedAt(),
@@ -172,6 +190,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getDescription(),
                        getOwner(),
                        isInTrash(),
+                       isCommitted(),
+                       isPushed(),
                        defaultLanguage,
                        getDefaultDisplayNameSettings(),
                        getCreatedAt(),
@@ -191,6 +211,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getDescription(),
                        getOwner(),
                        isInTrash(),
+                       isCommitted(),
+                       isPushed(),
                        getDefaultDictionaryLanguage(),
                        defaultDisplayNameSettings,
                        getCreatedAt(),
@@ -212,6 +234,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getDescription(),
                        getOwner(),
                        inTrash,
+                       isCommitted(),
+                       isPushed(),
                        getDefaultDictionaryLanguage(),
                        getDefaultDisplayNameSettings(),
                        getCreatedAt(),
@@ -264,6 +288,45 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
      */
     @JsonProperty(IN_TRASH)
     public abstract boolean isInTrash();
+
+    /**
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
+     *
+     * @return Denotes whether project is committed.
+     */
+    @JsonProperty(IS_COMMITTED)
+    public abstract boolean isCommitted();
+
+    /**
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
+     *
+     * @return Denotes whether project is pushed.
+     */
+    @JsonProperty(IS_PUSHED)
+    public abstract boolean isPushed();
+
+    /**
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
+     *
+     * @return Denotes whether project is not committed.
+     */
+
+    @JsonIgnore
+    public boolean isNotCommitted(){ return !isCommitted();}
+
+    /**
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
+     *
+     * @return Denotes whether project is not pushed.
+     */
+
+    @JsonIgnore
+    public boolean isNotPushed(){ return !isPushed();}
+
 
     @JsonIgnore
     public boolean isNotInTrash() {

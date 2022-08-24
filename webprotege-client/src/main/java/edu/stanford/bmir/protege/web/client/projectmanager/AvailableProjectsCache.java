@@ -52,7 +52,15 @@ public class AvailableProjectsCache {
         }
         ProjectDetails replacementDetails = availableProject.getProjectDetails()
                                                             .withInTrash(inTrash);
-        cache.put(projectId, AvailableProject.get(replacementDetails, availableProject.isDownloadable(), availableProject.isTrashable(),
+        /**
+         * Author Nenad Krdzavac
+         * Email nenad.krdzavac@tib.eu
+         *
+         * Extended get method with isCommitted and isPushed as arguments:
+         *  - availableProject.isCommitted(),
+         *  - availableProject.isPushed().
+         */
+        cache.put(projectId, AvailableProject.get(replacementDetails, availableProject.isDownloadable(), availableProject.isTrashable(), availableProject.isCommitted(), availableProject.isPushed(),
                                                   availableProject.getLastOpenedAt()));
         return true;
     }

@@ -3,10 +3,7 @@ package edu.stanford.bmir.protege.web.client.projectlist;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 import edu.stanford.bmir.protege.web.client.action.AbstractUiAction;
-import edu.stanford.bmir.protege.web.client.projectmanager.DownloadProjectRequestHandler;
-import edu.stanford.bmir.protege.web.client.projectmanager.LoadProjectInNewWindowRequestHandler;
-import edu.stanford.bmir.protege.web.client.projectmanager.LoadProjectRequestHandler;
-import edu.stanford.bmir.protege.web.client.projectmanager.TrashManagerRequestHandler;
+import edu.stanford.bmir.protege.web.client.projectmanager.*;
 import edu.stanford.bmir.protege.web.shared.TimeUtil;
 import edu.stanford.bmir.protege.web.shared.project.AvailableProject;
 import edu.stanford.bmir.protege.web.shared.project.ProjectId;
@@ -36,6 +33,9 @@ public class AvailableProjectPresenter {
     private final TrashManagerRequestHandler trashManagerRequestHandler;
 
     @Nonnull
+    private final GithubManagerRequestHandler githubManagerRequestHandler;
+
+    @Nonnull
     private final LoadProjectRequestHandler loadProjectRequestHandler;
 
     @Nonnull
@@ -49,12 +49,14 @@ public class AvailableProjectPresenter {
                                      @Provided @Nonnull AvailableProjectView view,
                                      @Provided @Nonnull LoadProjectInNewWindowRequestHandler loadProjectInNewWindowRequestHandler,
                                      @Provided @Nonnull TrashManagerRequestHandler trashManagerRequestHandler,
+                                     @Provided @Nonnull GithubManagerRequestHandler githubManagerRequestHandler,
                                      @Provided @Nonnull LoadProjectRequestHandler loadProjectRequestHandler,
                                      @Provided @Nonnull DownloadProjectRequestHandler downloadProjectRequestHandler) {
         this.view = checkNotNull(view);
         this.project = checkNotNull(project);
         this.loadProjectInNewWindowRequestHandler = checkNotNull(loadProjectInNewWindowRequestHandler);
         this.trashManagerRequestHandler = checkNotNull(trashManagerRequestHandler);
+        this.githubManagerRequestHandler = checkNotNull(githubManagerRequestHandler);
         this.loadProjectRequestHandler = checkNotNull(loadProjectRequestHandler);
         this.downloadProjectRequestHandler = checkNotNull(downloadProjectRequestHandler);
     }
@@ -112,19 +114,47 @@ public class AvailableProjectPresenter {
     }
 
     /**
-     * author Nenad Krdzavac
-     * email nenad.krdzavac@tib.eu
-     * 30.06.2022.
-     * Adde an Github option on the right side of project in main menu
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
+     * Date 30.06.2022.
+     *
+     * Adds Github commit or push actions on the right side of project in main menu
      */
     private void addGithubAction(){
 
-        view.addAction(new AbstractUiAction("Github") {
+        String githubActionLabel;
+
+        if(!project.isCommitted()){
+
+            githubActionLabel="Github commit";
+
+        }else{
+
+            githubActionLabel="Github push";
+        }
+
+        AbstractUiAction githubAction = new AbstractUiAction(githubActionLabel) {
+
             @Override
             public void execute() {
-
+                /**
+                 * If the project is not committed then current user can run commit changes.
+                 */
+                if (!project.isCommitted()) {
+//                    trashManagerRequestHandler.handleRemoveProjectFromTrash(project.getProjectId());
+                }
+                else {
+//                    trashManagerRequestHandler.handleMoveProjectToTrash(project.getProjectId());
+                }
             }
-        });
+
+        };
+//        view.addAction(new AbstractUiAction("Github") {
+//            @Override
+//            public void execute() {
+//
+//            }
+//        });
     }
     private void addOpenAction() {
         view.addAction(new AbstractUiAction("Open") {

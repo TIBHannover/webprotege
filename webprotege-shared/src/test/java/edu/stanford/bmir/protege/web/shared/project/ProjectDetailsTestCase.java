@@ -25,6 +25,10 @@ public class ProjectDetailsTestCase {
 
     public static final boolean IN_TRASH = true;
 
+    public static final boolean IS_COMMITTED = true;
+
+    public static final boolean IS_PUSHED= true;
+
     @Mock
     private ProjectId projectId;
 
@@ -55,6 +59,8 @@ public class ProjectDetailsTestCase {
         projectDetails = ProjectDetails.get(projectId, displayName, description,
                                             owner,
                                             IN_TRASH,
+                                            IS_COMMITTED,
+                                            IS_PUSHED,
                                             DictionaryLanguage.rdfsLabel(""),
                                             DisplayNameSettings.empty(),
                                             createdAt,
@@ -87,4 +93,19 @@ public class ProjectDetailsTestCase {
     public void suppliedTrashValueIsReturnedByAccessor() {
         assertEquals(projectDetails.isInTrash(), IN_TRASH);
     }
+
+    /**
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
+     * Date 24.08.2022.
+     */
+    @Test
+    public void suppliedCommittedValueIsReturnedByAccessor(){assertEquals(projectDetails.isCommitted(), IS_COMMITTED);}
+
+    @Test
+    public void suppliedPushedValueIsReturnedByAccessor(){assertEquals(projectDetails.isPushed(), IS_PUSHED);}
+
+
+
+
 }

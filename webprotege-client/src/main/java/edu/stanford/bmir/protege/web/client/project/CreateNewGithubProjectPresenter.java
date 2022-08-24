@@ -29,10 +29,10 @@ import static edu.stanford.bmir.protege.web.shared.access.BuiltInAction.UPLOAD_P
 
 
 /**
- * Author: Nenad Krdzavac<br>
- * email: nenad.krdzavac@tib.eu <br>
+ * Author Nenad Krdzavac<br>
+ * Email nenad.krdzavac@tib.eu <br>
  * TIB-Leibniz Information Centre for Science and Technology and University Library<br>
- * Date: 11/05/2022
+ * Date 11.05.2022
  */
 public class CreateNewGithubProjectPresenter  {
 

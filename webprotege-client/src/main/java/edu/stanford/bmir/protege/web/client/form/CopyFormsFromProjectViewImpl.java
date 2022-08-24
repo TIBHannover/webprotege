@@ -13,7 +13,6 @@ import edu.stanford.bmir.protege.web.client.list.ListBoxCellRenderer;
 import edu.stanford.bmir.protege.web.client.project.ProjectDetailsListBoxCellRenderer;
 import edu.stanford.bmir.protege.web.shared.form.FormDescriptor;
 import edu.stanford.bmir.protege.web.shared.form.FormId;
-import edu.stanford.bmir.protege.web.shared.project.AvailableProject;
 import edu.stanford.bmir.protege.web.shared.project.ProjectDetails;
 import edu.stanford.bmir.protege.web.shared.project.ProjectId;
 

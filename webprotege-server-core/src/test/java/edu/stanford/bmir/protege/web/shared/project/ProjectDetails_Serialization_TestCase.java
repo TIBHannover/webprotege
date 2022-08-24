@@ -28,6 +28,12 @@ public class ProjectDetails_Serialization_TestCase {
 
     private ObjectMapper objectMapper;
 
+    /**
+     * Author Nenad Krdzavac
+     * Email neand.krdzavac@tib.eu
+     *
+     * Assigned false to isCommitted and isPushed.
+     */
     @Before
     public void setUp() {
         projectDetails = ProjectDetails.get(ProjectId.get("12345678-1234-1234-1234-123456789abc"),
@@ -35,6 +41,8 @@ public class ProjectDetails_Serialization_TestCase {
                                             "The description",
                                             UserId.getUserId("The Owner"),
                                             true,
+                                            false,
+                                            false,
                                             DictionaryLanguage.rdfsLabel("en-GB"),
                                             DisplayNameSettings.get(ImmutableList.of(DictionaryLanguage.rdfsLabel("en-GB"),
                                                                                      DictionaryLanguage.rdfsLabel("en"),

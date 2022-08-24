@@ -39,6 +39,10 @@ public class ProjectDetailsRepository_IT {
 
     public static final boolean IN_TRASH = true;
 
+    public static final boolean IS_COMMITTED = false;
+
+    public static final boolean IS_PUSHED = false;
+
     private ProjectDetailsRepository repository;
 
     private MongoDatabase database;
@@ -63,6 +67,12 @@ public class ProjectDetailsRepository_IT {
 
     private ProjectDetails projectDetails;
 
+    /**
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
+     *
+     * Added IS_COMMITTED and IS_PUSHED to ProjectDetails.get().
+     */
     @Before
     public void setUp() {
         mongoClient = MongoTestUtils.createMongoClient();
@@ -74,6 +84,8 @@ public class ProjectDetailsRepository_IT {
                                             "The Description",
                                             owner,
                                             IN_TRASH,
+                                            IS_COMMITTED,
+                                            IS_PUSHED,
                                             DictionaryLanguage.rdfsLabel("en"),
                                             DisplayNameSettings.get(ImmutableList.of(DictionaryLanguage.rdfsLabel("en-GB"),
                                                                                      DictionaryLanguage.rdfsLabel("en"),
