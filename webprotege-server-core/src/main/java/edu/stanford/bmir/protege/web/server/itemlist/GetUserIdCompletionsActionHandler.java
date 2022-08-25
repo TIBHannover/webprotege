@@ -6,9 +6,9 @@ import edu.stanford.bmir.protege.web.server.dispatch.RequestContext;
 import edu.stanford.bmir.protege.web.server.dispatch.RequestValidator;
 import edu.stanford.bmir.protege.web.server.dispatch.validators.NullValidator;
 import edu.stanford.bmir.protege.web.server.user.UserDetailsManager;
-import edu.stanford.bmir.protege.web.shared.itemlist.GetPossibleItemCompletionsResult;
-import edu.stanford.bmir.protege.web.shared.itemlist.GetUserIdCompletionsAction;
-import edu.stanford.bmir.protege.web.shared.itemlist.GetUserIdCompletionsResult;
+import edu.stanford.bmir.protege.web.shared.chgpwd.itemlist.GetPossibleItemCompletionsResult;
+import edu.stanford.bmir.protege.web.shared.chgpwd.itemlist.GetUserIdCompletionsAction;
+import edu.stanford.bmir.protege.web.shared.chgpwd.itemlist.GetUserIdCompletionsResult;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
 
 import javax.annotation.Nonnull;

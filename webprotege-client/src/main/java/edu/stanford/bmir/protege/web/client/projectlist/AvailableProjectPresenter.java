@@ -32,8 +32,8 @@ public class AvailableProjectPresenter {
     @Nonnull
     private final TrashManagerRequestHandler trashManagerRequestHandler;
 
-    @Nonnull
-    private final GithubManagerRequestHandler githubManagerRequestHandler;
+//    @Nonnull
+//    private final GithubManagerRequestHandler githubManagerRequestHandler;
 
     @Nonnull
     private final LoadProjectRequestHandler loadProjectRequestHandler;
@@ -49,14 +49,14 @@ public class AvailableProjectPresenter {
                                      @Provided @Nonnull AvailableProjectView view,
                                      @Provided @Nonnull LoadProjectInNewWindowRequestHandler loadProjectInNewWindowRequestHandler,
                                      @Provided @Nonnull TrashManagerRequestHandler trashManagerRequestHandler,
-                                     @Provided @Nonnull GithubManagerRequestHandler githubManagerRequestHandler,
+//                                     @Provided @Nonnull GithubManagerRequestHandler githubManagerRequestHandler,
                                      @Provided @Nonnull LoadProjectRequestHandler loadProjectRequestHandler,
                                      @Provided @Nonnull DownloadProjectRequestHandler downloadProjectRequestHandler) {
         this.view = checkNotNull(view);
         this.project = checkNotNull(project);
         this.loadProjectInNewWindowRequestHandler = checkNotNull(loadProjectInNewWindowRequestHandler);
         this.trashManagerRequestHandler = checkNotNull(trashManagerRequestHandler);
-        this.githubManagerRequestHandler = checkNotNull(githubManagerRequestHandler);
+//        this.githubManagerRequestHandler = checkNotNull(githubManagerRequestHandler);
         this.loadProjectRequestHandler = checkNotNull(loadProjectRequestHandler);
         this.downloadProjectRequestHandler = checkNotNull(downloadProjectRequestHandler);
     }
@@ -138,10 +138,13 @@ public class AvailableProjectPresenter {
             @Override
             public void execute() {
                 /**
-                 * If the project is not committed then current user can run commit changes.
+                 * If the project is not committed then current user can commit changes.
                  */
                 if (!project.isCommitted()) {
-//                    trashManagerRequestHandler.handleRemoveProjectFromTrash(project.getProjectId());
+
+                    //TODO: implement method similar to doDownload()
+
+ //                    trashManagerRequestHandler.handleRemoveProjectFromTrash(project.getProjectId());
                 }
                 else {
 //                    trashManagerRequestHandler.handleMoveProjectToTrash(project.getProjectId());
@@ -149,6 +152,9 @@ public class AvailableProjectPresenter {
             }
 
         };
+        view.addAction(githubAction);
+        githubAction.setEnabled(project.canBeCommited());
+
 //        view.addAction(new AbstractUiAction("Github") {
 //            @Override
 //            public void execute() {

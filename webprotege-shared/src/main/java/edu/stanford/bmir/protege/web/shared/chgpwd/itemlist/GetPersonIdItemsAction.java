@@ -1,4 +1,4 @@
-package edu.stanford.bmir.protege.web.shared.itemlist;
+package edu.stanford.bmir.protege.web.shared.chgpwd.itemlist;
 
 import com.google.common.base.Objects;
 import edu.stanford.bmir.protege.web.shared.sharing.PersonId;
@@ -12,21 +12,21 @@ import static com.google.common.base.MoreObjects.toStringHelper;
  * Stanford Center for Biomedical Informatics Research
  * 13/05/15
  */
-public class GetPersonIdItemsResult extends GetItemsResult<PersonId> {
+public class GetPersonIdItemsAction extends GetItemsAction<PersonId, GetPersonIdItemsResult> {
 
     /**
      * For serialization only
      */
-    protected GetPersonIdItemsResult() {
+    private GetPersonIdItemsAction() {
     }
 
-    public GetPersonIdItemsResult(List<PersonId> items) {
-        super(items);
+    public GetPersonIdItemsAction(List<String> itemNames) {
+        super(itemNames);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getItems());
+        return Objects.hashCode(getItemNames());
     }
 
     @Override
@@ -34,18 +34,18 @@ public class GetPersonIdItemsResult extends GetItemsResult<PersonId> {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof GetPersonIdItemsResult)) {
+        if (!(obj instanceof GetPersonIdItemsAction)) {
             return false;
         }
-        GetPersonIdItemsResult other = (GetPersonIdItemsResult) obj;
-        return this.getItems().equals(other.getItems());
+        GetPersonIdItemsAction other = (GetPersonIdItemsAction) obj;
+        return this.getItemNames().equals(other.getItemNames());
     }
 
 
     @Override
     public String toString() {
-        return toStringHelper("GetPersonIdItemsResult")
-                .addValue(getItems())
+        return toStringHelper("GetPersonIdItemsAction")
+                .addValue(getItemNames())
                 .toString();
     }
 }

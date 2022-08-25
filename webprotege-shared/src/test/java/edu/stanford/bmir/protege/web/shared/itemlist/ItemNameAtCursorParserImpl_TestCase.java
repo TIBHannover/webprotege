@@ -1,5 +1,6 @@
 package edu.stanford.bmir.protege.web.shared.itemlist;
 
+import edu.stanford.bmir.protege.web.shared.chgpwd.itemlist.ItemNameAtCursorParserImpl;
 import org.junit.Before;
 import org.junit.Test;
 

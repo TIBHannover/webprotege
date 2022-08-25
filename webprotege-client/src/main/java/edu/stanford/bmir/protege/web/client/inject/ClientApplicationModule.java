@@ -354,8 +354,8 @@ public class ClientApplicationModule {
     }
 
     /**
-     * author Nenad Krdzavac
-     * email nenad.krdzavac@tib.eu
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
      * TIB-Leibniz Information Centre for Science and Technology and University Library
      * 04.08.2022
      *

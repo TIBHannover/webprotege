@@ -1,6 +1,7 @@
 
 package edu.stanford.bmir.protege.web.shared.itemlist;
 
+import edu.stanford.bmir.protege.web.shared.chgpwd.itemlist.GetPersonIdItemsAction;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Before;

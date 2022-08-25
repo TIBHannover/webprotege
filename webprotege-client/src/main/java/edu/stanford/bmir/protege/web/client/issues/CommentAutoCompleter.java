@@ -11,7 +11,7 @@ import edu.stanford.bmir.protege.web.client.dispatch.DispatchServiceManager;
 import edu.stanford.bmir.protege.web.shared.entity.EntityLookupRequest;
 import edu.stanford.bmir.protege.web.shared.entity.EntityLookupResult;
 import edu.stanford.bmir.protege.web.shared.entity.LookupEntitiesAction;
-import edu.stanford.bmir.protege.web.shared.itemlist.GetUserIdCompletionsAction;
+import edu.stanford.bmir.protege.web.shared.chgpwd.itemlist.GetUserIdCompletionsAction;
 import edu.stanford.bmir.protege.web.shared.project.ProjectId;
 import edu.stanford.bmir.protege.web.shared.search.SearchType;
 import edu.stanford.bmir.protege.web.shared.user.UserId;

@@ -1,4 +1,4 @@
-package edu.stanford.bmir.protege.web.shared.itemlist;
+package edu.stanford.bmir.protege.web.shared.chgpwd.itemlist;
 
 import edu.stanford.bmir.protege.web.shared.dispatch.Result;
 

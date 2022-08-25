@@ -1,10 +1,8 @@
 package edu.stanford.bmir.protege.web.client.user;
 
 import com.google.gwt.user.client.ui.SuggestOracle;
-import edu.stanford.bmir.protege.web.client.dispatch.DispatchServiceCallback;
 import edu.stanford.bmir.protege.web.client.dispatch.DispatchServiceManager;
-import edu.stanford.bmir.protege.web.shared.itemlist.GetPossibleItemCompletionsResult;
-import edu.stanford.bmir.protege.web.shared.itemlist.GetUserIdCompletionsAction;
+import edu.stanford.bmir.protege.web.shared.chgpwd.itemlist.GetUserIdCompletionsAction;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
 
 import javax.inject.Inject;

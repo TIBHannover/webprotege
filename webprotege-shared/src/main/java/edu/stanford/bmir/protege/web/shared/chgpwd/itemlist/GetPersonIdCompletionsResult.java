@@ -1,4 +1,4 @@
-package edu.stanford.bmir.protege.web.shared.itemlist;
+package edu.stanford.bmir.protege.web.shared.chgpwd.itemlist;
 
 import com.google.common.base.Objects;
 import edu.stanford.bmir.protege.web.shared.sharing.PersonId;

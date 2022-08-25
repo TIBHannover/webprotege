@@ -20,6 +20,7 @@ public class DownloadProjectRequestHandlerImpl implements DownloadProjectRequest
 
     @Inject
     public DownloadProjectRequestHandlerImpl() {
+
     }
 
     @Override
@@ -34,7 +35,6 @@ public class DownloadProjectRequestHandlerImpl implements DownloadProjectRequest
                 DownloadSettingsDialog.showDialog(extension -> doDownload(projectId, extension));
             }
         });
-
     }
 
     private void doDownload(ProjectId projectId, DownloadFormatExtension extension) {
@@ -42,5 +42,4 @@ public class DownloadProjectRequestHandlerImpl implements DownloadProjectRequest
         ProjectRevisionDownloader downloader = new ProjectRevisionDownloader(projectId, head, extension);
         downloader.download();
     }
-
 }

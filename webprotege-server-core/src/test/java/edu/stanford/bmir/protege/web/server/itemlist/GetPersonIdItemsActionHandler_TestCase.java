@@ -3,8 +3,8 @@ package edu.stanford.bmir.protege.web.server.itemlist;
 
 import edu.stanford.bmir.protege.web.server.dispatch.ExecutionContext;
 import edu.stanford.bmir.protege.web.server.user.UserDetailsManager;
-import edu.stanford.bmir.protege.web.shared.itemlist.GetPersonIdItemsAction;
-import edu.stanford.bmir.protege.web.shared.itemlist.GetPersonIdItemsResult;
+import edu.stanford.bmir.protege.web.shared.chgpwd.itemlist.GetPersonIdItemsAction;
+import edu.stanford.bmir.protege.web.shared.chgpwd.itemlist.GetPersonIdItemsResult;
 import edu.stanford.bmir.protege.web.shared.sharing.PersonId;
 import edu.stanford.bmir.protege.web.shared.user.UserDetails;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
