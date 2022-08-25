@@ -32,8 +32,8 @@ public class AvailableProjectPresenter {
     @Nonnull
     private final TrashManagerRequestHandler trashManagerRequestHandler;
 
-//    @Nonnull
-//    private final GithubManagerRequestHandler githubManagerRequestHandler;
+    @Nonnull
+    private final GithubManagerRequestHandler githubManagerRequestHandler;
 
     @Nonnull
     private final LoadProjectRequestHandler loadProjectRequestHandler;
@@ -49,14 +49,14 @@ public class AvailableProjectPresenter {
                                      @Provided @Nonnull AvailableProjectView view,
                                      @Provided @Nonnull LoadProjectInNewWindowRequestHandler loadProjectInNewWindowRequestHandler,
                                      @Provided @Nonnull TrashManagerRequestHandler trashManagerRequestHandler,
-//                                     @Provided @Nonnull GithubManagerRequestHandler githubManagerRequestHandler,
+                                     @Provided GithubManagerRequestHandler githubManagerRequestHandler,
                                      @Provided @Nonnull LoadProjectRequestHandler loadProjectRequestHandler,
                                      @Provided @Nonnull DownloadProjectRequestHandler downloadProjectRequestHandler) {
         this.view = checkNotNull(view);
         this.project = checkNotNull(project);
         this.loadProjectInNewWindowRequestHandler = checkNotNull(loadProjectInNewWindowRequestHandler);
         this.trashManagerRequestHandler = checkNotNull(trashManagerRequestHandler);
-//        this.githubManagerRequestHandler = checkNotNull(githubManagerRequestHandler);
+        this.githubManagerRequestHandler = checkNotNull(githubManagerRequestHandler);
         this.loadProjectRequestHandler = checkNotNull(loadProjectRequestHandler);
         this.downloadProjectRequestHandler = checkNotNull(downloadProjectRequestHandler);
     }
@@ -118,19 +118,21 @@ public class AvailableProjectPresenter {
      * Email nenad.krdzavac@tib.eu
      * Date 30.06.2022.
      *
-     * Adds Github commit or push actions on the right side of project in main menu
+     * Adds Github commit or push actions
      */
     private void addGithubAction(){
 
-        String githubActionLabel;
+        String githubActionLabel="Github";
 
-        if(!project.isCommitted()){
+        if(project.canBeCommited()){
 
-            githubActionLabel="Github commit";
+            githubActionLabel="Github committed";
 
-        }else{
+        } else {
+            if (project.canBePushed()) {
 
-            githubActionLabel="Github push";
+                githubActionLabel = "Github pushed";
+            }
         }
 
         AbstractUiAction githubAction = new AbstractUiAction(githubActionLabel) {
@@ -138,22 +140,25 @@ public class AvailableProjectPresenter {
             @Override
             public void execute() {
                 /**
-                 * If the project is not committed then current user can commit changes.
+                 * If the project is ready can be committed.
                  */
-                if (!project.isCommitted()) {
+                if (project.canBeCommited()) {
 
                     //TODO: implement method similar to doDownload()
 
- //                    trashManagerRequestHandler.handleRemoveProjectFromTrash(project.getProjectId());
+                     githubManagerRequestHandler.handleCommitProjectToGithub(project.getProjectId());
                 }
                 else {
-//                    trashManagerRequestHandler.handleMoveProjectToTrash(project.getProjectId());
+
+                    githubManagerRequestHandler.handlePushProjectToGithub(project.getProjectId());
+
                 }
             }
 
         };
-        view.addAction(githubAction);
+
         githubAction.setEnabled(project.canBeCommited());
+        view.addAction(githubAction);
 
 //        view.addAction(new AbstractUiAction("Github") {
 //            @Override

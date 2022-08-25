@@ -9,7 +9,7 @@ import edu.stanford.bmir.protege.web.shared.dispatch.Action;
  *
  * Date 25.08.2022
  */
-public class CommitProjectsToGithubAction implements Action<MoveProjectsToTrashResult> {
+public class CommitProjectsToGithubAction implements Action<CommitProjectsToGithubResult> {
 
     private ProjectId projectId;
 

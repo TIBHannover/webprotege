@@ -253,6 +253,19 @@ public class ClientApplicationModule {
         return impl;
     }
 
+    /**
+     * Author Nenad Krdzavac <br>
+     * Email nenad.krdzavac@tib.eu <br>
+     * Date 25.08.2022.
+     *
+     * @param impl
+     * @return
+     */
+    @Provides
+    GithubManagerRequestHandler provideGithubManagerRequestHandler(GithubManagerRequestHandlerImpl impl){
+        return impl;
+    }
+
     @Provides
     LoginView provideLoginView(LoginViewImpl loginView) {
         return loginView;
