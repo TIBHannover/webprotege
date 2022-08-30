@@ -41,6 +41,7 @@ public class AvailableProjectPresenter {
     @Nonnull
     private final DownloadProjectRequestHandler downloadProjectRequestHandler;
 
+
     @Nonnull
     private LoadProjectInNewWindowRequestHandler loadProjectInNewWindowRequestHandler;
 
@@ -116,57 +117,56 @@ public class AvailableProjectPresenter {
     /**
      * Author Nenad Krdzavac
      * Email nenad.krdzavac@tib.eu
-     * Date 30.06.2022.
+     * Date 25.08.2022.
      *
-     * Adds Github commit or push actions
+     * Adds Github commit and push actions to a list of project actions.
      */
-    private void addGithubAction(){
+    private void addGithubAction() {
 
-        String githubActionLabel="Github";
+        String githubActionLabel;
 
-        if(project.canBeCommited()){
+        if(project.isCommitted()){
 
-            githubActionLabel="Github committed";
+            githubActionLabel="Github push";
 
         } else {
-            if (project.canBePushed()) {
 
-                githubActionLabel = "Github pushed";
-            }
+                githubActionLabel = "Github commit";
         }
 
         AbstractUiAction githubAction = new AbstractUiAction(githubActionLabel) {
 
             @Override
             public void execute() {
+
                 /**
-                 * If the project is ready can be committed.
+                 * If the project is committed.
                  */
-                if (project.canBeCommited()) {
-
-                    //TODO: implement method similar to doDownload()
-
-                     githubManagerRequestHandler.handleCommitProjectToGithub(project.getProjectId());
-                }
-                else {
+                if (project.isCommitted()) {
 
                     githubManagerRequestHandler.handlePushProjectToGithub(project.getProjectId());
 
                 }
-            }
 
+                else {
+
+                    githubManagerRequestHandler.handleCommitProjectToGithub(project.getProjectId());
+
+                }
+            }
         };
 
-        githubAction.setEnabled(project.canBeCommited());
+        githubAction.setEnabled(project.isCommitted());
         view.addAction(githubAction);
 
-//        view.addAction(new AbstractUiAction("Github") {
+//        view.addAction(new AbstractUiAction("Github commit") {
 //            @Override
 //            public void execute() {
 //
 //            }
 //        });
     }
+
     private void addOpenAction() {
         view.addAction(new AbstractUiAction("Open") {
             @Override
@@ -218,6 +218,5 @@ public class AvailableProjectPresenter {
         view.addAction(trashAction);
         trashAction.setEnabled(project.isTrashable());
     }
-
 
 }
