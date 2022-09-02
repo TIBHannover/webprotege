@@ -146,9 +146,9 @@ public class ProjectManagerPresenter implements Presenter {
          * Author Nenad Krdzavac
          * Email nenad.krdzavac@tib.eu
          *
-         * Assigned false to canBeCommitted and canBePushed
+         * Assigned true to canBeCommitted and assign false to canBePushed
          */
-        AvailableProject availableProject = AvailableProject.get(event.getProjectDetails(), true, true, false, false,UNKNOWN);
+        AvailableProject availableProject = AvailableProject.get(event.getProjectDetails(), true, true, true, true,UNKNOWN);
         insertAndSelectAvailableProject(availableProject, event.getProjectId());
     }
 

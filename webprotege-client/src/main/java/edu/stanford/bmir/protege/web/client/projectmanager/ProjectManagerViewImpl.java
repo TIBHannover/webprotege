@@ -38,7 +38,9 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
     protected Button createProjectButton;
 
     /**
-     * @author: nenad.krdzavac@tib.eu
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
+     * Date 31.08.2022.
      * Button for creating project from Git repository
      */
     @UiField
@@ -73,7 +75,9 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
         initWidget(rootElement);
         setCreateProjectEnabled(false);
         /**
-         * @author nenad.krdzavac@tib.eu
+         * Author Nenad Krdzavac
+         * Email nenad.krdzavac@tib.eu
+         * Date 31.08.2022.
          */
         setCreateGitRepoProjectEnabled(false);
     }
@@ -98,7 +102,10 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
         createProjectButton.setVisible(enabled);
     }
     /**
-     * author nenad.krdzavac@tib.eu
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
+     * Date 31.08.2022.
+     *
      * @param enabled
      */
     @Override
@@ -178,7 +185,10 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
     }
 
     /**
-     * author: nenad.krdzavac@tib.eu
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
+     * Date 31.08.2022.
+     *
      * @param handler
      */
     @Override
