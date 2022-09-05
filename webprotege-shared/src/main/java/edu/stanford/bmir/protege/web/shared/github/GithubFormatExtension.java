@@ -5,6 +5,8 @@ package edu.stanford.bmir.protege.web.shared.github;
  * Email nenad.krdzavac@tib.eu <br>
  * TIB-Leibniz Information Centre for Science and Technology and University Library<br>
  * Date 02.09.2022
+ *
+ * This class represents format extension of ontology files that we commit, push and pull from Github.
  */
 public enum GithubFormatExtension {
 

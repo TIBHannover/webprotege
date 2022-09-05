@@ -7,7 +7,7 @@
         }
     </ui:style>
     <g:HTMLPanel addStyleNames="{style.main-panel}">
-        <g:InlineLabel text="Download format: " addStyleNames="{wp.style.formLabel}"/>
-        <g:ListBox ui:field="formatListBox" visibleItemCount="1"/>
+        <g:InlineLabel text="Remote Github repository: " addStyleNames="{wp.style.formLabel}"/>
+        <g:ListBox ui:field="repositoryListBox" visibleItemCount="1"/>
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -111,7 +111,8 @@ public class AvailableProjectPresenter {
         addOpenInNewWindowAction();
         addDowloadAction();
         addTrashAction();
-        addGithubAction();
+        addCommitAction();
+        addPushAction();
     }
 
     /**
@@ -119,52 +120,35 @@ public class AvailableProjectPresenter {
      * Email nenad.krdzavac@tib.eu
      * Date 25.08.2022.
      *
-     * Adds Github commit and push actions to a list of project actions.
+     * Adds Github commit to a list of project actions.
      */
-    private void addGithubAction() {
-
-        String githubActionLabel;
-
-        if(project.isCommitted()){
-
-            githubActionLabel="Github push";
-
-        } else {
-
-                githubActionLabel = "Github commit";
-        }
-
-        AbstractUiAction githubAction = new AbstractUiAction(githubActionLabel) {
-
+    private void addCommitAction() {
+        AbstractUiAction commitAction = new AbstractUiAction("Github commit") {
             @Override
             public void execute() {
-
-                /**
-                 * If the project is committed.
-                 */
-                if (project.isCommitted()) {
-
-                    githubManagerRequestHandler.handlePushProjectToGithub(project.getProjectId());
-
-                }
-
-                else {
-
-                    githubManagerRequestHandler.handleCommitProjectToGithub(project.getProjectId());
-
-                }
+                githubManagerRequestHandler.handleCommitProjectToGithub(project.getProjectId());
             }
         };
+        commitAction.setEnabled(project.canBeCommited());
+        view.addAction(commitAction);
+    }
+    /**
+     * Author Nenad Krdzavac
+     * Email nenad.krdzavac@tib.eu
+     * Date 02.09.2022.
+     *
+     * Adds Github push to a list of project actions.
+     */
 
-        githubAction.setEnabled(project.isCommitted());
-        view.addAction(githubAction);
-
-//        view.addAction(new AbstractUiAction("Github commit") {
-//            @Override
-//            public void execute() {
-//
-//            }
-//        });
+    private void addPushAction() {
+        AbstractUiAction pushAction = new AbstractUiAction("Github push") {
+            @Override
+            public void execute() {
+                githubManagerRequestHandler.handlePushProjectToGithub(project.getProjectId());
+            }
+        };
+        pushAction.setEnabled(project.canBePushed());
+        view.addAction(pushAction);
     }
 
     private void addOpenAction() {

@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import edu.stanford.bmir.protege.web.client.download.DownloadSettingsView;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
 import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
+import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
 
 
 /**
@@ -17,16 +18,16 @@ import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
  * TIB-Leibniz Information Centre for Science and Technology and University Library<br>
  * Date 31.08.2022
  */
-public class CommitSettingsViewImpl extends Composite implements DownloadSettingsView {
+public class CommitSettingsViewImpl extends Composite implements CommitSettingsView {
 
-    interface DownloadSettingsViewImplUiBinder extends UiBinder<HTMLPanel, CommitSettingsViewImpl> {
+    interface CommitSettingsViewImplUiBinder extends UiBinder<HTMLPanel, CommitSettingsViewImpl> {
 
     }
 
-    private static DownloadSettingsViewImplUiBinder ourUiBinder = GWT.create(DownloadSettingsViewImplUiBinder.class);
+    private static CommitSettingsViewImplUiBinder ourUiBinder = GWT.create(CommitSettingsViewImplUiBinder.class);
 
     @UiField
-    protected ListBox formatListBox;
+    protected ListBox repositoryListBox;
 
     public CommitSettingsViewImpl() {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
@@ -36,26 +37,26 @@ public class CommitSettingsViewImpl extends Composite implements DownloadSetting
 
 
     private void populateListBox() {
-        for(DownloadFormatExtension extension : DownloadFormatExtension.values()) {
-            formatListBox.addItem(extension.getDisplayName());
+        for(GithubFormatExtension extension : GithubFormatExtension.values()) {
+            repositoryListBox.addItem(extension.getDisplayName());
         }
     }
 
     @Override
-    public DownloadFormatExtension getDownloadFormatExtension() {
-        int selIndex = formatListBox.getSelectedIndex();
+    public GithubFormatExtension getGithubFormatExtension() {
+        int selIndex = repositoryListBox.getSelectedIndex();
         if(selIndex == 0) {
-            return DownloadFormatExtension.owl;
+            return GithubFormatExtension.owl;
         }
         else {
-            return DownloadFormatExtension.values()[selIndex];
+            return GithubFormatExtension.values()[selIndex];
         }
     }
 
     @Override
-    public void setDownloadFormatExtension(DownloadFormatExtension extension) {
+    public void setGithubFormatExtension(GithubFormatExtension extension) {
         int selIndex = extension.ordinal();
-        formatListBox.setSelectedIndex(selIndex);
+        repositoryListBox.setSelectedIndex(selIndex);
     }
 
     @Override

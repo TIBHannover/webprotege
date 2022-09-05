@@ -115,28 +115,9 @@ public class CreateNewGithubProjectViewImpl extends Composite implements CreateN
     @Override
     public String getProjectName() {
 
-        projectNameField = getRemoteGithubRepositoryURL().substring(getRemoteGithubRepositoryURL().lastIndexOf("/")+1);
+        projectNameField = getRemoteGithubRepositoryURL().substring(getRemoteGithubRepositoryURL().lastIndexOf("/") + 1);
         return projectNameField;
     }
-
-    @Nonnull
-    @Override
-    public String getRemoteGithubOntologyFileURL(){
-
-        remoteGithubOntologyFileURL = getRemoteGithubRepositoryURL().toString();
-
-        return remoteGithubOntologyFileURL;
-    }
-
-
-    @Nonnull
-    @Override
-    public String getGithubAccessTokenKey(){
-
-        githubAccessTokenKey = getGithubAccessToken().toString();
-
-        return githubAccessTokenKey;
-    };
 
 
     @Nonnull

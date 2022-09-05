@@ -3,6 +3,7 @@ package edu.stanford.bmir.protege.web.client.github;
 import com.google.gwt.user.client.ui.IsWidget;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasInitialFocusable;
 import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
+import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
 
 /**
  * Author Nenad Krdzavac<br>
@@ -12,7 +13,7 @@ import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
  */
 public interface CommitSettingsView extends IsWidget, HasInitialFocusable {
 
-    DownloadFormatExtension getDownloadFormatExtension();
+    GithubFormatExtension getGithubFormatExtension();
 
-    void setDownloadFormatExtension(DownloadFormatExtension extension);
+    void setGithubFormatExtension(GithubFormatExtension extension);
 }

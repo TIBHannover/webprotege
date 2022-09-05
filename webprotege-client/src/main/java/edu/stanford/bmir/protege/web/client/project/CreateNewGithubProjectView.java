@@ -17,9 +17,6 @@ public interface CreateNewGithubProjectView extends HasInitialFocusable, IsWidge
     @Nonnull
     String getProjectName();
 
-    String getRemoteGithubOntologyFileURL();
-
-    String getGithubAccessTokenKey();
     /**
      *
      * @return gets remote source Github repository
@@ -27,14 +24,6 @@ public interface CreateNewGithubProjectView extends HasInitialFocusable, IsWidge
     @Nonnull
     String getRemoteGithubRepositoryURL();
 
-//    @Nonnull
-//    String getGithubUserName();
-
-    /**
-     * Token replaces password.
-     */
-//    @Nonnull
-//    String getGithubPassword();
 
     @Nonnull
     String getGithubAccessToken();
