@@ -33,13 +33,13 @@ public class AvailableProjectPresenter {
     private final TrashManagerRequestHandler trashManagerRequestHandler;
 
     @Nonnull
-    private final GithubManagerRequestHandler githubManagerRequestHandler;
-
-    @Nonnull
     private final LoadProjectRequestHandler loadProjectRequestHandler;
 
     @Nonnull
     private final DownloadProjectRequestHandler downloadProjectRequestHandler;
+
+    @Nonnull
+    private final CommitProjectRequestHandler commitProjectRequestHandler;
 
 
     @Nonnull
@@ -50,14 +50,14 @@ public class AvailableProjectPresenter {
                                      @Provided @Nonnull AvailableProjectView view,
                                      @Provided @Nonnull LoadProjectInNewWindowRequestHandler loadProjectInNewWindowRequestHandler,
                                      @Provided @Nonnull TrashManagerRequestHandler trashManagerRequestHandler,
-                                     @Provided GithubManagerRequestHandler githubManagerRequestHandler,
+                                     @Provided CommitProjectRequestHandler commitProjectRequestHandler,
                                      @Provided @Nonnull LoadProjectRequestHandler loadProjectRequestHandler,
                                      @Provided @Nonnull DownloadProjectRequestHandler downloadProjectRequestHandler) {
         this.view = checkNotNull(view);
         this.project = checkNotNull(project);
         this.loadProjectInNewWindowRequestHandler = checkNotNull(loadProjectInNewWindowRequestHandler);
         this.trashManagerRequestHandler = checkNotNull(trashManagerRequestHandler);
-        this.githubManagerRequestHandler = checkNotNull(githubManagerRequestHandler);
+        this.commitProjectRequestHandler = checkNotNull(commitProjectRequestHandler);
         this.loadProjectRequestHandler = checkNotNull(loadProjectRequestHandler);
         this.downloadProjectRequestHandler = checkNotNull(downloadProjectRequestHandler);
     }
@@ -126,10 +126,12 @@ public class AvailableProjectPresenter {
         AbstractUiAction commitAction = new AbstractUiAction("Github commit") {
             @Override
             public void execute() {
-                githubManagerRequestHandler.handleCommitProjectToGithub(project.getProjectId());
+
+               commitProjectRequestHandler.handleCommitProjectRequest(project.getProjectId());
+
             }
         };
-        commitAction.setEnabled(project.canBeCommited());
+        commitAction.setEnabled(true);
         view.addAction(commitAction);
     }
     /**
@@ -144,10 +146,10 @@ public class AvailableProjectPresenter {
         AbstractUiAction pushAction = new AbstractUiAction("Github push") {
             @Override
             public void execute() {
-                githubManagerRequestHandler.handlePushProjectToGithub(project.getProjectId());
+
             }
         };
-        pushAction.setEnabled(project.canBePushed());
+        pushAction.setEnabled(true);
         view.addAction(pushAction);
     }
 

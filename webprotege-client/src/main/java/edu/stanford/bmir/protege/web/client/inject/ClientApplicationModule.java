@@ -248,6 +248,20 @@ public class ClientApplicationModule {
         return impl;
     }
 
+    /**
+     * Аuthor Nenad Krdzavac
+     * Еmail nenad.krdzavac@tib.eu
+     * TIB-Leibniz Information Centre for Science and Technology and University Library
+     *
+     * 08.09.2022.
+     *
+     */
+    @Provides
+    CommitProjectRequestHandler provideCommitProjectRequestHandler(CommitProjectRequestHandlerImpl impl){
+
+        return impl;
+    }
+
     @Provides
     TrashManagerRequestHandler provideTrashManagerRequestHandler(TrashManagerRequestHandlerImpl impl) {
         return impl;
@@ -427,8 +441,8 @@ public class ClientApplicationModule {
     }
 
     /**
-     * author Nenad Krdzavac
-     * email nenad.krdzavac@tib.eu
+     * Аuthor Nenad Krdzavac
+     * Еmail nenad.krdzavac@tib.eu
      * TIB-Leibniz Information Centre for Science and Technology and University Library
      * 04.08.2022.
      * @param impl

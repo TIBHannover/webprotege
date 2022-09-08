@@ -3,7 +3,10 @@ package edu.stanford.bmir.protege.web.client.projectmanager;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import edu.stanford.bmir.protege.web.client.download.ProjectRevisionDownloader;
+import edu.stanford.bmir.protege.web.client.github.CommitSettingsDialog;
+import edu.stanford.bmir.protege.web.client.github.ProjectRevisionCommit;
 import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
+import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
 import edu.stanford.bmir.protege.web.shared.project.ProjectId;
 import edu.stanford.bmir.protege.web.shared.revision.RevisionNumber;
 
@@ -32,33 +35,15 @@ public class CommitProjectRequestHandlerImpl implements CommitProjectRequestHand
 
             @Override
             public void onSuccess() {
-
-                //TODO: implement method that runs servlet to commit updated ontology. Similar to implementation of
-                // a servlet that loads ontology into Webprotege as a project.
-
-//                DownloadSettingsDialog.showDialog(extension -> doDownload(projectId, extension));
+                CommitSettingsDialog.showDialog(extension -> doCommit(projectId, extension));
             }
         });
     }
 
-//    @Override
-//    public void handleCommitRequest(final ProjectId projectId) {
-//        GWT.runAsync(new RunAsyncCallback() {
-//            @Override
-//            public void onFailure(Throwable reason) {
-//            }
-//
-//            @Override
-//            public void onSuccess() {
-//                DownloadSettingsDialog.showDialog(extension -> doDownload(projectId, extension));
-//            }
-//        });
-//    }
-
-    private void doDownload(ProjectId projectId, DownloadFormatExtension extension) {
+    private void doCommit(ProjectId projectId, GithubFormatExtension extension) {
         RevisionNumber head = RevisionNumber.getHeadRevisionNumber();
-        ProjectRevisionDownloader downloader = new ProjectRevisionDownloader(projectId, head, extension);
-        downloader.download();
+        ProjectRevisionCommit commit = new ProjectRevisionCommit(projectId, head, extension);
+        commit.commit();
     }
 
 
