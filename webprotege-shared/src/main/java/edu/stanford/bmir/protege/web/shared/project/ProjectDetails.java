@@ -85,7 +85,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                      @Nonnull UserId createdBy,
                                      long lastModifiedAt,
                                      @Nonnull UserId lastModifiedBy,
-                                     String personalAccessToken) {
+                                     @Nonnull String personalAccessToken) {
         return new AutoValue_ProjectDetails(projectId,
                                             displayName,
                                             description,
@@ -98,7 +98,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                             createdAt,
                                             createdBy,
                                             lastModifiedAt,
-                                            lastModifiedBy, personalAccessToken);
+                                            lastModifiedBy,
+                                            personalAccessToken);
     }
 
     /**
@@ -123,6 +124,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                          @JsonProperty(MODIFIED_BY) @Nonnull UserId lastModifiedBy,
                                          @Nullable @JsonProperty(PERSONAL_ACCESS_TOKEN) String personalAccessToken) {
         String desc = description == null ? "" : description;
+        String pat = personalAccessToken == null ? "" : personalAccessToken;
         DictionaryLanguage dl = dictionaryLanguage == null ? DictionaryLanguage.rdfsLabel("") : dictionaryLanguage;
         DisplayNameSettings dns = displayNameSettings == null ? DisplayNameSettings.empty() : displayNameSettings;
         return get(projectId,
@@ -138,7 +140,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                    createdBy,
                    lastModifiedAt.toEpochMilli(),
                    lastModifiedBy,
-                   personalAccessToken);
+                   pat);
     }
 
     public ProjectDetails withDisplayName(@Nonnull String displayName) {
