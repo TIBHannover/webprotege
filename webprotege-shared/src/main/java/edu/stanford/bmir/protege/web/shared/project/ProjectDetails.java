@@ -5,7 +5,6 @@ import com.google.auto.value.AutoValue;
 import com.google.common.annotations.GwtCompatible;
 import com.google.gwt.core.shared.GwtIncompatible;
 import edu.stanford.bmir.protege.web.shared.lang.DisplayNameSettings;
-import edu.stanford.bmir.protege.web.shared.projectsettings.ProjectSettings;
 import edu.stanford.bmir.protege.web.shared.shortform.DictionaryLanguage;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
 
@@ -53,6 +52,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
     public static final String DEFAULT_LANGUAGE = "defaultLanguage";
 
     public static final String DEFAULT_DISPLAY_NAME_SETTINGS = "defaultDisplayNameSettings";
+    
+    public static final String PERSONAL_ACCESS_TOKEN = "personalAccessToken";
 
     /**
      * Constructs a {@link ProjectDetails} object.
@@ -83,7 +84,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                      long createdAt,
                                      @Nonnull UserId createdBy,
                                      long lastModifiedAt,
-                                     @Nonnull UserId lastModifiedBy) {
+                                     @Nonnull UserId lastModifiedBy,
+                                     String personalAccessToken) {
         return new AutoValue_ProjectDetails(projectId,
                                             displayName,
                                             description,
@@ -96,7 +98,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                             createdAt,
                                             createdBy,
                                             lastModifiedAt,
-                                            lastModifiedBy);
+                                            lastModifiedBy, personalAccessToken);
     }
 
     /**
@@ -118,7 +120,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                          @JsonProperty(CREATED_AT) Instant createdAt,
                                          @JsonProperty(CREATED_BY) @Nonnull UserId createdBy,
                                          @JsonProperty(MODIFIED_AT) Instant lastModifiedAt,
-                                         @JsonProperty(MODIFIED_BY) @Nonnull UserId lastModifiedBy) {
+                                         @JsonProperty(MODIFIED_BY) @Nonnull UserId lastModifiedBy,
+                                         @Nullable @JsonProperty(PERSONAL_ACCESS_TOKEN) String personalAccessToken) {
         String desc = description == null ? "" : description;
         DictionaryLanguage dl = dictionaryLanguage == null ? DictionaryLanguage.rdfsLabel("") : dictionaryLanguage;
         DisplayNameSettings dns = displayNameSettings == null ? DisplayNameSettings.empty() : displayNameSettings;
@@ -134,7 +137,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                    createdAt.toEpochMilli(),
                    createdBy,
                    lastModifiedAt.toEpochMilli(),
-                   lastModifiedBy);
+                   lastModifiedBy,
+                   personalAccessToken);
     }
 
     public ProjectDetails withDisplayName(@Nonnull String displayName) {
@@ -154,7 +158,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getCreatedAt(),
                        getCreatedBy(),
                        getLastModifiedAt(),
-                       getLastModifiedBy());
+                       getLastModifiedBy(),
+                       getPersonalAccessToken());
         }
     }
 
@@ -175,7 +180,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getCreatedAt(),
                        getCreatedBy(),
                        getLastModifiedAt(),
-                       getLastModifiedBy());
+                       getLastModifiedBy(),
+                       getPersonalAccessToken());
         }
     }
 
@@ -197,7 +203,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getCreatedAt(),
                        getCreatedBy(),
                        getLastModifiedAt(),
-                       getLastModifiedBy());
+                       getLastModifiedBy(),
+                       getPersonalAccessToken());
         }
     }
 
@@ -218,7 +225,8 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getCreatedAt(),
                        getCreatedBy(),
                        getLastModifiedAt(),
-                       getLastModifiedBy());
+                       getLastModifiedBy(),
+                       getPersonalAccessToken());
         }
     }
 
@@ -241,7 +249,32 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getCreatedAt(),
                        getCreatedBy(),
                        getLastModifiedAt(),
-                       getLastModifiedBy());
+                       getLastModifiedBy(),
+                       getPersonalAccessToken());
+        }
+    }
+
+
+
+    public ProjectDetails withPersonalAccessToken(@Nullable String personalAccessToken) {
+        if(personalAccessToken.equals(getPersonalAccessToken())) {
+            return this;
+        }
+        else {
+            return get(getProjectId(),
+                    getDisplayName(),
+                    getDescription(),
+                    getOwner(),
+                    isInTrash(),
+                    isCommitted(),
+                    isPushed(),
+                    getDefaultDictionaryLanguage(),
+                    getDefaultDisplayNameSettings(),
+                    getCreatedAt(),
+                    getCreatedBy(),
+                    getLastModifiedAt(),
+                    getLastModifiedBy(),
+                    personalAccessToken);
         }
     }
 
@@ -393,6 +426,10 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
     @Nonnull
     @JsonProperty(MODIFIED_BY)
     public abstract UserId getLastModifiedBy();
+
+    @JsonProperty(PERSONAL_ACCESS_TOKEN)
+    @Nonnull
+    public abstract String getPersonalAccessToken();
 
     @Override
     public int compareTo(ProjectDetails o) {

@@ -37,6 +37,8 @@ public class ProjectDetailsRepository_IT {
 
     public static final long MODIFIED_AT = 44L;
 
+    public static final String PERSONAL_ACCESS_TOKEN = "PersonalAccessToken";
+
     public static final boolean IN_TRASH = true;
 
     public static final boolean IS_COMMITTED = false;
@@ -94,7 +96,8 @@ public class ProjectDetailsRepository_IT {
                                             CREATED_AT,
                                             createdBy,
                                             MODIFIED_AT,
-                                            lastModifiedBy);
+                                            lastModifiedBy,
+                                            PERSONAL_ACCESS_TOKEN);
 
         // Insert project details
         repository.save(projectDetails);

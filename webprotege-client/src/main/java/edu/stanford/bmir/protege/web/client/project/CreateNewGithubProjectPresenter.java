@@ -135,7 +135,7 @@ public class CreateNewGithubProjectPresenter  {
                 loggedInUserManager.getLoggedInUserId(),
                 view.getProjectName(),
                 "",
-                "");
+                "","");
         submitCreateNewGitProjectRequest(newProjectSettings, projectCreatedHandler);
     }
 
@@ -166,7 +166,8 @@ public class CreateNewGithubProjectPresenter  {
                     view.getProjectName(),
                     "",
                     "",
-                    documentId
+                    documentId,
+                    ""
             );
 
             Log.info("handleGitSourcesUploadComplete: view.getRemoteGithubRepositoryURL(): " + view.getRemoteGithubRepositoryURL());

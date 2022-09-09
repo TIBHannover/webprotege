@@ -12,5 +12,10 @@
             <g:Label text="Description" addStyleNames="{wp.style.formLabel}"/>
             <g:TextArea ui:field="descriptionField" visibleLines="5"/>
         </g:HTMLPanel>
+
+        <g:HTMLPanel addStyleNames="{wp.style.formGroup}">
+            <g:Label text="Personal access token" addStyleNames="{wp.style.formLabel}"/>
+            <g:TextBox ui:field="personalAccessTokenField"/>
+        </g:HTMLPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

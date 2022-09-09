@@ -6,6 +6,7 @@ import edu.stanford.bmir.protege.web.client.library.dlg.HasInitialFocusable;
 import edu.stanford.bmir.protege.web.shared.shortform.DictionaryLanguage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Author: Matthew Horridge<br>
@@ -34,6 +35,9 @@ public interface CreateNewProjectView extends HasInitialFocusable, IsWidget {
      */
     @Nonnull
     String getProjectLanguage();
+
+    @Nullable
+    String getPersonalAccessToken();
 
     /**
      * Specified whether the file upload section of the view should be enabled/visible.

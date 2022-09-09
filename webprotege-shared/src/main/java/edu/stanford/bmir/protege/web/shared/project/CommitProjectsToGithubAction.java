@@ -17,6 +17,12 @@ public class CommitProjectsToGithubAction implements Action<CommitProjectsToGith
     }
 
     public CommitProjectsToGithubAction(ProjectId projectId) {
+    	
+    	
+    	//// GIRAY BURAYA YAZ
+    	
+    	
+    	
         this.projectId = projectId;
     }
 

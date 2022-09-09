@@ -3,6 +3,7 @@ package edu.stanford.bmir.protege.web.client.projectsettings;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Matthew Horridge
@@ -20,4 +21,9 @@ public interface GeneralSettingsView extends IsWidget {
 
     @Nonnull
     String getDescription();
+
+    void setPersonalAccessToken(@Nonnull String personalAccessToken);
+
+    @Nonnull
+    String getPersonalAccessToken();
 }

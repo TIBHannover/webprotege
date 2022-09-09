@@ -51,7 +51,8 @@ public class ProjectDetails_Serialization_TestCase {
                                             2L,
                                             UserId.getUserId("The creator"),
                                             3L,
-                                            UserId.getUserId("The modifier"));
+                                            UserId.getUserId("The modifier"),
+                                            "personalAccessToken");
         ObjectMapperProvider objectMapperProvider = new ObjectMapperProvider();
         objectMapper = objectMapperProvider.get();
     }

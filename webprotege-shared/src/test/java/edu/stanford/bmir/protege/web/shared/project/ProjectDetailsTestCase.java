@@ -52,6 +52,8 @@ public class ProjectDetailsTestCase {
 
     private ProjectDetails projectDetails;
 
+    private String personalAccessToken;
+
     @Before
     public void setUp() throws Exception {
         displayName = "DisplayName";
@@ -66,7 +68,8 @@ public class ProjectDetailsTestCase {
                                             createdAt,
                                             createdBy,
                                             modifiedAt,
-                                            modifiedBy);
+                                            modifiedBy,
+                                            personalAccessToken);
     }
 
     @Test
@@ -106,6 +109,9 @@ public class ProjectDetailsTestCase {
     public void suppliedPushedValueIsReturnedByAccessor(){assertEquals(projectDetails.isPushed(), IS_PUSHED);}
 
 
-
+    @Test
+    public void emptyPersonalAccessTokenInConstructorIsOK() {
+        assertEquals(projectDetails.getPersonalAccessToken(), personalAccessToken);
+    }
 
 }

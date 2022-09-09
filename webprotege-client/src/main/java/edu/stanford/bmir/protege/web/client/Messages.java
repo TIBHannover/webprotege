@@ -717,6 +717,10 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("projectName")
     String projectName();
 
+    @DefaultMessage("Personal access token")
+    @Key("personalAccessToken")
+    String personalAccessToken();
+
     /**
      * @author nenad.krdzavac@tib.eu
      * @return String

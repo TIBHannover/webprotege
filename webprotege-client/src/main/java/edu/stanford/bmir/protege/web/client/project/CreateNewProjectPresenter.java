@@ -113,7 +113,8 @@ public class CreateNewProjectPresenter {
                 loggedInUserManager.getLoggedInUserId(),
                 view.getProjectName(),
                 view.getProjectLanguage(),
-                view.getProjectDescription());
+                view.getProjectDescription(),
+                view.getPersonalAccessToken());
         submitCreateNewProjectRequest(newProjectSettings, projectCreatedHandler);
     }
 
@@ -150,7 +151,8 @@ public class CreateNewProjectPresenter {
                     view.getProjectName(),
                     view.getProjectLanguage(),
                     view.getProjectDescription(),
-                    documentId
+                    documentId,
+                    view.getPersonalAccessToken()
             );
             submitCreateNewProjectRequest(newProjectSettings, projectCreatedHandler);
         }

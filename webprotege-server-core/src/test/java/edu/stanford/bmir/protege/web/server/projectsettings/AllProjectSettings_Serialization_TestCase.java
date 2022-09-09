@@ -34,6 +34,7 @@ public class AllProjectSettings_Serialization_TestCase {
         var projectSettings = ProjectSettings.get(projectId,
                                                   "My project",
                                                   "My project description",
+                                                  "token",
                                                   DictionaryLanguage.rdfsLabel("fr"),
                                                   DisplayNameSettings.get(ImmutableList.of(), ImmutableList.of()),
                                                   SlackIntegrationSettings.get("http://payloadurl"),

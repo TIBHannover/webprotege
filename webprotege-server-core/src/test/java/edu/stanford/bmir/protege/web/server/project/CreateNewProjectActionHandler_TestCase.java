@@ -85,7 +85,8 @@ public class CreateNewProjectActionHandler_TestCase {
         newProjectSettings = NewProjectSettings.get(UserId.getUserId("The Owner"),
                                                     "The display name",
                                                     langTag,
-                                                    "The Project Description");
+                                                    "The Project Description",
+                "token");
         handler = new CreateNewProjectActionHandler(projectManager,
                                                     projectDetailsManager,
                                                     accessManager,

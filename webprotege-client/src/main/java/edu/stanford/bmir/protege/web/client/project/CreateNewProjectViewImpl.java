@@ -12,6 +12,7 @@ import edu.stanford.bmir.protege.web.client.primitive.DefaultLanguageEditor;
 import com.allen_sauer.gwt.log.client.Log;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Optional;
 
@@ -34,6 +35,9 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
 
     @UiField
     TextArea projectDescriptionField;
+
+    @UiField
+    TextBox personalAccessTokenField;
 
     @UiField
     FileUpload fileUpload;
@@ -78,6 +82,10 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     public String getProjectLanguage() {
         return projectLanguageField.getValue().orElse("").trim();
     }
+
+    @Nullable
+    @Override
+    public String getPersonalAccessToken() { return personalAccessTokenField.getText().trim();}
 
     @Override
     public void setFileUploadEnabled(boolean enabled) {

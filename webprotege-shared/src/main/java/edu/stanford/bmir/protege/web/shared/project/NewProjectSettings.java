@@ -11,6 +11,7 @@ import edu.stanford.bmir.protege.web.shared.user.UserId;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.validation.constraints.Null;
 import java.util.Optional;
 
 /**
@@ -32,6 +33,8 @@ public abstract class NewProjectSettings implements IsSerializable {
 
     private static final String DESCRIPTION = "description";
 
+    private static final String PERSONAL_ACCESS_TOKEN = "personalAccessToken";
+
     /**
      * Creates a NewProjectSettings object that describes the basic settings for a new project and also specifies a
      * set of source documents (via a set of {@link DocumentId} objects) from which to create the project.
@@ -43,17 +46,20 @@ public abstract class NewProjectSettings implements IsSerializable {
      *                           which to initialise a project.  May be null.
      * @throws NullPointerException if either projectOwner, displayName, projectDescription or sourceDocumentId are
      *                              null.
+     * @param personalAccessToken The desired project personal access token for the new project.  May be null.
      */
     public static NewProjectSettings get(@Nonnull UserId projectOwner,
                                          @Nonnull String displayName,
                                          @Nonnull String langTag,
                                          @Nonnull String projectDescription,
-                                         @Nonnull DocumentId sourceDocumentId) {
+                                         @Nonnull DocumentId sourceDocumentId,
+                                         String personalAccessToken) {
         return new AutoValue_NewProjectSettings(projectOwner,
                                                 displayName,
                                                 langTag,
                                                 projectDescription,
-                                                sourceDocumentId);
+                                                sourceDocumentId,
+                                                personalAccessToken);
     }
 
     /**
@@ -69,12 +75,14 @@ public abstract class NewProjectSettings implements IsSerializable {
     public static NewProjectSettings get(@JsonProperty(PROJECT_OWNER) UserId projectOwner,
                                          @JsonProperty(DISPLAY_NAME) String displayName,
                                          @JsonProperty(LANG_TAG) String langTag,
-                                         @JsonProperty(DESCRIPTION) String projectDescription) {
+                                         @JsonProperty(DESCRIPTION) String projectDescription,
+                                         @JsonProperty(PERSONAL_ACCESS_TOKEN) String personalAccessToken) {
         return new AutoValue_NewProjectSettings(projectOwner,
                                                 displayName,
                                                 langTag,
                                                 projectDescription,
-                                                null);
+                                                null,
+                personalAccessToken);
     }
 
     /**
@@ -135,5 +143,8 @@ public abstract class NewProjectSettings implements IsSerializable {
 
     @Nullable
     protected abstract DocumentId sourceDocument();
+
+    @Nullable
+    public abstract String getPersonalAccessToken();
 
 }

@@ -10,6 +10,7 @@ import edu.stanford.bmir.protege.web.client.user.UserIcon;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 /**
@@ -42,6 +43,9 @@ public class ProjectDetailsViewImpl extends Composite implements ProjectDetailsV
     public void setDescription(@Nonnull String description) {
         displayNameField.setTitle(description);
     }
+
+    @Override
+    public void setPersonalAccessToken(@Nullable String personalAccessToken) { displayNameField.setText(personalAccessToken);}
 
     @Override
     public void setOwner(@Nonnull UserId owner) {

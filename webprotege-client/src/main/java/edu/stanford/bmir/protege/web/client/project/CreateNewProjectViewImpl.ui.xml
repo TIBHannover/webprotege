@@ -31,6 +31,12 @@
             <g:Label text="{msg.projectSettings_description}"  addStyleNames="{wp.style.formLabel}"/>
             <g:TextArea ui:field="projectDescriptionField" addStyleNames="{style.formField}" visibleLines="5"/>
         </div>
+
+        <div class="{wp.style.formGroup}">
+            <g:Label text="{msg.personalAccessToken}" addStyleNames="{wp.style.formLabel}"/>
+            <g:TextBox ui:field="personalAccessTokenField" addStyleNames="{style.formField}"/>
+        </div>
+
         <g:HTMLPanel ui:field="fileUploadArea" addStyleNames="{wp.style.formGroup}">
             <g:Label text="Create from existing sources" addStyleNames="{wp.style.formLabel}"/>
             <g:HTMLPanel addStyleNames="{style.uploadContainer}">

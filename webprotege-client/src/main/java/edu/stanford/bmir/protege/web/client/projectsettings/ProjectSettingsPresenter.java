@@ -181,7 +181,7 @@ public class ProjectSettingsPresenter {
         this.currentLanguageUsage = Optional.of(languages);
         generalSettingsView.setDisplayName(projectSettings.getProjectDisplayName());
         generalSettingsView.setDescription(projectSettings.getProjectDescription());
-
+        generalSettingsView.setPersonalAccessToken(projectSettings.getPersonalAccessToken());
         displayDefaultDictionaryLanguage(projectSettings.getDefaultLanguage());
         displayDefaultDisplayNameLanguages(projectSettings.getDefaultDisplayNameSettings(), languages);
         SlackIntegrationSettings slackIntegrationSettings = projectSettings.getSlackIntegrationSettings();
@@ -233,6 +233,7 @@ public class ProjectSettingsPresenter {
                 projectId,
                 generalSettingsView.getDisplayName(),
                 generalSettingsView.getDescription(),
+                generalSettingsView.getPersonalAccessToken(),
                 getDefaultLanguage(),
                 getDefaultDisplayNameSettings(),
                 slackIntegrationSettings,

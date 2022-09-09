@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 /**
@@ -29,6 +30,9 @@ public class GeneralSettingsViewImpl extends Composite implements GeneralSetting
 
     @UiField
     TextArea descriptionField;
+
+    @UiField
+    TextBox personalAccessTokenField;
 
     @Inject
     public GeneralSettingsViewImpl() {
@@ -56,4 +60,11 @@ public class GeneralSettingsViewImpl extends Composite implements GeneralSetting
     public String getDescription() {
         return descriptionField.getValue().trim();
     }
+
+    @Override
+    public void setPersonalAccessToken(@Nonnull String personalAccessToken) {personalAccessTokenField.setValue(personalAccessToken);}
+
+    @Nonnull
+    @Override
+    public String getPersonalAccessToken() { return personalAccessTokenField.getValue().trim();}
 }
