@@ -717,9 +717,9 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("projectName")
     String projectName();
 
-    @DefaultMessage("Personal access token")
-    @Key("personalAccessToken")
-    String personalAccessToken();
+    @DefaultMessage("Repo URI")
+    @Key("repoURI")
+    String repoURI();
 
     /**
      * @author nenad.krdzavac@tib.eu

@@ -14,8 +14,8 @@
         </g:HTMLPanel>
 
         <g:HTMLPanel addStyleNames="{wp.style.formGroup}">
-            <g:Label text="Personal access token" addStyleNames="{wp.style.formLabel}"/>
-            <g:TextBox ui:field="personalAccessTokenField"/>
+            <g:Label text="Repo URI" addStyleNames="{wp.style.formLabel}"/>
+            <g:TextBox ui:field="repoURIField"/>
         </g:HTMLPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

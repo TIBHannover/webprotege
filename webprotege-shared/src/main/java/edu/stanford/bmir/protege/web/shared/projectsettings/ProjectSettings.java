@@ -30,7 +30,7 @@ public abstract class ProjectSettings implements Serializable, IsSerializable, W
 
     private static final String DESCRIPTION = "description";
 
-    private static final String PERSONAL_ACCESS_TOKEN = "personalAccessToken";
+    private static final String REPO_URI = "repoURI";
 
     private static final String DEFAULT_LANGUAGE = "defaultLanguage";
 
@@ -65,8 +65,8 @@ public abstract class ProjectSettings implements Serializable, IsSerializable, W
     public abstract String getProjectDescription();
 
     @Nullable
-    @JsonProperty(PERSONAL_ACCESS_TOKEN)
-    public abstract String getPersonalAccessToken();
+    @JsonProperty(REPO_URI)
+    public abstract String getRepoURI();
 
     @Nonnull
     @JsonProperty(DEFAULT_LANGUAGE)
@@ -89,7 +89,7 @@ public abstract class ProjectSettings implements Serializable, IsSerializable, W
     public static ProjectSettings get(@Nonnull @JsonProperty(PROJECT_ID) ProjectId projectId,
                                       @Nonnull @JsonProperty(DISPLAY_NAME) String displayName,
                                       @Nonnull @JsonProperty(DESCRIPTION) String description,
-                                      @Nullable @JsonProperty(PERSONAL_ACCESS_TOKEN) String personalAccessToken,
+                                      @Nullable @JsonProperty(REPO_URI) String repoURI,
                                       @Nonnull @JsonProperty(DEFAULT_LANGUAGE) DictionaryLanguage defaultLanguage,
                                       @Nonnull @JsonProperty(DEFAULT_DISPLAY_NAME_SETTINGS) DisplayNameSettings defaultDisplayNameSettings,
                                       @Nonnull @JsonProperty(SLACK_INTEGRATION_SETTINGS) SlackIntegrationSettings slackIntegrationSettings,
@@ -97,7 +97,7 @@ public abstract class ProjectSettings implements Serializable, IsSerializable, W
         return new AutoValue_ProjectSettings(projectId,
                                              displayName,
                                              description,
-                                             personalAccessToken,
+                                             repoURI,
                                              defaultLanguage,
                                              defaultDisplayNameSettings,
                                              slackIntegrationSettings,
@@ -109,7 +109,7 @@ public abstract class ProjectSettings implements Serializable, IsSerializable, W
         return ProjectSettings.get(projectId,
                                    getProjectDisplayName(),
                                    getProjectDescription(),
-                                   getPersonalAccessToken(),
+                                   getRepoURI(),
                                    getDefaultLanguage(),
                                    getDefaultDisplayNameSettings(),
                                    getSlackIntegrationSettings(),

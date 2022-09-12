@@ -81,7 +81,7 @@ public class ProjectDetailsManagerImpl implements ProjectDetailsManager {
                 settings.getProjectOwner(),
                 now,
                 settings.getProjectOwner(),
-                settings.getPersonalAccessToken());
+                settings.getRepoURI());
         repository.save(record);
     }
 
@@ -116,7 +116,7 @@ public class ProjectDetailsManagerImpl implements ProjectDetailsManager {
         record.ifPresent(rec -> {
             ProjectDetails updatedRecord = rec.withDisplayName(projectSettings.getProjectDisplayName())
                                               .withDescription(projectSettings.getProjectDescription())
-                                              .withPersonalAccessToken(projectSettings.getPersonalAccessToken())
+                                              .withRepoURI(projectSettings.getRepoURI())
                                               .withDefaultLanguage(projectSettings.getDefaultLanguage())
                                               .withDefaultDisplayNameSettings(projectSettings.getDefaultDisplayNameSettings());
             repository.save(updatedRecord);
@@ -151,7 +151,7 @@ public class ProjectDetailsManagerImpl implements ProjectDetailsManager {
         return ProjectSettings.get(projectId,
                                    projectDetails.getDisplayName(),
                                    projectDetails.getDescription(),
-                                   projectDetails.getPersonalAccessToken(),
+                                   projectDetails.getRepoURI(),
                                    projectDetails.getDefaultDictionaryLanguage(),
                                    projectDetails.getDefaultDisplayNameSettings(),
                                    SlackIntegrationSettings.get(slackPayloadUrl),

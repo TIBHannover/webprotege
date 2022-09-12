@@ -17,7 +17,7 @@ public interface ProjectDetailsView extends IsWidget {
 
     void setDescription(@Nonnull String description);
 
-    void setPersonalAccessToken(@Nullable String personalAccessToken);
+    void setRepoURI(@Nullable String repoURI);
 
     void setOwner(@Nonnull UserId owner);
 

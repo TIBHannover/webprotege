@@ -32,7 +32,7 @@ public class GeneralSettingsViewImpl extends Composite implements GeneralSetting
     TextArea descriptionField;
 
     @UiField
-    TextBox personalAccessTokenField;
+    TextBox repoURIField;
 
     @Inject
     public GeneralSettingsViewImpl() {
@@ -62,9 +62,9 @@ public class GeneralSettingsViewImpl extends Composite implements GeneralSetting
     }
 
     @Override
-    public void setPersonalAccessToken(@Nonnull String personalAccessToken) {personalAccessTokenField.setValue(personalAccessToken);}
+    public void setRepoURI(@Nonnull String repoURI) {repoURIField.setValue(repoURI);}
 
     @Nonnull
     @Override
-    public String getPersonalAccessToken() { return personalAccessTokenField.getValue().trim();}
+    public String getRepoURI() { return repoURIField.getValue().trim();}
 }

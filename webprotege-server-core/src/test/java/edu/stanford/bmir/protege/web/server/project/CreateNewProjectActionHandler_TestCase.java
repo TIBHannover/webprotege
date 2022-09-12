@@ -86,7 +86,7 @@ public class CreateNewProjectActionHandler_TestCase {
                                                     "The display name",
                                                     langTag,
                                                     "The Project Description",
-                "token");
+                "repoURI");
         handler = new CreateNewProjectActionHandler(projectManager,
                                                     projectDetailsManager,
                                                     accessManager,

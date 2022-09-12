@@ -37,7 +37,7 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     TextArea projectDescriptionField;
 
     @UiField
-    TextBox personalAccessTokenField;
+    TextBox repoURIField;
 
     @UiField
     FileUpload fileUpload;
@@ -85,7 +85,7 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
 
     @Nullable
     @Override
-    public String getPersonalAccessToken() { return personalAccessTokenField.getText().trim();}
+    public String getRepoURI() { return repoURIField.getText().trim();}
 
     @Override
     public void setFileUploadEnabled(boolean enabled) {

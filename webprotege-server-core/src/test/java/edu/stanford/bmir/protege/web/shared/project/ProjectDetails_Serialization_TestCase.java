@@ -52,7 +52,7 @@ public class ProjectDetails_Serialization_TestCase {
                                             UserId.getUserId("The creator"),
                                             3L,
                                             UserId.getUserId("The modifier"),
-                                            "personalAccessToken");
+                                            "repoURI");
         ObjectMapperProvider objectMapperProvider = new ObjectMapperProvider();
         objectMapper = objectMapperProvider.get();
     }

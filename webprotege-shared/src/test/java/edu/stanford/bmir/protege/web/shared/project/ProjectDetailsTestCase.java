@@ -52,7 +52,7 @@ public class ProjectDetailsTestCase {
 
     private ProjectDetails projectDetails;
 
-    private String personalAccessToken;
+    private String repoURI;
 
     @Before
     public void setUp() throws Exception {
@@ -69,7 +69,7 @@ public class ProjectDetailsTestCase {
                                             createdBy,
                                             modifiedAt,
                                             modifiedBy,
-                                            personalAccessToken);
+                                            repoURI);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class ProjectDetailsTestCase {
 
     @Test
     public void emptyPersonalAccessTokenInConstructorIsOK() {
-        assertEquals(projectDetails.getPersonalAccessToken(), personalAccessToken);
+        assertEquals(projectDetails.getRepoURI(), repoURI);
     }
 
 }

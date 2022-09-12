@@ -37,7 +37,7 @@ public interface CreateNewProjectView extends HasInitialFocusable, IsWidget {
     String getProjectLanguage();
 
     @Nullable
-    String getPersonalAccessToken();
+    String getRepoURI();
 
     /**
      * Specified whether the file upload section of the view should be enabled/visible.

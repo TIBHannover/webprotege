@@ -22,8 +22,8 @@ public interface GeneralSettingsView extends IsWidget {
     @Nonnull
     String getDescription();
 
-    void setPersonalAccessToken(@Nonnull String personalAccessToken);
+    void setRepoURI(@Nonnull String repoURI);
 
     @Nonnull
-    String getPersonalAccessToken();
+    String getRepoURI();
 }

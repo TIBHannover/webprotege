@@ -53,7 +53,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
 
     public static final String DEFAULT_DISPLAY_NAME_SETTINGS = "defaultDisplayNameSettings";
     
-    public static final String PERSONAL_ACCESS_TOKEN = "personalAccessToken";
+    public static final String REPO_URI = "repoURI";
 
     /**
      * Constructs a {@link ProjectDetails} object.
@@ -85,7 +85,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                      @Nonnull UserId createdBy,
                                      long lastModifiedAt,
                                      @Nonnull UserId lastModifiedBy,
-                                     @Nonnull String personalAccessToken) {
+                                     @Nonnull String repoURI) {
         return new AutoValue_ProjectDetails(projectId,
                                             displayName,
                                             description,
@@ -99,7 +99,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                             createdBy,
                                             lastModifiedAt,
                                             lastModifiedBy,
-                                            personalAccessToken);
+                                            repoURI);
     }
 
     /**
@@ -122,9 +122,9 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                                          @JsonProperty(CREATED_BY) @Nonnull UserId createdBy,
                                          @JsonProperty(MODIFIED_AT) Instant lastModifiedAt,
                                          @JsonProperty(MODIFIED_BY) @Nonnull UserId lastModifiedBy,
-                                         @Nullable @JsonProperty(PERSONAL_ACCESS_TOKEN) String personalAccessToken) {
+                                         @Nullable @JsonProperty(REPO_URI) String repoURI) {
         String desc = description == null ? "" : description;
-        String pat = personalAccessToken == null ? "" : personalAccessToken;
+        String ru = repoURI == null ? "" : repoURI;
         DictionaryLanguage dl = dictionaryLanguage == null ? DictionaryLanguage.rdfsLabel("") : dictionaryLanguage;
         DisplayNameSettings dns = displayNameSettings == null ? DisplayNameSettings.empty() : displayNameSettings;
         return get(projectId,
@@ -140,7 +140,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                    createdBy,
                    lastModifiedAt.toEpochMilli(),
                    lastModifiedBy,
-                   pat);
+                   ru);
     }
 
     public ProjectDetails withDisplayName(@Nonnull String displayName) {
@@ -161,7 +161,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getCreatedBy(),
                        getLastModifiedAt(),
                        getLastModifiedBy(),
-                       getPersonalAccessToken());
+                       getRepoURI());
         }
     }
 
@@ -183,7 +183,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getCreatedBy(),
                        getLastModifiedAt(),
                        getLastModifiedBy(),
-                       getPersonalAccessToken());
+                       getRepoURI());
         }
     }
 
@@ -206,7 +206,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getCreatedBy(),
                        getLastModifiedAt(),
                        getLastModifiedBy(),
-                       getPersonalAccessToken());
+                       getRepoURI());
         }
     }
 
@@ -228,7 +228,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getCreatedBy(),
                        getLastModifiedAt(),
                        getLastModifiedBy(),
-                       getPersonalAccessToken());
+                       getRepoURI());
         }
     }
 
@@ -252,14 +252,14 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                        getCreatedBy(),
                        getLastModifiedAt(),
                        getLastModifiedBy(),
-                       getPersonalAccessToken());
+                       getRepoURI());
         }
     }
 
 
 
-    public ProjectDetails withPersonalAccessToken(@Nullable String personalAccessToken) {
-        if(personalAccessToken.equals(getPersonalAccessToken())) {
+    public ProjectDetails withRepoURI(@Nullable String repoURI) {
+        if(repoURI.equals(getRepoURI())) {
             return this;
         }
         else {
@@ -276,7 +276,7 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
                     getCreatedBy(),
                     getLastModifiedAt(),
                     getLastModifiedBy(),
-                    personalAccessToken);
+                    repoURI);
         }
     }
 
@@ -429,9 +429,9 @@ public abstract class ProjectDetails implements Serializable, Comparable<Project
     @JsonProperty(MODIFIED_BY)
     public abstract UserId getLastModifiedBy();
 
-    @JsonProperty(PERSONAL_ACCESS_TOKEN)
+    @JsonProperty(REPO_URI)
     @Nonnull
-    public abstract String getPersonalAccessToken();
+    public abstract String getRepoURI();
 
     @Override
     public int compareTo(ProjectDetails o) {

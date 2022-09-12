@@ -33,8 +33,8 @@
         </div>
 
         <div class="{wp.style.formGroup}">
-            <g:Label text="{msg.personalAccessToken}" addStyleNames="{wp.style.formLabel}"/>
-            <g:TextBox ui:field="personalAccessTokenField" addStyleNames="{style.formField}"/>
+            <g:Label text="{msg.repoURI}" addStyleNames="{wp.style.formLabel}"/>
+            <g:TextBox ui:field="repoURIField" addStyleNames="{style.formField}"/>
         </div>
 
         <g:HTMLPanel ui:field="fileUploadArea" addStyleNames="{wp.style.formGroup}">

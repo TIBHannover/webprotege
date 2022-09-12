@@ -33,7 +33,7 @@ public abstract class NewProjectSettings implements IsSerializable {
 
     private static final String DESCRIPTION = "description";
 
-    private static final String PERSONAL_ACCESS_TOKEN = "personalAccessToken";
+    private static final String REPO_URI = "repoURI";
 
     /**
      * Creates a NewProjectSettings object that describes the basic settings for a new project and also specifies a
@@ -53,13 +53,13 @@ public abstract class NewProjectSettings implements IsSerializable {
                                          @Nonnull String langTag,
                                          @Nonnull String projectDescription,
                                          @Nonnull DocumentId sourceDocumentId,
-                                         String personalAccessToken) {
+                                         String repoURI) {
         return new AutoValue_NewProjectSettings(projectOwner,
                                                 displayName,
                                                 langTag,
                                                 projectDescription,
                                                 sourceDocumentId,
-                                                personalAccessToken);
+                                                repoURI);
     }
 
     /**
@@ -76,13 +76,13 @@ public abstract class NewProjectSettings implements IsSerializable {
                                          @JsonProperty(DISPLAY_NAME) String displayName,
                                          @JsonProperty(LANG_TAG) String langTag,
                                          @JsonProperty(DESCRIPTION) String projectDescription,
-                                         @JsonProperty(PERSONAL_ACCESS_TOKEN) String personalAccessToken) {
+                                         @JsonProperty(REPO_URI) String repoURI) {
         return new AutoValue_NewProjectSettings(projectOwner,
                                                 displayName,
                                                 langTag,
                                                 projectDescription,
                                                 null,
-                personalAccessToken);
+                repoURI);
     }
 
     /**
@@ -145,6 +145,6 @@ public abstract class NewProjectSettings implements IsSerializable {
     protected abstract DocumentId sourceDocument();
 
     @Nullable
-    public abstract String getPersonalAccessToken();
+    public abstract String getRepoURI();
 
 }

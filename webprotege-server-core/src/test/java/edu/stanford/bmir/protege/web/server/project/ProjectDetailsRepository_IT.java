@@ -37,7 +37,7 @@ public class ProjectDetailsRepository_IT {
 
     public static final long MODIFIED_AT = 44L;
 
-    public static final String PERSONAL_ACCESS_TOKEN = "PersonalAccessToken";
+    public static final String REPO_URI = "RepoURI";
 
     public static final boolean IN_TRASH = true;
 
@@ -97,7 +97,7 @@ public class ProjectDetailsRepository_IT {
                                             createdBy,
                                             MODIFIED_AT,
                                             lastModifiedBy,
-                                            PERSONAL_ACCESS_TOKEN);
+                                            REPO_URI);
 
         // Insert project details
         repository.save(projectDetails);

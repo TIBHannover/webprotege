@@ -29,7 +29,7 @@ public class ProjectDetailsListBoxCellRenderer implements ListBoxCellRenderer<Pr
         ProjectDetailsView view = projectDetailsViewProvider.get();
         view.setDisplayName(element.getDisplayName());
         view.setDescription(element.getDescription());
-        view.setPersonalAccessToken(element.getPersonalAccessToken());
+        view.setRepoURI(element.getRepoURI());
         return view;
     }
 }
