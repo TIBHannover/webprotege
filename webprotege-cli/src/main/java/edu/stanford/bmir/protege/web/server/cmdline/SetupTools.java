@@ -68,8 +68,10 @@ public class SetupTools {
         String userName = console.readLine();
         console.printf("Please enter an email address for the administrator:\n");
         String emailAddress = console.readLine();
+        console.printf("Please enter a personal access token for the administrator:\n");
+        String personalAccessToken = console.readLine();
         String password = getPassword(console);
-        createAdministratorAccount(userName, emailAddress, password);
+        createAdministratorAccount(userName, emailAddress, personalAccessToken, password);
 
         accessManager.setAssignedRoles(Subject.forUser(userName),
                                        ApplicationResource.get(),
@@ -80,6 +82,7 @@ public class SetupTools {
 
     private void createAdministratorAccount(@Nonnull String userName,
                                             @Nonnull String emailAddress,
+                                            @Nonnull String personalAccessToken,
                                             @Nonnull String password) {
         Salt salt = getFreshSalt();
         PasswordDigestAlgorithm digestAlgorithm = new PasswordDigestAlgorithm(new Md5DigestAlgorithmProvider());
@@ -88,6 +91,7 @@ public class SetupTools {
                 UserId.getUserId(userName),
                 userName,
                 emailAddress,
+                personalAccessToken,
                 "",
                 salt,
                 digest

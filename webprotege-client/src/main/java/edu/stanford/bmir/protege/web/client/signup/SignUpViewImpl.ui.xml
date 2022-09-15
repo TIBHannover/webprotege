@@ -46,6 +46,13 @@
                                  addStyleNames="{wp.style.errorLabel}"/>
                     </div>
 
+                    <div class="{wp.style.formGroup}">
+                        <g:Label text="Personal Access Token" addStyleNames="{wp.style.formLabel}"/>
+                        <g:TextBox ui:field="personalAccessTokenField"/>
+                        <g:Label ui:field="personalAccessTokenErrorLabel" text="Please enter a personal access token"
+                                 addStyleNames="{wp.style.errorLabel}"/>
+                    </div>
+
                 </g:HTMLPanel>
             </g:HTMLPanel>
 

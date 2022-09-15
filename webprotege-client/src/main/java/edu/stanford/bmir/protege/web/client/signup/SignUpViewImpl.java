@@ -36,6 +36,9 @@ public class SignUpViewImpl extends Composite implements SignUpView {
     PasswordTextBox confirmPasswordField;
 
     @UiField
+    TextBox personalAccessTokenField;
+
+    @UiField
     Button cancelButton;
 
     @UiField
@@ -53,6 +56,9 @@ public class SignUpViewImpl extends Composite implements SignUpView {
     @UiField
     Label emailAddressErrorLabel;
 
+    @UiField
+    Label personalAccessTokenErrorLabel;
+
     @Inject
     public SignUpViewImpl() {
         initWidget(ourUiBinder.createAndBindUi(this));
@@ -64,6 +70,7 @@ public class SignUpViewImpl extends Composite implements SignUpView {
         emailAddressField.setText("");
         passwordField.setText("");
         confirmPasswordField.setText("");
+        personalAccessTokenField.setText("");
         clearErrorMessages();
     }
 
@@ -73,6 +80,7 @@ public class SignUpViewImpl extends Composite implements SignUpView {
         displayErrorLabel(emailAddressErrorLabel, false);
         displayErrorLabel(passwordErrorLabel, false);
         displayErrorLabel(confirmPasswordErrorLabel, false);
+        displayErrorLabel(personalAccessTokenErrorLabel,false);
     }
 
     @Override
@@ -113,6 +121,15 @@ public class SignUpViewImpl extends Composite implements SignUpView {
     @Override
     public void displayConfirmPasswordDoesNotMatchErrorMessage() {
         displayErrorLabel(confirmPasswordErrorLabel, true);
+    }
+
+    @Override
+    public String getPersonalAccessToken() {
+        return personalAccessTokenField.getText().trim();
+    }
+
+    @Override
+    public void displayEnterPersonalAccessTokenErrorMessage() { displayErrorLabel(personalAccessTokenErrorLabel, true);
     }
 
     @Override

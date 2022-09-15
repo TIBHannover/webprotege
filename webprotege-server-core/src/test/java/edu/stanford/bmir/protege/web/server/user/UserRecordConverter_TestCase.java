@@ -31,6 +31,7 @@ public class UserRecordConverter_TestCase {
                 UserId.getUserId("TheUserId"),
                 "The Real Name",
                 "user@email.com",
+                "token!?!",
                 "",
                 new Salt(new byte[]{1, 2, 3, 4}),
                 new SaltedPasswordDigest(new byte[]{5, 6, 7, 8})

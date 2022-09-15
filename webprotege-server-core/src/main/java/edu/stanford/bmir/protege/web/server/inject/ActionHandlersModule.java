@@ -18,6 +18,8 @@ import edu.stanford.bmir.protege.web.server.itemlist.GetPersonIdItemsActionHandl
 import edu.stanford.bmir.protege.web.server.itemlist.GetUserIdCompletionsActionHandler;
 import edu.stanford.bmir.protege.web.server.mail.GetEmailAddressActionHandler;
 import edu.stanford.bmir.protege.web.server.mail.SetEmailAddressActionHandler;
+import edu.stanford.bmir.protege.web.server.token.GetPersonalAccessTokenActionHandler;
+import edu.stanford.bmir.protege.web.server.token.SetPersonalAccessTokenActionHandler;
 import edu.stanford.bmir.protege.web.server.permissions.GetProjectPermissionsActionHandler;
 import edu.stanford.bmir.protege.web.server.permissions.RebuildPermissionsActionHandler;
 import edu.stanford.bmir.protege.web.server.project.CreateNewProjectActionHandler;
@@ -72,6 +74,16 @@ public class ActionHandlersModule {
 
     @Provides @IntoSet
     public ApplicationActionHandler provideGetEmailAddressActionHandler(GetEmailAddressActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ApplicationActionHandler provideSetPersonalAccessTokenActionHandler(SetPersonalAccessTokenActionHandler handler) {
+        return handler;
+    }
+
+    @Provides @IntoSet
+    public ApplicationActionHandler provideGetPersonalAccessTokenActionHandler(GetPersonalAccessTokenActionHandler handler) {
         return handler;
     }
 

@@ -63,6 +63,14 @@ public class UserRecordRepository {
         return Optional.ofNullable(firstDocument).map(d -> converter.fromDocument(d));
     }
 
+    public Optional<UserRecord> findOneByPersonalAccessToken(String personalAccessToken) {
+        Document firstDocument = collection
+                .find(byPersonalAccessToken(personalAccessToken))
+                .limit(1)
+                .first();
+        return Optional.ofNullable(firstDocument).map(d -> converter.fromDocument(d));
+    }
+
     public void save(UserRecord userRecord) {
         Document document = converter.toDocument(userRecord);
         collection.replaceOne(byUserId(userRecord.getUserId()), document, new UpdateOptions().upsert(true));

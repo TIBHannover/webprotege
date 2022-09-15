@@ -1,6 +1,5 @@
 package edu.stanford.bmir.protege.web.client.tag;
 
-import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

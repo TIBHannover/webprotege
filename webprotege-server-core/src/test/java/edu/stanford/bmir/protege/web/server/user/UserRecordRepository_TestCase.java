@@ -29,6 +29,8 @@ public class UserRecordRepository_TestCase {
 
     private static final String EMAIL_ADDRESS = "jane.doe@somewhere.com";
 
+    private static final String PERSONAL_ACCESS_TOKEN = "token!?!";
+
     private UserRecordRepository recordRepository;
 
     private MongoClient client;
@@ -49,6 +51,7 @@ public class UserRecordRepository_TestCase {
                 userId,
                 "Jane Doe" ,
                 EMAIL_ADDRESS,
+                PERSONAL_ACCESS_TOKEN,
                 "" ,
                 new Salt("somebytes".getBytes()),
                 new SaltedPasswordDigest("someotherbytes".getBytes())

@@ -30,6 +30,9 @@ public class UserRecord {
     private final String emailAddress;
 
     @Nonnull
+    private final String personalAccessToken;
+
+    @Nonnull
     private final String avatarUrl;
 
     @Nonnull
@@ -49,12 +52,14 @@ public class UserRecord {
     public UserRecord(@Nonnull UserId userId,
                       @Nonnull String realName,
                       @Nonnull String emailAddress,
+                      @Nonnull String personalAccessToken,
                       @Nonnull String avatarUrl,
                       @Nonnull Salt salt,
                       @Nonnull SaltedPasswordDigest saltedPasswordDigest) {
         this.userId = checkNotNull(userId);
         this.realName = checkNotNull(realName);
         this.emailAddress = checkNotNull(emailAddress);
+        this.personalAccessToken = checkNotNull(personalAccessToken);
         this.avatarUrl = checkNotNull(avatarUrl);
         this.salt = checkNotNull(salt);
         this.saltedPasswordDigest = checkNotNull(saltedPasswordDigest);
@@ -82,6 +87,16 @@ public class UserRecord {
     public String getEmailAddress() {
         return emailAddress;
     }
+
+    /**
+     * Gets the email address.
+     * @return The email address.  May be empty to indicate no specified address.  Not {@code null}.
+     */
+    @Nonnull
+    public String getPersonalAccessToken() {
+        return personalAccessToken;
+    }
+
 
     /**
      * Gets the avatar Url.
@@ -117,6 +132,7 @@ public class UserRecord {
                 .addValue(userId)
                 .addValue(realName)
                 .addValue(emailAddress)
+                .addValue(personalAccessToken)
                 .addValue(avatarUrl)
                 .addValue(salt)
                 .addValue(saltedPasswordDigest)
@@ -147,6 +163,7 @@ public class UserRecord {
         return this.userId.equals(other.userId)
                 && this.realName.equals(other.realName)
                 && this.emailAddress.equals(other.emailAddress)
+                && this.personalAccessToken.equals(other.personalAccessToken)
                 && this.avatarUrl.equals(other.avatarUrl)
                 && this.salt.equals(other.salt)
                 && this.saltedPasswordDigest.equals(other.saltedPasswordDigest);

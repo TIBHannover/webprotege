@@ -28,6 +28,8 @@ public class UserRecord_TestCase {
 
     private String emailAddress = "The emailAddress";
 
+    private String personalAccessToken = "The personalAccessToken";
+
     private String avatarUrl = "The avatarUrl";
 
     @Mock
@@ -38,12 +40,12 @@ public class UserRecord_TestCase {
 
     @Before
     public void setUp() {
-        userRecord = new UserRecord(userId, realName, emailAddress, avatarUrl, salt, saltedPasswordDigest);
+        userRecord = new UserRecord(userId, realName, emailAddress, personalAccessToken, avatarUrl, salt, saltedPasswordDigest);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_userId_IsNull() {
-        new UserRecord(null, realName, emailAddress, avatarUrl, salt, saltedPasswordDigest);
+        new UserRecord(null, realName, emailAddress, personalAccessToken, avatarUrl, salt, saltedPasswordDigest);
     }
 
     @Test
@@ -53,7 +55,7 @@ public class UserRecord_TestCase {
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_realName_IsNull() {
-        new UserRecord(userId, null, emailAddress, avatarUrl, salt, saltedPasswordDigest);
+        new UserRecord(userId, null, emailAddress, personalAccessToken, avatarUrl, salt, saltedPasswordDigest);
     }
 
     @Test
@@ -63,7 +65,7 @@ public class UserRecord_TestCase {
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_emailAddress_IsNull() {
-        new UserRecord(userId, realName, null, avatarUrl, salt, saltedPasswordDigest);
+        new UserRecord(userId, realName, null, personalAccessToken, avatarUrl, salt, saltedPasswordDigest);
     }
 
     @Test
@@ -73,7 +75,7 @@ public class UserRecord_TestCase {
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_avatarUrl_IsNull() {
-        new UserRecord(userId, realName, emailAddress, null, salt, saltedPasswordDigest);
+        new UserRecord(userId, realName, emailAddress, personalAccessToken, null, salt, saltedPasswordDigest);
     }
 
     @Test
@@ -83,7 +85,7 @@ public class UserRecord_TestCase {
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_salt_IsNull() {
-        new UserRecord(userId, realName, emailAddress, avatarUrl, null, saltedPasswordDigest);
+        new UserRecord(userId, realName, emailAddress, personalAccessToken, avatarUrl, null, saltedPasswordDigest);
     }
 
     @Test
@@ -93,7 +95,7 @@ public class UserRecord_TestCase {
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_saltedPasswordDigest_IsNull() {
-        new UserRecord(userId, realName, emailAddress, avatarUrl, salt, null);
+        new UserRecord(userId, realName, emailAddress, personalAccessToken, avatarUrl, salt, null);
     }
 
     @Test
@@ -113,42 +115,42 @@ public class UserRecord_TestCase {
 
     @Test
     public void shouldBeEqualToOther() {
-        assertThat(userRecord, is(new UserRecord(userId, realName, emailAddress, avatarUrl, salt, saltedPasswordDigest)));
+        assertThat(userRecord, is(new UserRecord(userId, realName, emailAddress, personalAccessToken, avatarUrl, salt, saltedPasswordDigest)));
     }
 
     @Test
     public void shouldNotBeEqualToOtherThatHasDifferent_userId() {
-        assertThat(userRecord, is(not(new UserRecord(Mockito.mock(UserId.class), realName, emailAddress, avatarUrl, salt, saltedPasswordDigest))));
+        assertThat(userRecord, is(not(new UserRecord(Mockito.mock(UserId.class), realName, emailAddress, personalAccessToken, avatarUrl, salt, saltedPasswordDigest))));
     }
 
     @Test
     public void shouldNotBeEqualToOtherThatHasDifferent_realName() {
-        assertThat(userRecord, is(not(new UserRecord(userId, "String-c546a2c3-850a-40db-81c2-d376303cb542", emailAddress, avatarUrl, salt, saltedPasswordDigest))));
+        assertThat(userRecord, is(not(new UserRecord(userId, "String-c546a2c3-850a-40db-81c2-d376303cb542", emailAddress, personalAccessToken, avatarUrl, salt, saltedPasswordDigest))));
     }
 
     @Test
     public void shouldNotBeEqualToOtherThatHasDifferent_emailAddress() {
-        assertThat(userRecord, is(not(new UserRecord(userId, realName, "String-e725a477-c521-469e-abff-3cf9dcdfd977", avatarUrl, salt, saltedPasswordDigest))));
+        assertThat(userRecord, is(not(new UserRecord(userId, realName, "String-e725a477-c521-469e-abff-3cf9dcdfd977", personalAccessToken, avatarUrl, salt, saltedPasswordDigest))));
     }
 
     @Test
     public void shouldNotBeEqualToOtherThatHasDifferent_avatarUrl() {
-        assertThat(userRecord, is(not(new UserRecord(userId, realName, emailAddress, "String-9c62bcba-f234-4c15-aa49-650fe22b962f", salt, saltedPasswordDigest))));
+        assertThat(userRecord, is(not(new UserRecord(userId, realName, emailAddress, personalAccessToken, "String-9c62bcba-f234-4c15-aa49-650fe22b962f", salt, saltedPasswordDigest))));
     }
 
     @Test
     public void shouldNotBeEqualToOtherThatHasDifferent_salt() {
-        assertThat(userRecord, is(not(new UserRecord(userId, realName, emailAddress, avatarUrl, Mockito.mock(Salt.class), saltedPasswordDigest))));
+        assertThat(userRecord, is(not(new UserRecord(userId, realName, emailAddress, personalAccessToken, avatarUrl, Mockito.mock(Salt.class), saltedPasswordDigest))));
     }
 
     @Test
     public void shouldNotBeEqualToOtherThatHasDifferent_saltedPasswordDigest() {
-        assertThat(userRecord, is(not(new UserRecord(userId, realName, emailAddress, avatarUrl, salt, Mockito.mock(SaltedPasswordDigest.class)))));
+        assertThat(userRecord, is(not(new UserRecord(userId, realName, emailAddress, personalAccessToken, avatarUrl, salt, Mockito.mock(SaltedPasswordDigest.class)))));
     }
 
     @Test
     public void shouldBeEqualToOtherHashCode() {
-        assertThat(userRecord.hashCode(), is(new UserRecord(userId, realName, emailAddress, avatarUrl, salt, saltedPasswordDigest).hashCode()));
+        assertThat(userRecord.hashCode(), is(new UserRecord(userId, realName, emailAddress, personalAccessToken, avatarUrl, salt, saltedPasswordDigest).hashCode()));
     }
 
     @Test

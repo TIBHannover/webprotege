@@ -2,10 +2,7 @@ package edu.stanford.bmir.protege.web.server.auth;
 
 import edu.stanford.bmir.protege.web.shared.auth.Salt;
 import edu.stanford.bmir.protege.web.shared.auth.SaltedPasswordDigest;
-import edu.stanford.bmir.protege.web.shared.user.EmailAddress;
-import edu.stanford.bmir.protege.web.shared.user.UserDetails;
-import edu.stanford.bmir.protege.web.shared.user.UserId;
-import edu.stanford.bmir.protege.web.shared.user.UserRegistrationException;
+import edu.stanford.bmir.protege.web.shared.user.*;
 
 import java.util.Optional;
 
@@ -16,7 +13,7 @@ import java.util.Optional;
  */
 public interface AuthenticationManager {
 
-    UserDetails registerUser(UserId userId, EmailAddress email, SaltedPasswordDigest password, Salt salt) throws UserRegistrationException;
+    UserDetails registerUser(UserId userId, EmailAddress email, PersonalAccessToken token, SaltedPasswordDigest password, Salt salt) throws UserRegistrationException;
 
     void setDigestedPassword(UserId userId, SaltedPasswordDigest saltedPasswordDigest, Salt salt);
 

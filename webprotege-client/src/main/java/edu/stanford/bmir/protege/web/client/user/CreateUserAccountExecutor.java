@@ -5,10 +5,7 @@ import edu.stanford.bmir.protege.web.client.dispatch.DispatchServiceManager;
 import edu.stanford.bmir.protege.web.shared.auth.PasswordDigestAlgorithm;
 import edu.stanford.bmir.protege.web.shared.auth.Salt;
 import edu.stanford.bmir.protege.web.shared.auth.SaltedPasswordDigest;
-import edu.stanford.bmir.protege.web.shared.user.CreateUserAccountAction;
-import edu.stanford.bmir.protege.web.shared.user.CreateUserAccountResult;
-import edu.stanford.bmir.protege.web.shared.user.EmailAddress;
-import edu.stanford.bmir.protege.web.shared.user.UserId;
+import edu.stanford.bmir.protege.web.shared.user.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -33,9 +30,9 @@ public class CreateUserAccountExecutor {
         this.saltProvider = saltProvider;
     }
 
-    public void execute(UserId userId, EmailAddress emailAddress, String clearTextPassword, DispatchServiceCallback<CreateUserAccountResult> callback) {
+    public void execute(UserId userId, EmailAddress emailAddress, PersonalAccessToken personalAccessToken, String clearTextPassword, DispatchServiceCallback<CreateUserAccountResult> callback) {
         Salt salt = saltProvider.get();
         SaltedPasswordDigest saltedPasswordDigest = passwordDigestAlgorithm.getDigestOfSaltedPassword(clearTextPassword, salt);
-        dispatchServiceManager.execute(new CreateUserAccountAction(userId, emailAddress, saltedPasswordDigest, salt), callback);
+        dispatchServiceManager.execute(new CreateUserAccountAction(userId, emailAddress, personalAccessToken, saltedPasswordDigest, salt), callback);
     }
 }

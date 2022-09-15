@@ -34,6 +34,9 @@ public class CreateUserAccountAction_TestCase {
     private EmailAddress emailAddress;
 
     @Mock
+    private PersonalAccessToken personalAccessToken;
+
+    @Mock
     private SaltedPasswordDigest saltedPasswordDigest;
 
     @Mock
@@ -42,28 +45,28 @@ public class CreateUserAccountAction_TestCase {
 
     @Before
     public void setUp() throws Exception {
-        action = new CreateUserAccountAction(userId, emailAddress, saltedPasswordDigest, salt);
-        otherAction = new CreateUserAccountAction(userId, emailAddress, saltedPasswordDigest, salt);
+        action = new CreateUserAccountAction(userId, emailAddress, personalAccessToken, saltedPasswordDigest, salt);
+        otherAction = new CreateUserAccountAction(userId, emailAddress, personalAccessToken, saltedPasswordDigest, salt);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_UserId_IsNull() {
-        new CreateUserAccountAction(null, emailAddress, saltedPasswordDigest, salt);
+        new CreateUserAccountAction(null, emailAddress, personalAccessToken, saltedPasswordDigest, salt);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_EmailAddress_IsNull() {
-        new CreateUserAccountAction(userId, null, saltedPasswordDigest, salt);
+        new CreateUserAccountAction(userId, null, personalAccessToken, saltedPasswordDigest, salt);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_SaltedPasswordDigest_IsNull() {
-        new CreateUserAccountAction(userId, emailAddress, null, salt);
+        new CreateUserAccountAction(userId, emailAddress, personalAccessToken, null, salt);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_Salt_IsNull() {
-        new CreateUserAccountAction(userId, emailAddress, saltedPasswordDigest, null);
+        new CreateUserAccountAction(userId, emailAddress, personalAccessToken, saltedPasswordDigest, null);
     }
 
     @Test

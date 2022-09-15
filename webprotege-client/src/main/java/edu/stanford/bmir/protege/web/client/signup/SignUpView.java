@@ -30,6 +30,10 @@ public interface SignUpView extends IsWidget {
 
     void displayConfirmPasswordDoesNotMatchErrorMessage();
 
+    String getPersonalAccessToken();
+
+    void displayEnterPersonalAccessTokenErrorMessage();
+
     void setCancelHandler(ClickHandler clickHandler);
 
     void setSignUpHandler(ClickHandler clickHandler);

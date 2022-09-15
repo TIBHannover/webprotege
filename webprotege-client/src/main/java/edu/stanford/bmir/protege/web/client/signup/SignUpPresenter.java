@@ -109,6 +109,12 @@ public class SignUpPresenter implements Presenter {
             return;
         }
 
+        String personalAccessToken = view.getPersonalAccessToken();
+        if(personalAccessToken.isEmpty()) {
+            view.displayEnterPersonalAccessTokenErrorMessage();
+            return;
+        }
+
         String password = view.getPassword();
         if(password.isEmpty()) {
             view.displayEnterPasswordErrorMessage();
@@ -121,6 +127,7 @@ public class SignUpPresenter implements Presenter {
         }
         final SignupInfo data = new SignupInfo(
                 new EmailAddress(emailAddress),
+                new PersonalAccessToken(personalAccessToken),
                 userName,
                 password,
                 new NullHumanVerificationServiceProvider()
@@ -149,7 +156,7 @@ public class SignUpPresenter implements Presenter {
         );
 
         UserId userId = UserId.getUserId(data.getUserName());
-        executor.execute(userId, data.getEmailAddress(), data.getPassword(), new DispatchServiceCallback<CreateUserAccountResult>(errorDisplay) {
+        executor.execute(userId, data.getEmailAddress(), data.getPersonalAccessToken(), data.getPassword(), new DispatchServiceCallback<CreateUserAccountResult>(errorDisplay) {
             @Override
             public void handleSuccess(CreateUserAccountResult createUserAccountResult) {
                 messageBox.showMessage("Registration complete",

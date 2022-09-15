@@ -1,6 +1,7 @@
 package edu.stanford.bmir.protege.web.server.user;
 
 import edu.stanford.bmir.protege.web.shared.user.EmailAddress;
+import edu.stanford.bmir.protege.web.shared.user.PersonalAccessToken;
 import edu.stanford.bmir.protege.web.shared.user.UserDetails;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
 import org.slf4j.Logger;
@@ -37,6 +38,15 @@ public class UserDetailsManagerImpl implements UserDetailsManager {
             return Optional.empty();
         }
         Optional<UserRecord> record = repository.findOneByEmailAddress(emailAddress.getEmailAddress());
+        return record.map(UserRecord::getUserId);
+    }
+
+    @Override
+    public Optional<UserId> getUserIdByPersonalAccessToken(PersonalAccessToken personalAccessToken) {
+        if (personalAccessToken.getPersonalAccessToken().isEmpty()) {
+            return Optional.empty();
+        }
+        Optional<UserRecord> record = repository.findOneByEmailAddress(personalAccessToken.getPersonalAccessToken());
         return record.map(UserRecord::getUserId);
     }
 
@@ -92,6 +102,7 @@ public class UserDetailsManagerImpl implements UserDetailsManager {
                 theRecord.getUserId(),
                 theRecord.getRealName(),
                 email,
+                theRecord.getPersonalAccessToken(),
                 theRecord.getAvatarUrl(),
                 theRecord.getSalt(),
                 theRecord.getSaltedPasswordDigest()
@@ -110,4 +121,67 @@ public class UserDetailsManagerImpl implements UserDetailsManager {
         Optional<UserRecord> byEmail = repository.findOneByEmailAddress(userNameOrEmail);
         return byEmail.map(UserRecord::getUserId);
     }
+
+    @Override
+    public Optional<String> getToken(UserId userId) {
+        if (userId.isGuest()) {
+            return Optional.empty();
+        }
+        Optional<UserRecord> record = repository.findOne(userId);
+        if (!record.isPresent()) {
+            return Optional.empty();
+        }
+        String personalAccessToken = record.get().getPersonalAccessToken();
+        if (personalAccessToken.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(personalAccessToken);
+    }
+
+    @Override
+    public void setToken(UserId userId, String token) {
+        checkNotNull(userId);
+        checkNotNull(token);
+        logger.info("Received request to set personal access token ({}) for user ({})", token, userId.getUserName());
+        if (userId.isGuest()) {
+            logger.info("Specified user is the guest user.  Not setting personal access token.");
+            return;
+        }
+        Optional<UserRecord> record = repository.findOne(userId);
+        if (!record.isPresent()) {
+            logger.info("Specified user ({}) does not exist.", userId.getUserName());
+            return;
+        }
+        Optional<UserRecord> recordByEmail = repository.findOneByPersonalAccessToken(token);
+        if (recordByEmail.isPresent()) {
+            logger.info("Account with specified personal access token ({}) already exists", token);
+            return;
+        }
+        UserRecord theRecord = record.get();
+        UserRecord replacement = new UserRecord(
+                theRecord.getUserId(),
+                theRecord.getRealName(),
+                theRecord.getEmailAddress(),
+                token,
+                theRecord.getAvatarUrl(),
+                theRecord.getSalt(),
+                theRecord.getSaltedPasswordDigest()
+        );
+        repository.delete(userId);
+        repository.save(replacement);
+        logger.info("Personal access token for {} changed to {}", userId.getUserName(), token);
+    }
+
+    @Override
+    public Optional<UserId> getUserByUserIdOrToken(String userNameOrToken) {
+        Optional<UserRecord> byUserId = repository.findOne(UserId.getUserId(userNameOrToken));
+        if (byUserId.isPresent()) {
+            return Optional.of(byUserId.get().getUserId());
+        }
+        Optional<UserRecord> byEmail = repository.findOneByPersonalAccessToken(userNameOrToken);
+        return byEmail.map(UserRecord::getUserId);
+    }
+
+
+
 }

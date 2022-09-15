@@ -1,8 +1,6 @@
 package edu.stanford.bmir.protege.web.client.frame;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -30,6 +28,7 @@ import edu.stanford.bmir.protege.web.shared.frame.ObjectPropertyCharacteristic;
 import edu.stanford.bmir.protege.web.shared.frame.ObjectPropertyFrame;
 import edu.stanford.bmir.protege.web.shared.frame.PropertyAnnotationValue;
 import edu.stanford.bmir.protege.web.shared.frame.PropertyValueList;
+import edu.stanford.bmir.protege.web.shared.user.PersonalAccessToken;
 import org.semanticweb.owlapi.model.EntityType;
 
 import javax.annotation.Nonnull;

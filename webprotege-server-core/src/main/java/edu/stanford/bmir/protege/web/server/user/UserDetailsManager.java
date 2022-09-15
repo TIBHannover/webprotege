@@ -11,7 +11,7 @@ import java.util.Optional;
  * Stanford Center for Biomedical Informatics Research
  * 06/02/15
  */
-public interface UserDetailsManager extends HasGetUserIdByEmailAddress, HasGetUserIdByUserIdOrEmail {
+public interface UserDetailsManager extends HasGetUserIdByEmailAddress, HasGetUserIdByUserIdOrEmail, HasGetUserIdByPersonalAccessToken, HasGetUserIdByUserIdOrToken {
 
     List<UserId> getUserIdsContainingIgnoreCase(String userName, int limit);
 
@@ -27,6 +27,10 @@ public interface UserDetailsManager extends HasGetUserIdByEmailAddress, HasGetUs
     Optional<String> getEmail(UserId userId);
 
     void setEmail(UserId userId, String email);
+
+    Optional<String> getToken(UserId userId);
+
+    void setToken(UserId userId, String email);
 
 
 }

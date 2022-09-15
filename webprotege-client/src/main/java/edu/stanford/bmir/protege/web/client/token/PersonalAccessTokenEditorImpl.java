@@ -1,4 +1,4 @@
-package edu.stanford.bmir.protege.web.client.mail;
+package edu.stanford.bmir.protege.web.client.token;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
 import edu.stanford.bmir.protege.web.shared.DirtyChangedEvent;
 import edu.stanford.bmir.protege.web.shared.DirtyChangedHandler;
-import edu.stanford.bmir.protege.web.shared.user.EmailAddress;
+import edu.stanford.bmir.protege.web.shared.user.PersonalAccessToken;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -24,63 +24,63 @@ import java.util.Optional;
  * Bio-Medical Informatics Research Group<br>
  * Date: 06/11/2013
  */
-public class EmailAddressEditorImpl extends Composite implements EmailAddressEditor {
+public class PersonalAccessTokenEditorImpl extends Composite implements PersonalAccessTokenEditor {
 
-    interface EmailAddressEditorImplUiBinder extends UiBinder<HTMLPanel, EmailAddressEditorImpl> {
+    interface PersonalAccessTokenEditorImplUiBinder extends UiBinder<HTMLPanel, PersonalAccessTokenEditorImpl> {
 
     }
 
-    private static EmailAddressEditorImplUiBinder ourUiBinder = GWT.create(EmailAddressEditorImplUiBinder.class);
+    private static PersonalAccessTokenEditorImplUiBinder ourUiBinder = GWT.create(PersonalAccessTokenEditorImplUiBinder.class);
 
     @UiField
-    protected TextBox emailAddressField;
+    protected TextBox personalAccessTokenField;
 
     @UiField
-    protected TextBox confirmEmailAddressField;
+    protected TextBox confirmPersonalAccessTokenField;
 
     private boolean dirty = false;
 
-    @UiHandler("emailAddressField")
-    protected void handleEmailAddressChanged(ValueChangeEvent<String> evt) {
+    @UiHandler("personalAccessTokenField")
+    protected void handlePersonalAccessTokenChanged(ValueChangeEvent<String> evt) {
 
     }
 
-    @UiHandler("confirmEmailAddressField")
-    protected void handleConfirmEmailAddressChanged(ValueChangeEvent<String> evt) {
+    @UiHandler("confirmPersonalAccessTokenField")
+    protected void handleConfirmPersonalAccessTokenChanged(ValueChangeEvent<String> evt) {
 
     }
 
     @Inject
-    public EmailAddressEditorImpl() {
+    public PersonalAccessTokenEditorImpl() {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
     }
 
     @Override
-    public java.util.Optional<HasRequestFocus> getInitialFocusable() {
-        return java.util.Optional.of(() -> emailAddressField.setFocus(true));
+    public Optional<HasRequestFocus> getInitialFocusable() {
+        return Optional.of(() -> personalAccessTokenField.setFocus(true));
     }
 
     @Override
-    public void setValue(EmailAddress object) {
-        setEmailAddressValue(object.getEmailAddress());
+    public void setValue(PersonalAccessToken pat) {
+        setPersonalAccessTokenValue(pat.getPersonalAccessToken());
     }
 
     @Override
     public void clearValue() {
-        setEmailAddressValue("");
+        setPersonalAccessTokenValue("");
     }
 
-    private void setEmailAddressValue(String value) {
-        emailAddressField.setText(value);
-        confirmEmailAddressField.setValue(value);
+    private void setPersonalAccessTokenValue(String value) {
+        personalAccessTokenField.setText(value);
+        confirmPersonalAccessTokenField.setValue(value);
         dirty = false;
     }
 
     @Override
-    public Optional<EmailAddress> getValue() {
+    public Optional<PersonalAccessToken> getValue() {
         if(isWellFormed()) {
-            return Optional.of(new EmailAddress(emailAddressField.getText().trim()));
+            return Optional.of(new PersonalAccessToken(personalAccessTokenField.getText().trim()));
         }
         else {
             return Optional.empty();
@@ -98,18 +98,18 @@ public class EmailAddressEditorImpl extends Composite implements EmailAddressEdi
     }
 
     @Override
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Optional<EmailAddress>> handler) {
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Optional<PersonalAccessToken>> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
     }
 
     @Override
     public boolean isWellFormed() {
-        return emailAddressField.getText().trim().equals(confirmEmailAddressField.getText().trim());
+        return personalAccessTokenField.getText().trim().equals(confirmPersonalAccessTokenField.getText().trim());
     }
 
     @Override
     protected void onAttach() {
         super.onAttach();
-        emailAddressField.setFocus(true);
+        personalAccessTokenField.setFocus(true);
     }
 }

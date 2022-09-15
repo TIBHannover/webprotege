@@ -31,6 +31,8 @@ public class UserDetails implements Serializable {
 
     private String emailAddress;
 
+    private String personalAccessToken;
+
 
     /**
      * Constructs a {@link UserDetails} object representing the key details about a user.

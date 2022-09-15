@@ -35,7 +35,7 @@ public class LoggedInUserViewImpl extends Composite implements LoggedInUserView 
 
     private ChangePasswordHandler changePasswordHandler = () -> {};
 
-
+    private ChangePersonalAccessTokenHandler changePersonalAccessTokenHandler = () -> {};
 
 
     @UiField
@@ -51,6 +51,7 @@ public class LoggedInUserViewImpl extends Composite implements LoggedInUserView 
         popupMenu.addItem(MESSAGES.signOut(), () -> signOutRequestHandler.handleSignOutRequest());
         popupMenu.addItem(MESSAGES.changeEmailAddress(), () -> changeEmailAddressHandler.handleChangeEmailAddress());
         popupMenu.addItem(MESSAGES.changePassword(), () -> changePasswordHandler.handleChangePassword());
+        popupMenu.addItem(MESSAGES.changePersonalAccessToken(), () -> changePersonalAccessTokenHandler.handleChangePersonalAccessToken());
     }
 
     @UiHandler("loggedInUserButton")
@@ -83,5 +84,10 @@ public class LoggedInUserViewImpl extends Composite implements LoggedInUserView 
     @Override
     public void setChangePasswordHandler(ChangePasswordHandler handler) {
         changePasswordHandler = checkNotNull(handler);
+    }
+
+    @Override
+    public void setChangePersonalAccessTokenHandler(ChangePersonalAccessTokenHandler handler) {
+        changePersonalAccessTokenHandler = checkNotNull(handler);
     }
 }

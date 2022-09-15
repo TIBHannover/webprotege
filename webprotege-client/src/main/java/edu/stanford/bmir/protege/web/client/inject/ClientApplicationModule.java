@@ -71,6 +71,8 @@ import edu.stanford.bmir.protege.web.client.settings.SettingsViewImpl;
 import edu.stanford.bmir.protege.web.client.signup.SignUpView;
 import edu.stanford.bmir.protege.web.client.signup.SignUpViewImpl;
 import edu.stanford.bmir.protege.web.client.tag.*;
+import edu.stanford.bmir.protege.web.client.token.PersonalAccessTokenEditor;
+import edu.stanford.bmir.protege.web.client.token.PersonalAccessTokenEditorImpl;
 import edu.stanford.bmir.protege.web.client.topbar.GoToHomeView;
 import edu.stanford.bmir.protege.web.client.topbar.GoToToHomeViewImpl;
 import edu.stanford.bmir.protege.web.client.topbar.TopBarView;
@@ -197,6 +199,12 @@ public class ClientApplicationModule {
     @Provides
     @ApplicationSingleton
     ChangeEmailAddressHandler provideChangeEmailAddressHandler(ChangeEmailAddressHandlerImpl impl) {
+        return impl;
+    }
+
+    @Provides
+    @ApplicationSingleton
+    ChangePersonalAccessTokenHandler provideChangePersonalAccessTokenHandler(ChangePersonalAccessTokenHandlerImpl impl) {
         return impl;
     }
 
@@ -574,6 +582,12 @@ public class ClientApplicationModule {
     EmailAddressEditor provideEmailAddressEditor(@Nonnull EmailAddressEditorImpl impl) {
         return impl;
     }
+
+    @Provides
+    PersonalAccessTokenEditor providePersonalAccessTokenEditor(@Nonnull PersonalAccessTokenEditorImpl impl) {
+        return impl;
+    }
+
 
     @Provides
     InputBoxView providesInputBoxView(InputBoxViewImpl impl) {

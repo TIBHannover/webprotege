@@ -90,6 +90,10 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("changeEmailAddress")
     String changeEmailAddress();
 
+    @DefaultMessage("Change Personal Access Token")
+    @Key("changePersonalAccessToken")
+    String changePersonalAccessToken();
+
     
     @DefaultMessage("Change Password")
     @Key("changePassword")

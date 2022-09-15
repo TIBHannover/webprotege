@@ -19,6 +19,8 @@ public class CreateUserAccountAction implements Action<CreateUserAccountResult> 
 
     private EmailAddress emailAddress;
 
+    private PersonalAccessToken personalAccessToken;
+
     private SaltedPasswordDigest passwordDigest;
 
     private Salt salt;
@@ -29,9 +31,10 @@ public class CreateUserAccountAction implements Action<CreateUserAccountResult> 
     private CreateUserAccountAction() {
     }
 
-    public CreateUserAccountAction(UserId userId, EmailAddress emailAddress, SaltedPasswordDigest passwordDigest, Salt salt) {
+    public CreateUserAccountAction(UserId userId, EmailAddress emailAddress, PersonalAccessToken token, SaltedPasswordDigest passwordDigest, Salt salt) {
         this.userId = checkNotNull(userId);
         this.emailAddress = checkNotNull(emailAddress);
+        this.personalAccessToken = checkNotNull(token);
         this.passwordDigest = checkNotNull(passwordDigest);
         this.salt = checkNotNull(salt);
     }
@@ -43,6 +46,8 @@ public class CreateUserAccountAction implements Action<CreateUserAccountResult> 
     public EmailAddress getEmailAddress() {
         return emailAddress;
     }
+
+    public PersonalAccessToken getPersonalAccessToken() { return personalAccessToken;}
 
     public SaltedPasswordDigest getPasswordDigest() {
         return passwordDigest;
@@ -68,6 +73,7 @@ public class CreateUserAccountAction implements Action<CreateUserAccountResult> 
         CreateUserAccountAction other = (CreateUserAccountAction) obj;
         return this.getUserId().equals(other.getUserId())
                 && this.getEmailAddress().equals(other.getEmailAddress())
+                && this.getPersonalAccessToken().equals(other.getPersonalAccessToken())
                 && this.getPasswordDigest().equals(other.getPasswordDigest())
                 && this.getSalt().equals(other.getSalt());
     }
@@ -78,6 +84,7 @@ public class CreateUserAccountAction implements Action<CreateUserAccountResult> 
         return toStringHelper("CreateUserAccountAction")
                 .addValue(userId)
                 .addValue(emailAddress)
+                .addValue(personalAccessToken)
                 .addValue(passwordDigest)
                 .addValue(salt)
                 .toString();

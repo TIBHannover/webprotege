@@ -2,6 +2,7 @@ package edu.stanford.bmir.protege.web.client.signup;
 
 import edu.stanford.bmir.protege.web.client.verification.HumanVerificationServiceProvider;
 import edu.stanford.bmir.protege.web.shared.user.EmailAddress;
+import edu.stanford.bmir.protege.web.shared.user.PersonalAccessToken;
 
 import java.io.Serializable;
 
@@ -20,6 +21,8 @@ public class SignupInfo implements Serializable {
     private String password;
     
     private String userName;
+
+    private PersonalAccessToken personalAccessToken;
 
     private transient HumanVerificationServiceProvider verificationServiceProvider;
 
@@ -41,8 +44,9 @@ public class SignupInfo implements Serializable {
      * @throws NullPointerException if any parameter is {@code null}.
      *
      */
-    public SignupInfo(EmailAddress emailAddress, String userName, String password, HumanVerificationServiceProvider verificationServiceProvider) {
+    public SignupInfo(EmailAddress emailAddress, PersonalAccessToken personalAccessToken, String userName, String password, HumanVerificationServiceProvider verificationServiceProvider) {
         this.emailAddress = checkNotNull(emailAddress);
+        this.personalAccessToken = checkNotNull(personalAccessToken);
         this.userName = checkNotNull(userName);
         this.password = checkNotNull(password);
         this.verificationServiceProvider = verificationServiceProvider;
@@ -71,6 +75,8 @@ public class SignupInfo implements Serializable {
     public String getUserName() {
         return userName;
     }
+
+    public PersonalAccessToken getPersonalAccessToken() { return personalAccessToken; }
 
     public HumanVerificationServiceProvider getVerificationServiceProvider() {
         return verificationServiceProvider;

@@ -7,6 +7,7 @@ import edu.stanford.bmir.protege.web.shared.auth.Salt;
 import edu.stanford.bmir.protege.web.shared.auth.SaltedPasswordDigest;
 import edu.stanford.bmir.protege.web.shared.user.CreateUserAccountAction;
 import edu.stanford.bmir.protege.web.shared.user.EmailAddress;
+import edu.stanford.bmir.protege.web.shared.user.PersonalAccessToken;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,6 +43,9 @@ public class CreateUserAccountActionHandler_TestCase {
     private EmailAddress emailAddress;
 
     @Mock
+    private PersonalAccessToken personalAccessToken;
+
+    @Mock
     private SaltedPasswordDigest saltedPasswordDigest;
 
     @Mock
@@ -55,6 +59,7 @@ public class CreateUserAccountActionHandler_TestCase {
         handler = new CreateUserAccountActionHandler(accessManager, authenticationManager);
         when(action.getUserId()).thenReturn(userId);
         when(action.getEmailAddress()).thenReturn(emailAddress);
+        when(action.getPersonalAccessToken()).thenReturn(personalAccessToken);
         when(action.getPasswordDigest()).thenReturn(saltedPasswordDigest);
         when(action.getSalt()).thenReturn(salt);
     }
@@ -62,6 +67,6 @@ public class CreateUserAccountActionHandler_TestCase {
     @Test
     public void shouldCreateUserAccount() {
         handler.execute(action, executionContext);
-        verify(authenticationManager, times(1)).registerUser(userId, emailAddress, saltedPasswordDigest, salt);
+        verify(authenticationManager, times(1)).registerUser(userId, emailAddress, personalAccessToken, saltedPasswordDigest, salt);
     }
 }

@@ -23,6 +23,8 @@ public class UserRecordConverter implements DocumentConverter<UserRecord> {
 
     private static final String EMAIL_ADDRESS = "emailAddress";
 
+    private static final String PERSONAL_ACCESS_TOKEN = "personalAccessToken";
+
     private static final String AVATAR_URL = "avatar";
 
     private static final String SALT = "salt";
@@ -39,6 +41,7 @@ public class UserRecordConverter implements DocumentConverter<UserRecord> {
         document.append(USER_ID, object.getUserId().getUserName());
         document.append(REAL_NAME, object.getRealName());
         document.append(EMAIL_ADDRESS, object.getEmailAddress());
+        document.append(PERSONAL_ACCESS_TOKEN, object.getPersonalAccessToken());
         if (!object.getAvatarUrl().isEmpty()) {
             document.append(AVATAR_URL, object.getAvatarUrl());
         }
@@ -52,6 +55,7 @@ public class UserRecordConverter implements DocumentConverter<UserRecord> {
         String userId = document.getString(USER_ID);
         String realName = document.getString(REAL_NAME);
         String email = orEmptyString(document.getString(EMAIL_ADDRESS));
+        String token = orEmptyString(document.getString(PERSONAL_ACCESS_TOKEN));
         String avatar = orEmptyString(document.getString(AVATAR_URL));
         Salt salt = new SaltReadConverter().convert(document.getString(SALT));
         SaltedPasswordDigest password = new SaltedPasswordDigestReadConverter().convert(document.getString(SALTED_PASSWORD_DIGEST));
@@ -59,6 +63,7 @@ public class UserRecordConverter implements DocumentConverter<UserRecord> {
                 UserId.getUserId(userId),
                 realName,
                 email,
+                token,
                 avatar,
                 salt,
                 password);
@@ -84,6 +89,10 @@ public class UserRecordConverter implements DocumentConverter<UserRecord> {
 
     public static Document byEmailAddress(@Nonnull String emailAddress) {
         return new Document(EMAIL_ADDRESS, emailAddress);
+    }
+
+    public static Document byPersonalAccessToken(@Nonnull String personalAccessToken) {
+        return new Document(PERSONAL_ACCESS_TOKEN, personalAccessToken);
     }
 
     public static Document byUserIdContainsIgnoreCase(@Nonnull String regex) {

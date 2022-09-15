@@ -100,7 +100,7 @@ public class OBOTermCrossProductEditorImpl extends Composite implements OBOTermC
     }
 
     @Override
-    public java.util.Optional<OBOTermCrossProduct> getValue() {
+    public Optional<OBOTermCrossProduct> getValue() {
         if(!genusField.getValue().isPresent()) {
             return java.util.Optional.empty();
         }

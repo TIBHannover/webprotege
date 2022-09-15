@@ -30,7 +30,7 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
     }
 
     @Override
-    public UserDetails registerUser(UserId userId, EmailAddress email, SaltedPasswordDigest password, Salt salt) throws UserRegistrationException {
+    public UserDetails registerUser(UserId userId, EmailAddress email, PersonalAccessToken token, SaltedPasswordDigest password, Salt salt) throws UserRegistrationException {
         checkNotNull(userId);
         checkNotNull(email);
         checkNotNull(password);
@@ -48,6 +48,7 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
                 userId,
                 userId.getUserName(),
                 email.getEmailAddress(),
+                token.getPersonalAccessToken(),
                 "",
                 salt,
                 password
@@ -69,6 +70,7 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
                 record.get().getUserId(),
                 record.get().getRealName(),
                 record.get().getEmailAddress(),
+                record.get().getPersonalAccessToken(),
                 record.get().getAvatarUrl(),
                 salt,
                 saltedPasswordDigest
