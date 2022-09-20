@@ -96,7 +96,7 @@ public class GitFileUploadServlet extends HttpServlet {
 
         GitCommandsService gitCommandsService = new GitCommandsServiceImpl();
         gitCommandsService.gitCloneGitHub("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",
-                "nenadkrdzavac","test","C:/srv/webprotege/uploads/test");
+                "nenadkrdzavac","test","/srv/webprotege/uploads/test");
 
         WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
         UserId userId = webProtegeSession.getUserInSession();

@@ -54,7 +54,7 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
                 password
         );
         repository.save(newUserRecord);
-        return UserDetails.getUserDetails(userId, userId.getUserName(), email.getEmailAddress());
+        return UserDetails.getUserDetails(userId, userId.getUserName(), email.getEmailAddress(), token.getPersonalAccessToken());
     }
 
     @Override

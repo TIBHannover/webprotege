@@ -37,6 +37,9 @@ public interface CreateNewProjectView extends HasInitialFocusable, IsWidget {
     String getProjectLanguage();
 
     @Nullable
+    boolean getRepoCreationSelector();
+
+    @Nullable
     String getRepoURI();
 
     /**

@@ -7,6 +7,7 @@ import edu.stanford.bmir.protege.web.client.github.CommitSettingsDialog;
 import edu.stanford.bmir.protege.web.client.github.ProjectRevisionCommit;
 import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
 import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
+import edu.stanford.bmir.protege.web.shared.project.AvailableProject;
 import edu.stanford.bmir.protege.web.shared.project.ProjectId;
 import edu.stanford.bmir.protege.web.shared.revision.RevisionNumber;
 
@@ -26,7 +27,7 @@ public class CommitProjectRequestHandlerImpl implements CommitProjectRequestHand
 
     }
     @Override
-    public void handleCommitProjectRequest(ProjectId projectId) {
+    public void handleCommitProjectRequest(AvailableProject project, String token) {
 
         GWT.runAsync(new RunAsyncCallback() {
             @Override
@@ -35,7 +36,7 @@ public class CommitProjectRequestHandlerImpl implements CommitProjectRequestHand
 
             @Override
             public void onSuccess() {
-                CommitSettingsDialog.showDialog(extension -> doCommit(projectId, extension));
+                CommitSettingsDialog.showDialog(extension -> doCommit(project.getProjectId(), extension), project.getRepoURI(), token);
             }
         });
     }

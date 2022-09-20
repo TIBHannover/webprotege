@@ -9,6 +9,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
 import edu.stanford.bmir.protege.web.shared.project.AvailableProject;
 import edu.stanford.bmir.protege.web.shared.project.ProjectId;
 
@@ -34,15 +35,18 @@ public class AvailableProjectsListViewImpl extends Composite implements Availabl
 
     private final AvailableProjectPresenterFactory presenterFactory;
 
+    private final LoggedInUserProvider loggedInUserProvider;
+
 
     @UiField
     protected FlowPanel itemContainer;
 
     @Inject
-    public AvailableProjectsListViewImpl(AvailableProjectPresenterFactory presenterFactory) {
+    public AvailableProjectsListViewImpl(AvailableProjectPresenterFactory presenterFactory, LoggedInUserProvider loggedInUserProvider) {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
         this.presenterFactory = presenterFactory;
+        this.loggedInUserProvider = loggedInUserProvider;
     }
 
     @Override
@@ -60,7 +64,7 @@ public class AvailableProjectsListViewImpl extends Composite implements Availabl
         itemContainer.clear();
         entries.clear();
         for(final AvailableProject project : availableProjects) {
-            AvailableProjectPresenter itemPresenter = presenterFactory.create(project);
+            AvailableProjectPresenter itemPresenter = presenterFactory.create(project, loggedInUserProvider);
             itemPresenter.start();
             entries.add(itemPresenter);
             itemContainer.add(itemPresenter.getView());
@@ -69,7 +73,7 @@ public class AvailableProjectsListViewImpl extends Composite implements Availabl
 
     @Override
     public void addListData(AvailableProject details) {
-        AvailableProjectPresenter itemPresenter = presenterFactory.create(details);
+        AvailableProjectPresenter itemPresenter = presenterFactory.create(details, loggedInUserProvider);
         itemPresenter.start();
         itemContainer.insert(itemPresenter.getView(), 0);
         entries.add(0, itemPresenter);

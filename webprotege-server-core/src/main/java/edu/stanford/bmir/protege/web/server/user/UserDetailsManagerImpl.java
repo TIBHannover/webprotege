@@ -59,7 +59,8 @@ public class UserDetailsManagerImpl implements UserDetailsManager {
         return record.map(userRecord ->
                                   UserDetails.getUserDetails(userId,
                                                              userId.getUserName(),
-                                                             Optional.of(userRecord.getEmailAddress())));
+                                                             Optional.of(userRecord.getEmailAddress()),
+                                                             Optional.of(userRecord.getPersonalAccessToken())));
     }
 
     @Override

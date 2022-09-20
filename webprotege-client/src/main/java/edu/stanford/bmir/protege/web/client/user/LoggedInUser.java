@@ -54,6 +54,12 @@ public class LoggedInUser implements LoggedInUserProvider {
         return userInSession.getUserDetails().getUserId();
     }
 
+
+    @Nonnull
+    public String getCurrentUserToken() {
+        return userInSession.getUserDetails().getPersonalAccessToken().orElse("");
+    }
+
     @Nonnull
     public UserInSession getUserInSession() {
         return userInSession;

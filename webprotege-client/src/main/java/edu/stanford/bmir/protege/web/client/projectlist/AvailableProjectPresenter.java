@@ -4,6 +4,7 @@ import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 import edu.stanford.bmir.protege.web.client.action.AbstractUiAction;
 import edu.stanford.bmir.protege.web.client.projectmanager.*;
+import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
 import edu.stanford.bmir.protege.web.shared.TimeUtil;
 import edu.stanford.bmir.protege.web.shared.project.AvailableProject;
 import edu.stanford.bmir.protege.web.shared.project.ProjectId;
@@ -30,6 +31,9 @@ public class AvailableProjectPresenter {
     private final AvailableProject project;
 
     @Nonnull
+    private final LoggedInUserProvider loggedInUserProvider;
+
+    @Nonnull
     private final TrashManagerRequestHandler trashManagerRequestHandler;
 
     @Nonnull
@@ -48,13 +52,15 @@ public class AvailableProjectPresenter {
     @Inject
     public AvailableProjectPresenter(@Nonnull AvailableProject project,
                                      @Provided @Nonnull AvailableProjectView view,
+                                     LoggedInUserProvider loggedInUserProvider,
                                      @Provided @Nonnull LoadProjectInNewWindowRequestHandler loadProjectInNewWindowRequestHandler,
                                      @Provided @Nonnull TrashManagerRequestHandler trashManagerRequestHandler,
-                                     @Provided CommitProjectRequestHandler commitProjectRequestHandler,
+                                     @Provided @Nonnull CommitProjectRequestHandler commitProjectRequestHandler,
                                      @Provided @Nonnull LoadProjectRequestHandler loadProjectRequestHandler,
                                      @Provided @Nonnull DownloadProjectRequestHandler downloadProjectRequestHandler) {
         this.view = checkNotNull(view);
         this.project = checkNotNull(project);
+        this.loggedInUserProvider = checkNotNull(loggedInUserProvider);
         this.loadProjectInNewWindowRequestHandler = checkNotNull(loadProjectInNewWindowRequestHandler);
         this.trashManagerRequestHandler = checkNotNull(trashManagerRequestHandler);
         this.commitProjectRequestHandler = checkNotNull(commitProjectRequestHandler);
@@ -126,8 +132,8 @@ public class AvailableProjectPresenter {
         AbstractUiAction commitAction = new AbstractUiAction("Github commit") {
             @Override
             public void execute() {
-
-               commitProjectRequestHandler.handleCommitProjectRequest(project.getProjectId());
+               //BUralar ilginc
+               commitProjectRequestHandler.handleCommitProjectRequest(project,loggedInUserProvider.getCurrentUserToken());
 
             }
         };

@@ -13,4 +13,6 @@ public interface LoggedInUserProvider {
 
     @Nonnull
     UserId getCurrentUserId();
+
+    public String getCurrentUserToken();
 }

@@ -37,6 +37,7 @@ public class UserInSessionDecoder implements ClientObjectDecoder<UserInSession> 
         }
         String displayName = object.get(DISPLAY_NAME).isString().stringValue();
         String userEmail = object.get(USER_EMAIL).isString().stringValue();
+        String userToken = object.get(USER_TOKEN).isString().stringValue();
         JSONArray actionArray = object.get(APPLICATION_ACTIONS).isArray();
         Set<ActionId> allowedActions = new HashSet<>();
         if(actionArray != null) {
@@ -51,7 +52,7 @@ public class UserInSessionDecoder implements ClientObjectDecoder<UserInSession> 
             userDetails = UserDetails.getGuestUserDetails();
         }
         else {
-            userDetails = UserDetails.getUserDetails(userId, displayName, userEmail);
+            userDetails = UserDetails.getUserDetails(userId, displayName, userEmail, userToken);
         }
         return new UserInSession(
                 userDetails,

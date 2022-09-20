@@ -27,13 +27,16 @@ public class GwtTest_UserInSessionDecoder extends GWTTestCase {
 
     public static final String EXPECTED_EMAIL_ADDRESS = "john.smith@gmail.com";
 
+    public static final String EXPECTED_PERSONAL_ACCESS_TOKEN = "@token?!?";
+
     public static final Set<ActionId> EXPECTED_ACTIONS = ImmutableSet.of(new ActionId("MyAction"));
 
     public static final UserInSession EXPECTED_SESSION_DATA = new UserInSession(
             UserDetails.getUserDetails(
                     EXPECTED_USER_ID,
                     EXPECTED_DISPLAY_NAME,
-                    Optional.of(EXPECTED_EMAIL_ADDRESS)),
+                    Optional.of(EXPECTED_EMAIL_ADDRESS),
+                    Optional.of(EXPECTED_PERSONAL_ACCESS_TOKEN)),
             EXPECTED_ACTIONS
     );
     private String userInSessionJson;

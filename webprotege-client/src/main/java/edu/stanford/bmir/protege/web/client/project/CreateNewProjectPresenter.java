@@ -140,6 +140,11 @@ public class CreateNewProjectPresenter {
         view.submitFormData();
     }
 
+    private void cloneRepoAndCreateProject(){
+        // GIRAY
+
+    }
+
     private void handleSourcesUploadComplete(FormPanel.SubmitCompleteEvent event,
                                              ProjectCreatedHandler projectCreatedHandler) {
         FileUploadResponse response = new FileUploadResponse(event.getResults());

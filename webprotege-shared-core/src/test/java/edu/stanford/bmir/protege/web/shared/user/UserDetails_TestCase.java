@@ -34,25 +34,27 @@ public class UserDetails_TestCase {
 
     private Optional<String> emailAddress = Optional.of("Email Address");
 
+    private Optional<String> personalAccessToken = Optional.of("Personal Access Token");
+
     @Before
     public void setUp() throws Exception {
-        userDetails = new UserDetails(userId, displayName, emailAddress);
-        otherUserDetails = new UserDetails(userId, displayName, emailAddress);
+        userDetails = new UserDetails(userId, displayName, emailAddress, personalAccessToken);
+        otherUserDetails = new UserDetails(userId, displayName, emailAddress, personalAccessToken);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_UserId_IsNull() {
-        new UserDetails(null, displayName, emailAddress);
+        new UserDetails(null, displayName, emailAddress, personalAccessToken);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_DisplayName_IsNull() {
-        new UserDetails(userId, null, emailAddress);
+        new UserDetails(userId, null, emailAddress, personalAccessToken);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_EmailAddress_IsNull() {
-        new UserDetails(userId, displayName, null);
+        new UserDetails(userId, displayName, null, null);
     }
 
     @Test
@@ -103,7 +105,7 @@ public class UserDetails_TestCase {
     @Test
     public void shouldBeEqualToGuestUser() {
         assertThat(UserDetails.getGuestUserDetails(), is(new UserDetails(UserId.getGuest(), "Guest",
-                                                                         Optional.empty())));
+                                                                         Optional.empty(), Optional.empty())));
     }
 
 }

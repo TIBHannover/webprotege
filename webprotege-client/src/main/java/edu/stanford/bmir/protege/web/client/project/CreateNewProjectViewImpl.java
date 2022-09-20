@@ -37,6 +37,9 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     TextArea projectDescriptionField;
 
     @UiField
+    CheckBox repoCreationSelectorField;
+
+    @UiField
     TextBox repoURIField;
 
     @UiField
@@ -82,6 +85,10 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     public String getProjectLanguage() {
         return projectLanguageField.getValue().orElse("").trim();
     }
+
+    @Nullable
+    @Override
+    public boolean getRepoCreationSelector(){ return repoCreationSelectorField.getValue(); }
 
     @Nullable
     @Override

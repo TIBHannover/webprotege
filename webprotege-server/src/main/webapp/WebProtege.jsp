@@ -146,11 +146,12 @@
         else {
             UserDetailsManager userDetailsManager = getServerComponent().getUserDetailsManager();
             Optional<String> email = userDetailsManager.getEmail(userId);
+            Optional<String> token = userDetailsManager.getToken(userId);
             if (email.isPresent()) {
-                userDetails = UserDetails.getUserDetails(userId, userId.getUserName(), Optional.of(email.get()));
+                userDetails = UserDetails.getUserDetails(userId, userId.getUserName(), Optional.of(email.get()), Optional.of(token.get()));
             }
             else {
-                userDetails = UserDetails.getUserDetails(userId, userId.getUserName(), Optional.<String>empty());
+                userDetails = UserDetails.getUserDetails(userId, userId.getUserName(), Optional.<String>empty(), Optional.<String>empty());
             }
         }
         Set<ActionId> allowedApplicationActions = new HashSet<ActionId>(getAccessManager().getActionClosure(Subject.forUser(userId), ApplicationResource.get()));

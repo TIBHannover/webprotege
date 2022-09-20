@@ -1,5 +1,6 @@
 package edu.stanford.bmir.protege.web.client.projectmanager;
 
+import edu.stanford.bmir.protege.web.shared.project.AvailableProject;
 import edu.stanford.bmir.protege.web.shared.project.ProjectId;
 
 /**
@@ -14,5 +15,5 @@ public interface CommitProjectRequestHandler {
      * Handle a request to commit the specified project.  The project is identified by its {@link ProjectId}.
      * @param projectId The {@link ProjectId} that identifies the project to be committed.
      */
-    void handleCommitProjectRequest(ProjectId projectId);
+    void handleCommitProjectRequest(AvailableProject project, String token);
 }

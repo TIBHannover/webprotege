@@ -37,6 +37,11 @@
             <g:TextBox ui:field="repoURIField" addStyleNames="{style.formField}"/>
         </div>
 
+        <div class="{wp.style.formGroup}">
+            <g:Label text="{msg.repoURISelector}" addStyleNames="{wp.style.formLabel}"/>
+            <g:CheckBox ui:field="repoCreationSelectorField" addStyleNames="{style.formField}"/>
+        </div>
+
         <g:HTMLPanel ui:field="fileUploadArea" addStyleNames="{wp.style.formGroup}">
             <g:Label text="Create from existing sources" addStyleNames="{wp.style.formLabel}"/>
             <g:HTMLPanel addStyleNames="{style.uploadContainer}">

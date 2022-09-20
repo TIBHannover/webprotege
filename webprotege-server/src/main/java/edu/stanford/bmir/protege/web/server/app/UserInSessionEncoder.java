@@ -25,6 +25,7 @@ public class UserInSessionEncoder implements ClientObjectEncoder<UserInSession> 
                    .add(USER_NAME, userDetails.getUserId().getUserName())
                    .add(DISPLAY_NAME, userDetails.getDisplayName())
                    .add(USER_EMAIL, userDetails.getEmailAddress().orElse(""))
+                   .add(USER_TOKEN, userDetails.getPersonalAccessToken().orElse(""))
                    .add(APPLICATION_ACTIONS, actionArray)
                 .build();
     }

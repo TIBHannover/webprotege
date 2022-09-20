@@ -23,7 +23,7 @@ public class UserDetails implements Serializable {
 
     private static final String GUEST_DISPLAY_NAME = "Guest";
 
-    private static final UserDetails GUEST_DETAILS = new UserDetails(UserId.getGuest(), GUEST_DISPLAY_NAME, Optional.empty());
+    private static final UserDetails GUEST_DETAILS = new UserDetails(UserId.getGuest(), GUEST_DISPLAY_NAME, Optional.empty(), Optional.empty());
 
     private UserId userId;
 
@@ -43,10 +43,12 @@ public class UserDetails implements Serializable {
      */
     public UserDetails(@Nonnull UserId userId,
                        @Nonnull String displayName,
-                       @Nonnull Optional<String> emailAddress) {
+                       @Nonnull Optional<String> emailAddress,
+                       @Nonnull Optional<String> personalAccessToken) {
         this.userId = checkNotNull(userId);
         this.displayName = checkNotNull(displayName);
         this.emailAddress = emailAddress.orElse(null);
+        this.personalAccessToken = personalAccessToken.orElse(null);
     }
 
 
@@ -64,15 +66,17 @@ public class UserDetails implements Serializable {
     @Nonnull
     public static UserDetails getUserDetails(@Nonnull UserId userId,
                                              @Nonnull String displayName,
-                                             @Nonnull String emailAddress) {
-        return new UserDetails(userId, displayName, Optional.of(emailAddress));
+                                             @Nonnull String emailAddress,
+                                             @Nonnull String personalAccessToken) {
+        return new UserDetails(userId, displayName, Optional.of(emailAddress), Optional.of(personalAccessToken));
     }
 
     @Nonnull
     public static UserDetails getUserDetails(@Nonnull UserId userId,
                                              @Nonnull String displayName,
-                                             @Nonnull Optional<String> emailAddress) {
-        return new UserDetails(userId, displayName, emailAddress);
+                                             @Nonnull Optional<String> emailAddress,
+                                             @Nonnull Optional<String> personalAccessToken) {
+        return new UserDetails(userId, displayName, emailAddress, personalAccessToken);
     }
 
     @Nonnull
@@ -108,6 +112,11 @@ public class UserDetails implements Serializable {
         return Optional.ofNullable(emailAddress);
     }
 
+    @Nonnull
+    public Optional<String> getPersonalAccessToken() {
+        return Optional.ofNullable(personalAccessToken);
+    }
+
 
     @Override
     public int hashCode() {
@@ -132,6 +141,7 @@ public class UserDetails implements Serializable {
                           .addValue(userId)
                           .add("displayName", displayName)
                           .add("emailAddress", Optional.ofNullable(emailAddress).orElse(""))
+                          .add("personalAccessToken", Optional.ofNullable(personalAccessToken).orElse(""))
                           .toString();
     }
 }

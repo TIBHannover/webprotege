@@ -113,6 +113,11 @@ public abstract class AvailableProject implements IsSerializable, Comparable<Ava
         return getProjectDetails().getDescription();
     }
 
+    @Nonnull
+    public String getRepoURI() {
+        return getProjectDetails().getRepoURI();
+    }
+
     /**
      * Determines whether this project is in the trash or not.
      *

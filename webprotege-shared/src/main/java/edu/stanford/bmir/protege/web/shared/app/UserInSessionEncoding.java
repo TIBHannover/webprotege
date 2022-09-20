@@ -13,5 +13,7 @@ public interface UserInSessionEncoding {
 
     String USER_EMAIL = "userEmail";
 
+    String USER_TOKEN = "userToken";
+
     String APPLICATION_ACTIONS = "applicationActions";
 }

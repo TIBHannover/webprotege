@@ -721,6 +721,10 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("projectName")
     String projectName();
 
+    @DefaultMessage("Create Project from Repo URI")
+    @Key("repoURISelector")
+    String repoURISelector();
+
     @DefaultMessage("Repo URI")
     @Key("repoURI")
     String repoURI();
