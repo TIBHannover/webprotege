@@ -1,6 +1,7 @@
 package edu.stanford.bmir.protege.web.client.github;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.*;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
@@ -11,7 +12,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
-import edu.stanford.bmir.protege.web.client.repo.RepoMetadataService;
 import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
 import javax.inject.Inject;
 
@@ -33,25 +33,16 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
 
     @UiField
     protected ListBox repositoryListBox;
-    // alternatifi changeemailaddresspresenter da loggedinuserprovider ile
-    private final String token;
-
-    private final String repoURI;
-
-    private final RepoMetadataService repoMetadataService = new RepoMetadataService();
-
 
     @Inject
     public CommitSettingsViewImpl(String repoURI, String token) {
-        this.token = token;
-        this.repoURI = repoURI;
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
-        populateListBox();
+        populateListBox(repoURI, token);
 
     }
 
-    private void populateListBox(){
+    private void populateListBox(String repoURI, String token){
 
         String[] parsedRepoUrl = repoURI.split("/");
         StringBuilder sb = new StringBuilder();
@@ -69,16 +60,9 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
             sb.append(parsedRepoUrl[i]).append("/");
         }
         sb.append("branches");
-
-        repoMetadataService.callGithub(sb.toString(),token);
-        String responseBody = repoMetadataService.getResponseBody();
-        JSONValue jsonValue = JSONParser.parseStrict(responseBody);
-        JSONArray branches = jsonValue.isArray();
-
-        for (int i = 0; i< branches.size();i++){
-            final JSONObject branch = branches.get(i).isObject();
-            repositoryListBox.addItem(branch.get("name").isString().stringValue());
-        }
+        System.out.println("repoURI: "+sb.toString());
+        System.out.println("token: "+token);
+        callGithub(sb.toString(),token);
     }
 
     @Override
@@ -91,6 +75,46 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
             return GithubFormatExtension.values()[selIndex];
         }
     }
+
+    public String callGithub(String callUrl, String token) {
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
+        requestBuilder.setHeader("Authorization", "Bearer " + token);
+
+        try {
+            Request response = requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
+                        returnResponse(response.getText());
+                    } else {
+                        // Handle the error.  Can get the status text from response.getStatusText()
+                    }
+                }
+
+                public void onError(Request request, Throwable exception) {
+                    // Code omitted for clarity
+                }
+
+            });
+
+        } catch (RequestException e) {
+            throw new RuntimeException(e);
+        }
+
+        return "";
+
+    }
+
+    public void returnResponse(String result) {
+        JSONValue jsonValue = JSONParser.parseStrict(result);
+        JSONArray branches = jsonValue.isArray();
+
+        for (int i = 0; i< branches.size();i++){
+            final JSONObject branch = branches.get(i).isObject();
+            repositoryListBox.addItem(branch.get("name").isString().stringValue());
+        }
+    }
+
 
     @Override
     public void setGithubFormatExtension(GithubFormatExtension extension) {
