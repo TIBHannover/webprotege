@@ -16,4 +16,21 @@ public interface CommitSettingsView extends IsWidget, HasInitialFocusable {
     GithubFormatExtension getGithubFormatExtension();
 
     void setGithubFormatExtension(GithubFormatExtension extension);
+
+    String getBranch();
+
+    void setBranch(String branch);
+
+    void setBranch(int index);
+
+    String getMessage();
+
+    void setMessage(String branch);
+
+    String getPath();
+
+    void setPath(String path);
+
+    CommitData getCommitData();
+
 }

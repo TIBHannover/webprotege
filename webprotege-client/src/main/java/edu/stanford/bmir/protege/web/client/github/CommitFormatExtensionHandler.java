@@ -12,5 +12,5 @@ import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
  */
 public interface CommitFormatExtensionHandler {
 
-    void handleCommit(GithubFormatExtension extension);
+    void handleCommit(CommitData commitData);
 }

@@ -45,6 +45,8 @@ public enum BuiltInAction {
 
     DOWNLOAD_PROJECT,
 
+    COMMIT_PROJECT,
+
     REVERT_CHANGES,
 
     EDIT_ONTOLOGY,

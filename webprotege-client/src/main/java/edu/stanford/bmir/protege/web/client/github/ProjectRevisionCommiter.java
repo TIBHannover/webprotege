@@ -4,11 +4,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
 import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
-import edu.stanford.bmir.protege.web.shared.project.ProjectId;
+import edu.stanford.bmir.protege.web.shared.project.AvailableProject;
 import edu.stanford.bmir.protege.web.shared.revision.RevisionNumber;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static edu.stanford.bmir.protege.web.shared.download.ProjectDownloadConstants.*;
+import static edu.stanford.bmir.protege.web.shared.git.ProjectCommitConstants.*;
 
 /**
  * Author Nenad Krdzavac<br>
@@ -20,39 +20,47 @@ import static edu.stanford.bmir.protege.web.shared.download.ProjectDownloadConst
  *    Commits a project (possibly a specific revision) by opening a new browser window
  * </p>
  */
-public class ProjectRevisionCommit {
+public class ProjectRevisionCommiter {
 
-    private final ProjectId projectId;
+    private final AvailableProject project;
 
     private final RevisionNumber revisionNumber;
 
-    private final GithubFormatExtension formatExtension;
+    private final CommitData commitData;
 
     /**
      * Constructs a ProjectRevisionCommit for the specified project, revision and project format.
      *
-     * @param projectId The project id.  Not {@code null}.
+     * @param project The available project id.  Not {@code null}.
      * @param revisionNumber The revision to download.  Not {@code null}.
-     * @param githubFormatExtension The format that the project should be downloaded in.  Not {@code null}.
+     * @param commitData The format that the project should be downloaded in.  Not {@code null}.
      * @throws  NullPointerException if any parameters are {@code null}.
      */
-    public ProjectRevisionCommit(ProjectId projectId, RevisionNumber revisionNumber, GithubFormatExtension githubFormatExtension) {
-        this.projectId = checkNotNull(projectId);
+    public ProjectRevisionCommiter(AvailableProject project, RevisionNumber revisionNumber, CommitData commitData) {
+        this.project = checkNotNull(project);
         this.revisionNumber = checkNotNull(revisionNumber);
-        this.formatExtension = checkNotNull(githubFormatExtension);
+        this.commitData = checkNotNull(commitData);
     }
 
     /**
      * Causes a new browser window to be opened which will commit the specified project revision in the specified
      * format.
      */
-    public void commit() {
-        String encodedProjectName = URL.encode(projectId.getId());
+    public void commit(String token) {
+        String encodedProjectName = URL.encode(project.getProjectId().getId());
+        String encodedRepoURI = URL.encode(project.getRepoURI());
+        String encodedPath = URL.encode(commitData.getPath());
+        String encodedMessage = URL.encode(commitData.getMessage());
         String baseURL = GWT.getHostPageBaseURL();
         String commitURL = baseURL + "commit?"
                 + PROJECT + "=" + encodedProjectName  +
                 "&" + REVISION + "=" + revisionNumber.getValue() +
-                "&" + FORMAT + "=" + formatExtension.getExtension();
+                "&" + REPO_URI + "=" + encodedRepoURI +
+                "&" + PERSONAL_ACCESS_TOKEN + "=" + token +
+                "&" + BRANCH + "=" + commitData.getBranch() +
+                "&" + MESSAGE + "=" + encodedMessage +
+                "&" + PATH + "=" + encodedPath +
+                "&" + FORMAT + "=" + commitData.getGfe().getExtension();
         Window.open(commitURL, "Commit ontology", "");
     }
 

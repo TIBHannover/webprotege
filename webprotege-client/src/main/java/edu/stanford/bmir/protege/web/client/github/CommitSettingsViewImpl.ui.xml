@@ -8,6 +8,12 @@
     </ui:style>
     <g:HTMLPanel addStyleNames="{style.main-panel}">
         <g:InlineLabel text="Remote Github repository: " addStyleNames="{wp.style.formLabel}"/>
-        <g:ListBox ui:field="repositoryListBox" visibleItemCount="1"/>
+        <g:ListBox ui:field="branchListBox" visibleItemCount="1"/>
+        <g:InlineLabel text="Ontology Format: " addStyleNames="{wp.style.formLabel}"/>
+        <g:ListBox ui:field="formatListBox" visibleItemCount="1"/>
+        <g:InlineLabel text="Commit message: " addStyleNames="{wp.style.formLabel}"/>
+        <g:TextBox ui:field="messageTextBox" />
+        <g:InlineLabel text="Relative Path in Repo: " addStyleNames="{wp.style.formLabel}"/>
+        <g:TextBox ui:field="pathTextBox" />
     </g:HTMLPanel>
 </ui:UiBinder>

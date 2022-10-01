@@ -25,8 +25,9 @@ public class CommitSettingsDialog {
     public static void showDialog(final CommitFormatExtensionHandler handler, String repoURI, String token) {
         final CommitSettingsView view = new CommitSettingsViewImpl(repoURI, token);
         view.setGithubFormatExtension(lastExtension);
+        view.setBranch(0);
 
-        WebProtegeOKCancelDialogController<GithubFormatExtension> controller = new WebProtegeOKCancelDialogController<GithubFormatExtension>("Commit project") {
+        WebProtegeOKCancelDialogController<CommitData> controller = new WebProtegeOKCancelDialogController<CommitData>("Commit project") {
 
             @Override
             public Widget getWidget() {
@@ -40,19 +41,21 @@ public class CommitSettingsDialog {
             }
 
             @Override
-            public GithubFormatExtension getData() {
-                return view.getGithubFormatExtension();
+            public CommitData getData() {
+                return view.getCommitData();
             }
         };
-        controller.setDialogButtonHandler(DialogButton.OK, new WebProtegeDialogButtonHandler<GithubFormatExtension>() {
+        controller.setDialogButtonHandler(DialogButton.OK, new WebProtegeDialogButtonHandler<CommitData>() {
             @Override
-            public void handleHide(GithubFormatExtension data, WebProtegeDialogCloser closer) {
+            public void handleHide(CommitData data, WebProtegeDialogCloser closer) {
                 closer.hide();
-                lastExtension = data;
+                lastExtension = data.getGfe();
                 handler.handleCommit(data);
             }
         });
-        WebProtegeDialog<GithubFormatExtension> dlg = new WebProtegeDialog<GithubFormatExtension>(controller);
+        WebProtegeDialog<CommitData> dlg = new WebProtegeDialog<CommitData>(controller);
         dlg.show();
     }
+
+
 }

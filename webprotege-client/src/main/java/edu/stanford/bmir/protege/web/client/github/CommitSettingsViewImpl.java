@@ -11,7 +11,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
+import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
 import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
 import javax.inject.Inject;
 
@@ -32,17 +34,27 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     private static CommitSettingsViewImplUiBinder ourUiBinder = GWT.create(CommitSettingsViewImplUiBinder.class);
 
     @UiField
-    protected ListBox repositoryListBox;
+    protected ListBox branchListBox;
+
+    @UiField
+    protected ListBox formatListBox;
+
+    @UiField
+    protected TextBox messageTextBox;
+
+    @UiField
+    protected TextBox pathTextBox;
 
     @Inject
     public CommitSettingsViewImpl(String repoURI, String token) {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
-        populateListBox(repoURI, token);
+        populateBranchListBox(repoURI, token);
+        populateFormatListBox();
 
     }
 
-    private void populateListBox(String repoURI, String token){
+    private void populateBranchListBox(String repoURI, String token){
 
         String[] parsedRepoUrl = repoURI.split("/");
         StringBuilder sb = new StringBuilder();
@@ -63,17 +75,6 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
         System.out.println("repoURI: "+sb.toString());
         System.out.println("token: "+token);
         callGithub(sb.toString(),token);
-    }
-
-    @Override
-    public GithubFormatExtension getGithubFormatExtension() {
-        int selIndex = repositoryListBox.getSelectedIndex();
-        if(selIndex == 0) {
-            return GithubFormatExtension.owl;
-        }
-        else {
-            return GithubFormatExtension.values()[selIndex];
-        }
     }
 
     public String callGithub(String callUrl, String token) {
@@ -111,16 +112,69 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
 
         for (int i = 0; i< branches.size();i++){
             final JSONObject branch = branches.get(i).isObject();
-            repositoryListBox.addItem(branch.get("name").isString().stringValue());
+            branchListBox.addItem(branch.get("name").isString().stringValue());
         }
     }
 
+    private void populateFormatListBox() {
+        for(DownloadFormatExtension extension : DownloadFormatExtension.values()) {
+            formatListBox.addItem(extension.getDisplayName());
+        }
+    }
+
+    @Override
+    public GithubFormatExtension getGithubFormatExtension() {
+        int selIndex = formatListBox.getSelectedIndex();
+        if(selIndex == 0) {
+            return GithubFormatExtension.owl;
+        }
+        else {
+            return GithubFormatExtension.values()[selIndex];
+        }
+    }
 
     @Override
     public void setGithubFormatExtension(GithubFormatExtension extension) {
         int selIndex = extension.ordinal();
-        repositoryListBox.setSelectedIndex(selIndex);
+        formatListBox.setSelectedIndex(selIndex);
     }
+    @Override
+    public String getBranch(){
+        return branchListBox.getSelectedValue();
+    }
+    @Override
+    public void setBranch(String branch){
+        for(int i = 0; i<branchListBox.getItemCount(); i++){
+            if (branchListBox.getItemText(i).equals(branch))
+                branchListBox.setSelectedIndex(i);
+        }
+    }
+
+    @Override
+    public void setBranch(int index){
+        branchListBox.setSelectedIndex(index);
+
+    }
+    @Override
+    public String getMessage(){
+        return messageTextBox.getValue();
+    }
+    @Override
+    public void setMessage(String message){
+        messageTextBox.setValue(message);
+    }
+
+    @Override
+    public String getPath() {return pathTextBox.getValue(); }
+    @Override
+    public void setPath(String path) {pathTextBox.setValue(path);}
+
+
+    @Override
+    public CommitData getCommitData(){
+        return new CommitData(getGithubFormatExtension(),getBranch(),getMessage(),getPath());
+    }
+
 
     @Override
     public java.util.Optional<HasRequestFocus> getInitialFocusable() {
