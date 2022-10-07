@@ -34,7 +34,9 @@
 
         <div class="{wp.style.formGroup}">
             <g:Label text="{msg.repoURI}" addStyleNames="{wp.style.formLabel}"/>
-            <g:TextBox ui:field="repoURIField" addStyleNames="{style.formField}"/>
+            <g:FormPanel ui:field="repoFormPanel">
+                <g:TextBox ui:field="repoURIField" addStyleNames="{style.formField}"/>
+            </g:FormPanel>
         </div>
 
         <div class="{wp.style.formGroup}">

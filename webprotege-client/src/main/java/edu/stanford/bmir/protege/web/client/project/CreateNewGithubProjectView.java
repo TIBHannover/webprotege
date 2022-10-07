@@ -22,38 +22,18 @@ public interface CreateNewGithubProjectView extends HasInitialFocusable, IsWidge
      * @return gets remote source Github repository
      */
     @Nonnull
-    String getRemoteGithubRepositoryURL();
+    String getRepoURIField();
 
 
     @Nonnull
-    String getGithubAccessToken();
-
-    /**
-     * Gets a description for the new project.
-     */
-//    @Nonnull
-//    String getProjectDescription();
-
-    /**
-     * Gets the language used for labelling new entities and displaying entities.
-     * @return The (possibly empty) language.  This is trimmed so that there is no
-     * leading or trailing white space.
-     */
-//    @Nonnull
-//    String getProjectLanguage();
-
-    /**
-     * Specified whether the file upload section of the view should be enabled/visible.
-     * @param enabled true if the file upload section should be enabled/visible, otherwise false.
-     */
-    void setFileUploadEnabled(boolean enabled);
+    String getPersonalAccessTokenField();
 
     /**
      * Sets the URL that the upload should be posted to.  This is the URL that would be set in the "action" field
      * on an HTML form.
      * @param url The post URL.
      */
-    void setGitFileUploadPostUrl(@Nonnull String url);
+    void setGitFileUploadPostUrl(@Nonnull String url, String token);
 
     /**
      * Determines whether a file (for upload) has been supplied.

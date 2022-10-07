@@ -51,7 +51,7 @@ public class WebProtegeServletContextListener implements ServletContextListener 
              * TIB-Leibniz Information Centre for Science and Technology and University Library
              * 27.06.2022
              */
-            servletContext.addServlet("GitFileUploadServlet", serverComponent.getGitFileUploadServlet())
+            servletContext.addServlet("GitCloneServlet", serverComponent.getGitCloneServlet())
                             .addMapping("/webprotege/submitgitfile");
 
             servletContext.addServlet("JerseyContainerServlet", serverComponent.getJerseyServletContainer())

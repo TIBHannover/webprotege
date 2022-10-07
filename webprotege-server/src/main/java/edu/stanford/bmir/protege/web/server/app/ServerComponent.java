@@ -9,11 +9,9 @@ import edu.stanford.bmir.protege.web.server.git.GitFileCommitServlet;
 import edu.stanford.bmir.protege.web.server.inject.*;
 import edu.stanford.bmir.protege.web.server.inject.project.ProjectModule;
 import edu.stanford.bmir.protege.web.server.project.ProjectCacheManager;
-import edu.stanford.bmir.protege.web.server.project.ProjectDisposablesManager;
 import edu.stanford.bmir.protege.web.server.upload.FileUploadServlet;
-import edu.stanford.bmir.protege.web.server.upload.GitFileUploadServlet;
+import edu.stanford.bmir.protege.web.server.upload.GitCloneServlet;
 import edu.stanford.bmir.protege.web.server.user.UserDetailsManager;
-import edu.stanford.bmir.protege.web.server.util.DisposableObjectManager;
 import edu.stanford.bmir.protege.web.shared.inject.ApplicationSingleton;
 import edu.stanford.bmir.protege.web.shared.inject.SharedApplicationModule;
 import org.glassfish.jersey.servlet.ServletContainer;
@@ -47,7 +45,7 @@ public interface ServerComponent {
 
     FileUploadServlet getFileUploadServlet();
 
-    GitFileUploadServlet getGitFileUploadServlet();
+    GitCloneServlet getGitCloneServlet();
 
     ServletContainer getJerseyServletContainer();
 

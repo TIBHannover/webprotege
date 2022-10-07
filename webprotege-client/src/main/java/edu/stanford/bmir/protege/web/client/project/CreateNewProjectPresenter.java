@@ -1,6 +1,13 @@
 package edu.stanford.bmir.protege.web.client.project;
 
+import com.google.auto.factory.AutoFactory;
+import com.google.auto.factory.Provided;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.URL;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import edu.stanford.bmir.protege.web.client.dispatch.DispatchErrorMessageDisplay;
@@ -12,17 +19,20 @@ import edu.stanford.bmir.protege.web.client.progress.ProgressMonitor;
 import edu.stanford.bmir.protege.web.client.projectmanager.ProjectCreatedEvent;
 import edu.stanford.bmir.protege.web.client.upload.FileUploadResponse;
 import edu.stanford.bmir.protege.web.client.user.LoggedInUserManager;
+import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
 import edu.stanford.bmir.protege.web.shared.csv.DocumentId;
 import edu.stanford.bmir.protege.web.shared.permissions.PermissionDeniedException;
 import edu.stanford.bmir.protege.web.shared.project.*;
 
 import com.allen_sauer.gwt.log.client.Log;
+import edu.stanford.bmir.protege.web.shared.upload.FileUploadResponseAttributes;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.stanford.bmir.protege.web.shared.access.BuiltInAction.UPLOAD_PROJECT;
+import static edu.stanford.bmir.protege.web.shared.git.ProjectCommitConstants.*;
 
 /**
  * Matthew Horridge Stanford Center for Biomedical Informatics Research 16 Nov 2017
@@ -44,6 +54,9 @@ public class CreateNewProjectPresenter {
     private final LoggedInUserManager loggedInUserManager;
 
     @Nonnull
+    private final LoggedInUserProvider loggedInUserProvider;
+
+    @Nonnull
     private final DispatchServiceManager dispatchServiceManager;
 
     @Nonnull
@@ -51,10 +64,11 @@ public class CreateNewProjectPresenter {
 
     @Nonnull
     private final MessageBox messageBox;
-
+    @AutoFactory
     @Inject
     public CreateNewProjectPresenter(DispatchErrorMessageDisplay errorDisplay, ProgressDisplay progressDisplay, @Nonnull CreateNewProjectView view,
                                      @Nonnull LoggedInUserManager loggedInUserManager,
+                                     @Provided LoggedInUserProvider loggedInUserProvider,
                                      @Nonnull DispatchServiceManager dispatchServiceManager,
                                      @Nonnull EventBus eventBus,
                                      @Nonnull MessageBox messageBox) {
@@ -62,6 +76,7 @@ public class CreateNewProjectPresenter {
         this.progressDisplay = progressDisplay;
         this.view = checkNotNull(view);
         this.loggedInUserManager = checkNotNull(loggedInUserManager);
+        this.loggedInUserProvider = checkNotNull(loggedInUserProvider);
         this.dispatchServiceManager = checkNotNull(dispatchServiceManager);
         this.eventBus = checkNotNull(eventBus);
         this.messageBox = messageBox;
@@ -73,6 +88,9 @@ public class CreateNewProjectPresenter {
     }
 
     public void start() {
+
+        view.setCloneEnabled(true);
+
         view.clear();
         if (loggedInUserManager.isAllowedApplicationAction(UPLOAD_PROJECT)) {
             view.setFileUploadEnabled(true);
@@ -108,40 +126,58 @@ public class CreateNewProjectPresenter {
 
     private void createEmptyProject(ProjectCreatedHandler projectCreatedHandler) {
 
+        if (view.getRepoCreationSelector()){
+            String encodedRepoURI = URL.encode(view.getRepoURI());
+            String getURL = GWT.getModuleBaseURL() + "submitgitfile";
+            /*        + REPO_URI + "=" + encodedRepoURI +
+                    "&" + PERSONAL_ACCESS_TOKEN + "=" + loggedInUserProvider.getCurrentUserToken();*/
+            Log.info("GWT.getModuleBaseURL(): " + GWT.getModuleBaseURL().toString());
+            Log.info("GWT.getHostPageBaseURL(): " + GWT.getHostPageBaseURL());
+            Log.info("getUrl: " + getURL);
+            view.setGitClonePostUrl(getURL, loggedInUserProvider.getCurrentUserToken());
 
-        NewProjectSettings newProjectSettings = NewProjectSettings.get(
-                loggedInUserManager.getLoggedInUserId(),
-                view.getProjectName(),
-                view.getProjectLanguage(),
-                view.getProjectDescription(),
-                view.getRepoURI());
-        submitCreateNewProjectRequest(newProjectSettings, projectCreatedHandler);
+            ProgressMonitor.get().showProgressMonitor("Uploading sources", "Uploading file");
+
+            view.setGitSubmitCompleteHandler(event -> {
+                ProgressMonitor.get().hideProgressMonitor();
+                handleSourcesCloneComplete(event, projectCreatedHandler);
+            });
+
+            view.submitGitFormData();
+        } else {
+            NewProjectSettings newProjectSettings = NewProjectSettings.get(
+                    loggedInUserManager.getLoggedInUserId(),
+                    view.getProjectName(),
+                    view.getProjectLanguage(),
+                    view.getProjectDescription(),
+                    view.getRepoURI());
+            submitCreateNewProjectRequest(newProjectSettings, projectCreatedHandler);
+        }
+
     }
 
 
     private void uploadSourcesAndCreateProject(@Nonnull ProjectCreatedHandler projectCreatedHandler) {
-
         checkNotNull(projectCreatedHandler);
-        String postUrl = GWT.getModuleBaseURL() + "submitfile";
 
-        Log.info("GWT.getModuleBaseURL(): " + GWT.getModuleBaseURL().toString());
-        Log.info("postUrl: " + postUrl);
-        Log.info("");
+            String postUrl = GWT.getModuleBaseURL() + "submitfile";
 
-        view.setFileUploadPostUrl(postUrl);
+            Log.info("GWT.getModuleBaseURL(): " + GWT.getModuleBaseURL().toString());
+            Log.info("postUrl: " + postUrl);
+            Log.info("");
 
-        ProgressMonitor.get().showProgressMonitor("Uploading sources", "Uploading file");
+            view.setFileUploadPostUrl(postUrl);
 
-        view.setSubmitCompleteHandler(event -> {
-            ProgressMonitor.get().hideProgressMonitor();
-            handleSourcesUploadComplete(event, projectCreatedHandler);
-        });
+            ProgressMonitor.get().showProgressMonitor("Uploading sources", "Uploading file");
 
-        view.submitFormData();
-    }
+            view.setSubmitCompleteHandler(event -> {
+                ProgressMonitor.get().hideProgressMonitor();
+                handleSourcesUploadComplete(event, projectCreatedHandler);
+            });
 
-    private void cloneRepoAndCreateProject(){
-        // GIRAY
+            view.submitFormData();
+
+
 
     }
 
@@ -165,6 +201,41 @@ public class CreateNewProjectPresenter {
             messageBox.showAlert("Upload Failed", response.getUploadRejectedMessage());
         }
     }
+
+
+    private void handleSourcesCloneComplete(FormPanel.SubmitCompleteEvent event,
+                                             ProjectCreatedHandler projectCreatedHandler) {
+
+
+        JSONValue value = JSONParser.parseLenient(event.getResults());
+        JSONObject object = value.isObject();
+        DocumentId documentId;
+        if (object == null)
+            documentId = new DocumentId("");
+        else {
+            JSONValue value1 = object.get(FileUploadResponseAttributes.UPLOAD_FILE_ID.name());
+            if (value1.isString() == null)
+                documentId = new DocumentId("");
+            else
+                documentId = new DocumentId(value1.isString().stringValue().trim());
+        }
+
+        if (object != null) {
+            NewProjectSettings newProjectSettings = NewProjectSettings.get(
+                    loggedInUserManager.getLoggedInUserId(),
+                    view.getProjectName(),
+                    view.getProjectLanguage(),
+                    view.getProjectDescription(),
+                    documentId,
+                    view.getRepoURI()
+            );
+            submitCreateNewProjectRequest(newProjectSettings, projectCreatedHandler);
+        }
+        else {
+            messageBox.showAlert("Clone Failed", "No ontology could be found");
+        }
+    }
+
 
     private void submitCreateNewProjectRequest(@Nonnull NewProjectSettings newProjectSettings,
                                                @Nonnull ProjectCreatedHandler projectCreatedHandler) {

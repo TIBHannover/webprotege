@@ -18,40 +18,11 @@
         }
     </ui:style>
     <g:HTMLPanel addStyleNames="{wp.style.form}">
-        <div class="{wp.style.formGroup}">
-            <g:Label text="{msg.addGithubURI}" addStyleNames="{wp.style.formLabel}"/>
-            <g:TextBox ui:field="remoteGithubRepositoryURL" addStyleNames="{style.formField}"/>
-        </div>
-        <!--
-        <div class="{wp.style.formGroup}">
-            <g:Label text="{msg.githubUserName}" addStyleNames="{wp.style.formLabel}"/>
-            <g:TextBox ui:field="githubUserName" addStyleNames="{style.formField}"/>
-        </div>
-        -->
-        <div class="{wp.style.formGroup}">
-            <g:Label text="{msg.githubAccessToken}" addStyleNames="{wp.style.formLabel}"/>
-            <g:TextBox ui:field="githubAccessToken" addStyleNames="{style.formField}"/>
-        </div>
-
-
-<!--        <div class="{wp.style.formGroup}">-->
-<!--            <g:Label text="{msg.projectSettings_language}"  addStyleNames="{wp.style.formLabel}"/>-->
-<!--            <primitive:DefaultLanguageEditor ui:field="projectLanguageField" addStyleNames="{style.formField}"/>-->
-<!--            <label class="{wp.style.formHelpText} {style.helpText}"><ui:safehtml from="{msg.projectSettings_language_helpText}"/></label>-->
-<!--        </div>-->
-<!--        <div class="{wp.style.formGroup}">-->
-<!--            <g:Label text="{msg.projectSettings_description}"  addStyleNames="{wp.style.formLabel}"/>-->
-<!--            <g:TextArea ui:field="projectDescriptionField" addStyleNames="{style.formField}" visibleLines="5"/>-->
-<!--        </div>-->
-        <g:HTMLPanel ui:field="fileUploadArea" addStyleNames="{wp.style.formGroup}" visible="false">
-            <g:Label text="Create from existing sources" addStyleNames="{wp.style.formLabel}"/>
-            <g:HTMLPanel addStyleNames="{style.uploadContainer}">
-                <g:FormPanel ui:field="formPanel">
-                    <g:FileUpload ui:field="gitFileUpload"/>
-                </g:FormPanel>
-            </g:HTMLPanel>
-            <label class="{wp.style.formHelpText} {style.helpText}"><ui:safehtml from="{msg.projectSettings_owl_import_helpText}"/></label>
-        </g:HTMLPanel>
-
+    <g:FormPanel ui:field="formPanel">
+<!--        <g:Label text="{msg.repoURI}" addStyleNames="{wp.style.formLabel}"/>-->
+        <g:TextBox ui:field="repoURIField" addStyleNames="{style.formField}"/>
+<!--        <g:Label text="{msg.personalAccessToken}" addStyleNames="{wp.style.formLabel}"/>-->
+<!--        <g:TextBox ui:field="personalAccessTokenField" addStyleNames="{style.formField}"/>-->
+    </g:FormPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

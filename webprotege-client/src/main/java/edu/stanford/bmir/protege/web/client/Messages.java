@@ -729,6 +729,10 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("repoURI")
     String repoURI();
 
+    @DefaultMessage("Personal Access Token")
+    @Key("personalAccessToken")
+    String personalAccessToken();
+
     /**
      * @author nenad.krdzavac@tib.eu
      * @return String

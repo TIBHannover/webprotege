@@ -101,7 +101,10 @@ public class GitFileCommitServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         logger.info("GitFileCommitServlet: This is doGet method in servlet GitFileCommitServlet!");
-
+        while (req.getParameterNames().hasMoreElements()){
+            String parameter = req.getParameterNames().nextElement();
+            System.out.println(parameter +": " +req.getParameter(parameter));
+        }
         GitCommitParameters commitParameters = new GitCommitParameters(req);
 
         String[] parsedRepoUrl = commitParameters.getRepoURI().split("/");
@@ -114,11 +117,11 @@ public class GitFileCommitServlet extends HttpServlet {
             if (i ==4)
                 repo = parsedRepoUrl[i];
         }
-        removeDirectory("/srv/webprotege/uploads/"+commitParameters.getProjectId().getId());
-        //uploadsDirectory.getPath()
+        removeDirectory(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
+
         gitCommandsService.gitCloneGitHub(commitParameters.getPersonalAccessToken(),
-                institution,repo,"/srv/webprotege/uploads/"+commitParameters.getProjectId().getId());
-        gitCommandsService.gitCheckout("/srv/webprotege/uploads/"+commitParameters.getProjectId().getId(), commitParameters.getBranch());
+                institution,repo,uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
+        gitCommandsService.gitCheckout(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getBranch());
 
         WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
         UserId userId = webProtegeSession.getUserInSession();
@@ -152,9 +155,9 @@ public class GitFileCommitServlet extends HttpServlet {
                 }
             }
 
-            gitCommandsService.gitAddAll("/srv/webprotege/uploads/"+commitParameters.getProjectId().getId());
-            gitCommandsService.gitCommit("/srv/webprotege/uploads/"+commitParameters.getProjectId().getId(), commitParameters.getMessage());
-            gitCommandsService.gitPush("/srv/webprotege/uploads/"+commitParameters.getProjectId().getId(), commitParameters.getBranch());
+            gitCommandsService.gitAddAll(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
+            gitCommandsService.gitCommit(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getMessage());
+            gitCommandsService.gitPush(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getBranch());
 
         } catch (Exception e) {
             logger.info("Commit failed because of an error: {}", e.getMessage(), e);
@@ -267,7 +270,7 @@ public class GitFileCommitServlet extends HttpServlet {
         // TODO: Separate object
         List<File> ontologies = new ArrayList<File>();
         OWLOntologyManager manager = projectManager.getRevisionManager(projectId).getOntologyManagerForRevision(revisionNumber);
-        String baseFolder = "/srv/webprotege/uploads/"+projectId.getId();
+        String baseFolder = uploadsDirectory.getAbsolutePath()+"/"+projectId.getId();
         for(var ontology : manager.getOntologies()) {
             var documentFormat = format.getDocumentFormat();
             if(documentFormat.isPrefixOWLOntologyFormat()) {

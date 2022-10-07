@@ -42,11 +42,16 @@ public interface CreateNewProjectView extends HasInitialFocusable, IsWidget {
     @Nullable
     String getRepoURI();
 
+    @Nullable
+    String getPersonalAccessToken();
+
     /**
      * Specified whether the file upload section of the view should be enabled/visible.
      * @param enabled true if the file upload section should be enabled/visible, otherwise false.
      */
     void setFileUploadEnabled(boolean enabled);
+
+    void setCloneEnabled(boolean enabled);
 
     /**
      * Sets the URL that the upload should be posted to.  This is the URL that would be set in the "action" field
@@ -54,6 +59,8 @@ public interface CreateNewProjectView extends HasInitialFocusable, IsWidget {
      * @param url The post URL.
      */
     void setFileUploadPostUrl(@Nonnull String url);
+
+    void setGitClonePostUrl(@Nonnull String url, String token);
 
     /**
      * Determines whether a file (for upload) has been supplied.
@@ -71,10 +78,14 @@ public interface CreateNewProjectView extends HasInitialFocusable, IsWidget {
      */
     void setSubmitCompleteHandler(@Nonnull FormPanel.SubmitCompleteHandler handler);
 
+    void setGitSubmitCompleteHandler(@Nonnull FormPanel.SubmitCompleteHandler handler);
+
     /**
      * Asks the file upload form to submit the form data.
      */
     void submitFormData();
+
+    void submitGitFormData();
 
     /**
      * Displays a message saying that the project name is missing

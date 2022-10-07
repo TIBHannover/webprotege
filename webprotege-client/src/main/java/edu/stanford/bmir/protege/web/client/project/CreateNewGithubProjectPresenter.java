@@ -1,11 +1,11 @@
 package edu.stanford.bmir.protege.web.client.project;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.auto.factory.AutoFactory;
+import com.google.auto.factory.Provided;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.web.bindery.event.shared.EventBus;
-import edu.stanford.bmir.protege.web.client.app.Presenter;
 import edu.stanford.bmir.protege.web.client.dispatch.DispatchErrorMessageDisplay;
 import edu.stanford.bmir.protege.web.client.dispatch.DispatchServiceCallbackWithProgressDisplay;
 import edu.stanford.bmir.protege.web.client.dispatch.DispatchServiceManager;
@@ -15,6 +15,7 @@ import edu.stanford.bmir.protege.web.client.projectmanager.ProjectCreatedEvent;
 import edu.stanford.bmir.protege.web.client.progress.ProgressMonitor;
 import edu.stanford.bmir.protege.web.client.upload.FileUploadResponse;
 import edu.stanford.bmir.protege.web.client.user.LoggedInUserManager;
+import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
 import edu.stanford.bmir.protege.web.shared.csv.DocumentId;
 import edu.stanford.bmir.protege.web.shared.permissions.PermissionDeniedException;
 import edu.stanford.bmir.protege.web.shared.project.*;
@@ -23,9 +24,6 @@ import javax.annotation.Nonnull;
 import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import static edu.stanford.bmir.protege.web.shared.access.BuiltInAction.UPLOAD_PROJECT;
-
 
 
 /**
@@ -52,6 +50,9 @@ public class CreateNewGithubProjectPresenter  {
     private final LoggedInUserManager loggedInUserManager;
 
     @Nonnull
+    private final LoggedInUserProvider loggedInUserProvider;
+
+    @Nonnull
     private final DispatchServiceManager dispatchServiceManager;
 
     @Nonnull
@@ -59,10 +60,11 @@ public class CreateNewGithubProjectPresenter  {
 
     @Nonnull
     private final MessageBox messageBox;
-
+    @AutoFactory
     @Inject
     public CreateNewGithubProjectPresenter(DispatchErrorMessageDisplay errorDisplay, ProgressDisplay progressDisplay, @Nonnull CreateNewGithubProjectView view,
                                            @Nonnull LoggedInUserManager loggedInUserManager,
+                                           @Provided LoggedInUserProvider loggedInUserProvider,
                                            @Nonnull DispatchServiceManager dispatchServiceManager,
                                            @Nonnull EventBus eventBus,
                                            @Nonnull MessageBox messageBox) {
@@ -70,6 +72,7 @@ public class CreateNewGithubProjectPresenter  {
         this.progressDisplay = progressDisplay;
         this.view = checkNotNull(view);
         this.loggedInUserManager = checkNotNull(loggedInUserManager);
+        this.loggedInUserProvider = checkNotNull(loggedInUserProvider);
         this.dispatchServiceManager = checkNotNull(dispatchServiceManager);
         this.eventBus = checkNotNull(eventBus);
         this.messageBox = messageBox;
@@ -82,26 +85,23 @@ public class CreateNewGithubProjectPresenter  {
 
     public void start() {
         view.clear();
-
         Log.info("public void start()");
-
-        view.setFileUploadEnabled(true);
     }
 
     private boolean validate() {
 
-        if (view.getRemoteGithubRepositoryURL().isEmpty()) {
+        if (view.getRepoURIField().isEmpty()) {
 
             view.showRemoteGithubRepositoryMissingMessage();
             return false;
         }
 
-        if(view.getGithubAccessToken().isEmpty()){
+/*        if(view.getPersonalAccessTokenField().isEmpty()){
 
             view.showGitAccessTokenMissingMessage();
 
             return false;
-        }
+        }*/
 
         return true;
     }
@@ -116,15 +116,12 @@ public class CreateNewGithubProjectPresenter  {
     private void submitCreateProjectRequest(GithubProjectCreatedHandler handler) {
 
         Log.info("submitCreateProjectRequest: ");
-        Log.info("   - view.getRemoteGithubRepositoryURL(): " + view.getRemoteGithubRepositoryURL());
-        Log.info("   - view.getRemoteGithubRepositoryURL(): " + view.getGithubAccessToken());
+        Log.info("   - view.getRemoteGithubRepositoryURL(): " + view.getRepoURIField());
+        Log.info("   - view.getRemoteGithubRepositoryURL(): " + view.getPersonalAccessTokenField());
 
                 uploadSourcesAndCreateGitProject(handler);
 
         }
-
-
-
 
     private void createEmptyGitProject(GithubProjectCreatedHandler projectCreatedHandler) {
 
@@ -146,7 +143,7 @@ public class CreateNewGithubProjectPresenter  {
 
         Log.info("postUrl: " + postUrl);
 
-        view.setGitFileUploadPostUrl(postUrl);
+        view.setGitFileUploadPostUrl(postUrl, loggedInUserProvider.getCurrentUserToken());
         ProgressMonitor.get().showProgressMonitor("Uploading sources", "Uploading file");
         view.setSubmitCompleteHandler(event -> {
             ProgressMonitor.get().hideProgressMonitor();
@@ -170,8 +167,8 @@ public class CreateNewGithubProjectPresenter  {
                     ""
             );
 
-            Log.info("handleGitSourcesUploadComplete: view.getRemoteGithubRepositoryURL(): " + view.getRemoteGithubRepositoryURL());
-            Log.info("handleGitSourcesUploadComplete: view.getGithubAccessToken(): " + view.getGithubAccessToken());
+            Log.info("handleGitSourcesUploadComplete: view.getRemoteGithubRepositoryURL(): " + view.getRepoURIField());
+            Log.info("handleGitSourcesUploadComplete: view.getGithubAccessToken(): " + view.getPersonalAccessTokenField());
 
             submitCreateNewGitProjectRequest(newGitProjectSettings, githubprojectCreatedHandler);
         }
