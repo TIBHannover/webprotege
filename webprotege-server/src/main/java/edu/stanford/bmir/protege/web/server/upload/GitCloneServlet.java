@@ -28,6 +28,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 
@@ -77,7 +78,7 @@ public class GitCloneServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        logger.info("GitFileUploadServlet: This is doGet method in servlet GitFileUploadServlet!");
+        logger.info("GitCloneServlet: This is doGet method in servlet GitCloneServlet!");
         String repoURI = req.getParameter("repoURI");
         String personalAccessToken = repoURI.split("#token#")[1];
         repoURI = repoURI.split("#token#")[0];
@@ -116,6 +117,11 @@ public class GitCloneServlet extends HttpServlet {
                 if (repoFile.getName().contains(repo) && (repoFile.getName().contains(".owl") || repoFile.getName().contains(".ttl") || repoFile.getName().contains(".owx") || repoFile.getName().contains(".omn") || repoFile.getName().contains(".ofn"))){
                     logger.info("Stored cloned file with name {}", repoFile.getName());
                     resp.setStatus(HttpServletResponse.SC_CREATED);
+                    Path copied = Paths.get(uploadsDirectory.getAbsolutePath()+"/"+repoFile.getName());
+                    if(Files.exists(copied))
+                        Files.delete(copied);
+                    Path originalPath = repoFile.toPath();
+                    Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
                     sendSuccessMessage(resp, repoFile.getName());
                     return;
                 }
