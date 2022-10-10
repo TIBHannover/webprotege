@@ -101,10 +101,7 @@ public class GitFileCommitServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         logger.info("GitFileCommitServlet: This is doGet method in servlet GitFileCommitServlet!");
-        while (req.getParameterNames().hasMoreElements()){
-            String parameter = req.getParameterNames().nextElement();
-            System.out.println(parameter +": " +req.getParameter(parameter));
-        }
+
         GitCommitParameters commitParameters = new GitCommitParameters(req);
 
         String[] parsedRepoUrl = commitParameters.getRepoURI().split("/");

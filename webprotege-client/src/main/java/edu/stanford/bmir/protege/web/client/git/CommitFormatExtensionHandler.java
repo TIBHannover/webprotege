@@ -1,7 +1,4 @@
-package edu.stanford.bmir.protege.web.client.github;
-
-import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
-import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
+package edu.stanford.bmir.protege.web.client.git;
 
 /**
  * Author Nenad Krdzavac <br>

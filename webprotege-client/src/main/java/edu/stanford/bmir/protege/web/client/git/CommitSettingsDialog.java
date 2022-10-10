@@ -1,12 +1,10 @@
-package edu.stanford.bmir.protege.web.client.github;
+package edu.stanford.bmir.protege.web.client.git;
 
 import com.google.gwt.user.client.ui.Widget;
 import edu.stanford.bmir.protege.web.client.library.dlg.*;
-import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
-import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
+import edu.stanford.bmir.protege.web.shared.git.CommitFormatExtension;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
 
 /**
  * Author Nenad Krdzavac <br>
@@ -20,11 +18,11 @@ public class CommitSettingsDialog {
     public CommitSettingsDialog(){
     }
 
-    private static GithubFormatExtension lastExtension = GithubFormatExtension.owl;
+    private static CommitFormatExtension lastExtension = CommitFormatExtension.owl;
 
     public static void showDialog(final CommitFormatExtensionHandler handler, String repoURI, String token) {
         final CommitSettingsView view = new CommitSettingsViewImpl(repoURI, token);
-        view.setGithubFormatExtension(lastExtension);
+        view.setCommitFormatExtension(lastExtension);
         view.setBranch(0);
 
         WebProtegeOKCancelDialogController<CommitData> controller = new WebProtegeOKCancelDialogController<CommitData>("Commit project") {

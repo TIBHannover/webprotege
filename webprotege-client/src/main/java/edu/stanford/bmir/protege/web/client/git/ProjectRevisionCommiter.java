@@ -1,9 +1,8 @@
-package edu.stanford.bmir.protege.web.client.github;
+package edu.stanford.bmir.protege.web.client.git;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
-import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
 import edu.stanford.bmir.protege.web.shared.project.AvailableProject;
 import edu.stanford.bmir.protege.web.shared.revision.RevisionNumber;
 

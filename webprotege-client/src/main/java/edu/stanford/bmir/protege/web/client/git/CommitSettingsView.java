@@ -1,9 +1,8 @@
-package edu.stanford.bmir.protege.web.client.github;
+package edu.stanford.bmir.protege.web.client.git;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasInitialFocusable;
-import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
-import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
+import edu.stanford.bmir.protege.web.shared.git.CommitFormatExtension;
 
 /**
  * Author Nenad Krdzavac<br>
@@ -13,9 +12,9 @@ import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
  */
 public interface CommitSettingsView extends IsWidget, HasInitialFocusable {
 
-    GithubFormatExtension getGithubFormatExtension();
+    CommitFormatExtension getGithubFormatExtension();
 
-    void setGithubFormatExtension(GithubFormatExtension extension);
+    void setCommitFormatExtension(CommitFormatExtension extension);
 
     String getBranch();
 

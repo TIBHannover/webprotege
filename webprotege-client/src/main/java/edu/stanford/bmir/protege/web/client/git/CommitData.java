@@ -1,24 +1,23 @@
-package edu.stanford.bmir.protege.web.client.github;
+package edu.stanford.bmir.protege.web.client.git;
 
-import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
-
-import java.nio.file.Path;
+import edu.stanford.bmir.protege.web.shared.git.CommitFormatExtension;
+import edu.stanford.bmir.protege.web.shared.git.CommitFormatExtension;
 
 public class CommitData {
-    GithubFormatExtension gfe;
+    CommitFormatExtension gfe;
     String branch;
     String message;
 
     String path;
 
-    public CommitData(GithubFormatExtension gfe, String branch, String message, String path) {
+    public CommitData(CommitFormatExtension gfe, String branch, String message, String path) {
         this.gfe = gfe;
         this.branch = branch;
         this.message = message;
         this.path = path;
     }
 
-    public GithubFormatExtension getGfe() {
+    public CommitFormatExtension getGfe() {
         return gfe;
     }
 

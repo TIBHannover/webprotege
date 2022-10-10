@@ -1,4 +1,4 @@
-package edu.stanford.bmir.protege.web.client.github;
+package edu.stanford.bmir.protege.web.client.git;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.*;
@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
 import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
-import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
+import edu.stanford.bmir.protege.web.shared.git.CommitFormatExtension;
 import javax.inject.Inject;
 
 
@@ -123,18 +123,18 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     }
 
     @Override
-    public GithubFormatExtension getGithubFormatExtension() {
+    public CommitFormatExtension getGithubFormatExtension() {
         int selIndex = formatListBox.getSelectedIndex();
         if(selIndex == 0) {
-            return GithubFormatExtension.owl;
+            return CommitFormatExtension.owl;
         }
         else {
-            return GithubFormatExtension.values()[selIndex];
+            return CommitFormatExtension.values()[selIndex];
         }
     }
 
     @Override
-    public void setGithubFormatExtension(GithubFormatExtension extension) {
+    public void setCommitFormatExtension(CommitFormatExtension extension) {
         int selIndex = extension.ordinal();
         formatListBox.setSelectedIndex(selIndex);
     }

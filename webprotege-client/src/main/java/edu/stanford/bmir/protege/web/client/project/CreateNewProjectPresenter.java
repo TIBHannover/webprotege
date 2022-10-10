@@ -1,12 +1,11 @@
 package edu.stanford.bmir.protege.web.client.project;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.URL;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.web.bindery.event.shared.EventBus;
@@ -23,8 +22,6 @@ import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
 import edu.stanford.bmir.protege.web.shared.csv.DocumentId;
 import edu.stanford.bmir.protege.web.shared.permissions.PermissionDeniedException;
 import edu.stanford.bmir.protege.web.shared.project.*;
-
-import com.allen_sauer.gwt.log.client.Log;
 import edu.stanford.bmir.protege.web.shared.upload.FileUploadResponseAttributes;
 
 import javax.annotation.Nonnull;
@@ -32,7 +29,6 @@ import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.stanford.bmir.protege.web.shared.access.BuiltInAction.UPLOAD_PROJECT;
-import static edu.stanford.bmir.protege.web.shared.git.ProjectCommitConstants.*;
 
 /**
  * Matthew Horridge Stanford Center for Biomedical Informatics Research 16 Nov 2017

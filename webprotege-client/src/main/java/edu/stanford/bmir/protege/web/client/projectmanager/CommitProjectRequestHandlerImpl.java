@@ -2,11 +2,10 @@ package edu.stanford.bmir.protege.web.client.projectmanager;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
-import edu.stanford.bmir.protege.web.client.github.CommitData;
-import edu.stanford.bmir.protege.web.client.github.CommitSettingsDialog;
-import edu.stanford.bmir.protege.web.client.github.ProjectRevisionCommiter;
+import edu.stanford.bmir.protege.web.client.git.CommitData;
+import edu.stanford.bmir.protege.web.client.git.CommitSettingsDialog;
+import edu.stanford.bmir.protege.web.client.git.ProjectRevisionCommiter;
 import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
-import edu.stanford.bmir.protege.web.shared.github.GithubFormatExtension;
 import edu.stanford.bmir.protege.web.shared.project.AvailableProject;
 import edu.stanford.bmir.protege.web.shared.revision.RevisionNumber;
 
