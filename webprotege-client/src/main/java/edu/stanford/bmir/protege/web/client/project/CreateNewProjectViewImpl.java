@@ -1,7 +1,8 @@
 package edu.stanford.bmir.protege.web.client.project;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.FormElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -11,6 +12,7 @@ import edu.stanford.bmir.protege.web.client.library.msgbox.MessageBox;
 import edu.stanford.bmir.protege.web.client.primitive.DefaultLanguageEditor;
 
 import com.allen_sauer.gwt.log.client.Log;
+import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,9 +44,6 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     @UiField
     TextBox repoURIField;
 
-  /*  @UiField
-    TextArea personalAccessTokenField;*/
-
     @UiField
     FileUpload fileUpload;
 
@@ -54,6 +53,8 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     @UiField
     FormPanel repoFormPanel;
 
+    @UiField
+    Hidden repoData;
 
     @UiField
     HTMLPanel fileUploadArea;
@@ -64,7 +65,7 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     @Nonnull
     private final MessageBox messageBox;
 
-    private HandlerRegistration submitCompleteHandlerRegistraion = () -> {};
+    private HandlerRegistration submitCompleteHandlerRegistration = () -> {};
 
 
     @Inject
@@ -73,6 +74,21 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
         this.projectLanguageField = checkNotNull(languageEditor);
         this.messageBox = messageBox;
         initWidget(ourUiBinder.createAndBindUi(this));
+
+        repoCreationSelectorField.addClickHandler( new ClickHandler() {
+            @Override
+            public void onClick(final ClickEvent event) {
+                if(getRepoCreationSelector()){
+                    fileUploadArea.setVisible(false);
+                    fileUpload.setVisible(false);
+                    fileUpload.setEnabled(false);
+                } else {
+                    fileUploadArea.setVisible(true);
+                    fileUpload.setVisible(true);
+                    fileUpload.setEnabled(true);
+                }
+            }
+        } );
     }
 
     @Nonnull
@@ -101,10 +117,6 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     @Override
     public String getRepoURI() { return repoURIField.getText().trim();}
 
-    @Nullable
-    @Override
-    public String getPersonalAccessToken(){ return ""/*personalAccessTokenField.getText().trim()*/; }
-
 
     @Override
     public void setFileUploadEnabled(boolean enabled) {
@@ -114,7 +126,6 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     @Override
     public void setCloneEnabled(boolean enabled){
         repoURIField.setEnabled(true);
-    //    personalAccessTokenField.setEnabled(true);
     }
 
     @Override
@@ -129,12 +140,10 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
         formPanel.setAction(checkNotNull(url));
     }
     @Override
-    public void setGitClonePostUrl(@Nonnull String url, String token){
+    public void setGitClonePostUrl(@Nonnull String url, LoggedInUserProvider loggedInUserProvider, String projectName){
         Log.info("url in method setGitClonePostUrl of CreateNewProjectViewImpl class : " + url);
-        repoURIField.setName("repoURI");
-        repoURIField.setValue(repoURIField.getValue()+"#token#"+token);
-/*        personalAccessTokenField.setName("personalAccessToken");
-        personalAccessTokenField.setValue(token);*/
+        repoData.setName("repoData");
+        repoData.setValue(repoURIField.getValue()+"#parse#"+loggedInUserProvider.getCurrentUserToken()+"#parse#"+loggedInUserProvider.getCurrentUserId().getUserName()+"#parse#"+ projectName);
         repoFormPanel.setMethod(METHOD_GET);
         repoFormPanel.setEncoding(ENCODING_URLENCODED);
         repoFormPanel.setAction(checkNotNull(url));
@@ -148,18 +157,17 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
 
     @Override
     public void setSubmitCompleteHandler(@Nonnull FormPanel.SubmitCompleteHandler handler) {
-        submitCompleteHandlerRegistraion.removeHandler();
-        submitCompleteHandlerRegistraion = formPanel.addSubmitCompleteHandler(handler);
+        submitCompleteHandlerRegistration.removeHandler();
+        submitCompleteHandlerRegistration = formPanel.addSubmitCompleteHandler(handler);
     }
     @Override
     public void setGitSubmitCompleteHandler(@Nonnull FormPanel.SubmitCompleteHandler handler) {
-        submitCompleteHandlerRegistraion.removeHandler();
-        submitCompleteHandlerRegistraion = repoFormPanel.addSubmitCompleteHandler(handler);
+        submitCompleteHandlerRegistration.removeHandler();
+        submitCompleteHandlerRegistration = repoFormPanel.addSubmitCompleteHandler(handler);
     }
 
     @Override
     public void submitFormData() {
-       // formPanel.getElement().<FormElement>cast().setTarget("");
         formPanel.submit();
     }
     @Override

@@ -79,11 +79,15 @@ public class GitCloneServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         logger.info("GitCloneServlet: This is doGet method in servlet GitCloneServlet!");
-        String repoURI = req.getParameter("repoURI");
-        String personalAccessToken = repoURI.split("#token#")[1];
-        repoURI = repoURI.split("#token#")[0];
+        String repoData = req.getParameter("repoData");
+        String repoURI = repoData.split("#parse#")[0];
+        String personalAccessToken = repoData.split("#parse#")[1];
+        String user = repoData.split("#parse#")[2];
+        String project = repoData.split("#parse#")[3];
         logger.info("repoURI: "+repoURI);
-        logger.info("personalAccessToken"+personalAccessToken);
+        logger.info("personalAccessToken: "+personalAccessToken);
+        logger.info("User Name: "+user);
+        logger.info("Project: "+project);
 
         String[] parsedRepoUrl = repoURI.split("/");
         String institution = "";
@@ -95,9 +99,9 @@ public class GitCloneServlet extends HttpServlet {
             if (i ==4)
                 repo = parsedRepoUrl[i];
         }
-        removeDirectory(uploadsDirectory.getAbsolutePath()+"/tempproject");
+        removeDirectory(uploadsDirectory.getAbsolutePath()+"/temp-"+user);
         gitCommandsService.gitCloneGitHub(personalAccessToken,
-                institution,repo,uploadsDirectory.getAbsolutePath()+"/tempproject");
+                institution,repo,uploadsDirectory.getAbsolutePath()+"/temp-"+user);
 
         WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
         UserId userId = webProtegeSession.getUserInSession();
@@ -109,12 +113,19 @@ public class GitCloneServlet extends HttpServlet {
 
         try {
 
-            List<File> files = listFilesIteratively(new File(uploadsDirectory.getAbsolutePath()+"/tempproject"));
+            List<File> files = listFilesIteratively(new File(uploadsDirectory.getAbsolutePath()+"/temp-"+user));
 
             for (File repoFile : files){
                 long sizeInBytes = repoFile.length();
                 logger.info("File size is {} bytes.  Computed file size is {} bytes.", sizeInBytes);
-                if (repoFile.getName().contains(repo) && (repoFile.getName().contains(".owl") || repoFile.getName().contains(".ttl") || repoFile.getName().contains(".owx") || repoFile.getName().contains(".omn") || repoFile.getName().contains(".ofn"))){
+                if ((repoFile.getName().toLowerCase().contains(repo.toLowerCase())
+                        || repoFile.getName().toLowerCase().contains(project.toLowerCase()))
+                        &&
+                        (repoFile.getName().contains(".owl")
+                                || repoFile.getName().contains(".ttl")
+                                || repoFile.getName().contains(".owx")
+                                || repoFile.getName().contains(".omn")
+                                || repoFile.getName().contains(".ofn"))){
                     logger.info("Stored cloned file with name {}", repoFile.getName());
                     resp.setStatus(HttpServletResponse.SC_CREATED);
                     Path copied = Paths.get(uploadsDirectory.getAbsolutePath()+"/"+repoFile.getName());

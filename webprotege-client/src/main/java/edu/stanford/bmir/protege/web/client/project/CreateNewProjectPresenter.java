@@ -116,7 +116,10 @@ public class CreateNewProjectPresenter {
 
 
     private void submitCreateProjectRequest(ProjectCreatedHandler handler) {
-        if (view.isFileUploadSpecified()) {
+
+        if (view.getRepoCreationSelector())
+            cloneRepoAndCreateProject(handler);
+        else if (view.isFileUploadSpecified()) {
             uploadSourcesAndCreateProject(handler);
         }
         else {
@@ -125,26 +128,6 @@ public class CreateNewProjectPresenter {
     }
 
     private void createEmptyProject(ProjectCreatedHandler projectCreatedHandler) {
-
-        if (view.getRepoCreationSelector()){
-            String encodedRepoURI = URL.encode(view.getRepoURI());
-            String getURL = GWT.getModuleBaseURL() + "submitgitfile";
-            /*        + REPO_URI + "=" + encodedRepoURI +
-                    "&" + PERSONAL_ACCESS_TOKEN + "=" + loggedInUserProvider.getCurrentUserToken();*/
-            Log.info("GWT.getModuleBaseURL(): " + GWT.getModuleBaseURL().toString());
-            Log.info("GWT.getHostPageBaseURL(): " + GWT.getHostPageBaseURL());
-            Log.info("getUrl: " + getURL);
-            view.setGitClonePostUrl(getURL, loggedInUserProvider.getCurrentUserToken());
-
-            ProgressMonitor.get().showProgressMonitor("Uploading sources", "Uploading file");
-
-            view.setGitSubmitCompleteHandler(event -> {
-                ProgressMonitor.get().hideProgressMonitor();
-                handleSourcesCloneComplete(event, projectCreatedHandler);
-            });
-
-            view.submitGitFormData();
-        } else {
             NewProjectSettings newProjectSettings = NewProjectSettings.get(
                     loggedInUserManager.getLoggedInUserId(),
                     view.getProjectName(),
@@ -152,13 +135,30 @@ public class CreateNewProjectPresenter {
                     view.getProjectDescription(),
                     view.getRepoURI());
             submitCreateNewProjectRequest(newProjectSettings, projectCreatedHandler);
-        }
+    }
 
+    private void cloneRepoAndCreateProject(@Nonnull ProjectCreatedHandler projectCreatedHandler){
+        checkNotNull(projectCreatedHandler);
+        String getURL = GWT.getModuleBaseURL() + "submitgitfile";
+        Log.info("GWT.getModuleBaseURL(): " + GWT.getModuleBaseURL().toString());
+        Log.info("GWT.getHostPageBaseURL(): " + GWT.getHostPageBaseURL());
+        Log.info("getUrl: " + getURL);
+        Log.info("");
+        view.setGitClonePostUrl(getURL, loggedInUserProvider, view.getProjectName());
+
+        ProgressMonitor.get().showProgressMonitor("Cloning repo", "Uploading file");
+
+        view.setGitSubmitCompleteHandler(event -> {
+            ProgressMonitor.get().hideProgressMonitor();
+            handleSourcesCloneComplete(event, projectCreatedHandler);
+        });
+
+        view.submitGitFormData();
     }
 
 
     private void uploadSourcesAndCreateProject(@Nonnull ProjectCreatedHandler projectCreatedHandler) {
-        checkNotNull(projectCreatedHandler);
+            checkNotNull(projectCreatedHandler);
 
             String postUrl = GWT.getModuleBaseURL() + "submitfile";
 
@@ -176,9 +176,6 @@ public class CreateNewProjectPresenter {
             });
 
             view.submitFormData();
-
-
-
     }
 
     private void handleSourcesUploadComplete(FormPanel.SubmitCompleteEvent event,
@@ -205,8 +202,6 @@ public class CreateNewProjectPresenter {
 
     private void handleSourcesCloneComplete(FormPanel.SubmitCompleteEvent event,
                                              ProjectCreatedHandler projectCreatedHandler) {
-
-
         JSONValue value = JSONParser.parseLenient(event.getResults());
         JSONObject object = value.isObject();
         DocumentId documentId;

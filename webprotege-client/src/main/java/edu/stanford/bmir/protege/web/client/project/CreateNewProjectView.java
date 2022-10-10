@@ -3,6 +3,7 @@ package edu.stanford.bmir.protege.web.client.project;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasInitialFocusable;
+import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
 import edu.stanford.bmir.protege.web.shared.shortform.DictionaryLanguage;
 
 import javax.annotation.Nonnull;
@@ -42,9 +43,6 @@ public interface CreateNewProjectView extends HasInitialFocusable, IsWidget {
     @Nullable
     String getRepoURI();
 
-    @Nullable
-    String getPersonalAccessToken();
-
     /**
      * Specified whether the file upload section of the view should be enabled/visible.
      * @param enabled true if the file upload section should be enabled/visible, otherwise false.
@@ -60,7 +58,7 @@ public interface CreateNewProjectView extends HasInitialFocusable, IsWidget {
      */
     void setFileUploadPostUrl(@Nonnull String url);
 
-    void setGitClonePostUrl(@Nonnull String url, String token);
+    void setGitClonePostUrl(@Nonnull String url, LoggedInUserProvider loggedInUserProvider, String projectName);
 
     /**
      * Determines whether a file (for upload) has been supplied.
