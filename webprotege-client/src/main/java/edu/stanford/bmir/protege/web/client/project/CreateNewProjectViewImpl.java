@@ -23,7 +23,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.gwt.user.client.ui.FormPanel.*;
 
 /**
- * Matthew Horridge Stanford Center for Biomedical Informatics Research 16 Nov 2017
+ * author Erhun Giray TUNCAY
+ * email giray.tuncay@tib.eu
+ * TIB-Leibniz Information Centre for Science and Technology
+ * 11.10.2022
  */
 public class CreateNewProjectViewImpl extends Composite implements CreateNewProjectView {
 

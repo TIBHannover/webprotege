@@ -10,10 +10,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Author: Matthew Horridge<br>
- * Stanford University<br>
- * Bio-Medical Informatics Research Group<br>
- * Date: 18/01/2012
+ * author Erhun Giray TUNCAY
+ * email giray.tuncay@tib.eu
+ * TIB-Leibniz Information Centre for Science and Technology
+ * 11.10.2022
  */
 public interface CreateNewProjectView extends HasInitialFocusable, IsWidget {
 

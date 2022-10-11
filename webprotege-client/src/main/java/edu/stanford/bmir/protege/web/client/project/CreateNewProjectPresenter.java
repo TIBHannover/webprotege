@@ -31,8 +31,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.stanford.bmir.protege.web.shared.access.BuiltInAction.UPLOAD_PROJECT;
 
 /**
- * Matthew Horridge Stanford Center for Biomedical Informatics Research 16 Nov 2017
+ * author Erhun Giray TUNCAY
+ * email giray.tuncay@tib.eu
+ * TIB-Leibniz Information Centre for Science and Technology
+ * 11.10.2022
  */
+
 public class CreateNewProjectPresenter {
 
     private final DispatchErrorMessageDisplay errorDisplay;

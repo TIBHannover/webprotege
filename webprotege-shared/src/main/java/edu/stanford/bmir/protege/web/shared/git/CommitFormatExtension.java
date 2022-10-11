@@ -1,10 +1,10 @@
 package edu.stanford.bmir.protege.web.shared.git;
 
 /**
- * Author: Matthew Horridge<br>
- * Stanford University<br>
- * Bio-Medical Informatics Research Group<br>
- * Date: 24/07/2013
+ * author Erhun Giray TUNCAY
+ * email giray.tuncay@tib.eu
+ * TIB-Leibniz Information Centre for Science and Technology
+ * 11.10.2022
  */
 public enum CommitFormatExtension {
 

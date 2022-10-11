@@ -48,11 +48,11 @@ import static edu.stanford.bmir.protege.web.server.logging.RequestFormatter.form
 /**
  * author Erhun Giray TUNCAY
  * email giray.tuncay@tib.eu
- * TIB-Leibniz Information Centre for Science and Technology and University Library
- * 27.06.2022
+ * TIB-Leibniz Information Centre for Science and Technology
+ * 11.10.2022
  *
  * <p>
- * A servlet for cloning ontologies from Github and uploading it into Webprotege as ontology project.
+ * A servlet for committing and pushing project ontologies into Github & Gitlab.
  * </p>
  *
  */
@@ -103,21 +103,32 @@ public class GitFileCommitServlet extends HttpServlet {
         logger.info("GitFileCommitServlet: This is doGet method in servlet GitFileCommitServlet!");
 
         GitCommitParameters commitParameters = new GitCommitParameters(req);
-
-        String[] parsedRepoUrl = commitParameters.getRepoURI().split("/");
+        String repoURI = commitParameters.getRepoURI();
         String institution = "";
         String repo = "";
-        for (int i = 0;i<parsedRepoUrl.length;i++) {
-            if (i == 3) {
-                institution = parsedRepoUrl[i];
-            }
-            if (i ==4)
-                repo = parsedRepoUrl[i];
-        }
+        String gitlabInstance = "";
+        String instancePath = "";
+
         removeDirectory(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
 
-        gitCommandsService.gitCloneGitHub(commitParameters.getPersonalAccessToken(),
-                institution,repo,uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
+        if(repoURI.startsWith("https://github.com") || repoURI.startsWith("http://github.com")){
+            String[] parsedRepoUrl = repoURI.split("/");
+            for (int i = 0;i<parsedRepoUrl.length;i++) {
+                if (i == 3) {
+                    institution = parsedRepoUrl[i];
+                }
+                if (i ==4)
+                    repo = parsedRepoUrl[i];
+            }
+            gitCommandsService.gitCloneGitHub(commitParameters.getPersonalAccessToken(),
+                    institution,repo,uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
+        } else {
+            String temp = repoURI;
+            gitlabInstance = temp.split("://")[1].split("/")[0];
+            instancePath = temp.split(gitlabInstance+"/")[1];
+            gitCommandsService.gitCloneGitlab("oauth2",commitParameters.getPersonalAccessToken(),gitlabInstance, instancePath, uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
+        }
+
         gitCommandsService.gitCheckout(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getBranch());
 
         WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());

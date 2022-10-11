@@ -129,12 +129,10 @@ public class AvailableProjectPresenter {
      * Adds Github commit to a list of project actions.
      */
     private void addCommitAction() {
-        AbstractUiAction commitAction = new AbstractUiAction("Github commit") {
+        AbstractUiAction commitAction = new AbstractUiAction("Git Commit & Push") {
             @Override
             public void execute() {
-               //BUralar ilginc
                commitProjectRequestHandler.handleCommitProjectRequest(project,loggedInUserProvider.getCurrentUserToken());
-
             }
         };
         commitAction.setEnabled(true);

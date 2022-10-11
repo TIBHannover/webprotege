@@ -17,7 +17,20 @@ public class GitCommandsServiceImpl implements GitCommandsService {
      */
     @Override
     public void gitCloneGitHub(String token, String repoOwnerName, String repoName, String path) {
-        var command = String.format("git clone https://%s@github.com/%s/%s.git %s", token, repoOwnerName, repoName, path);
+        var command = "";
+        if(token == null)
+            command = String.format("git clone https://github.com/%s/%s.git %s", repoOwnerName, repoName, path);
+        else
+            command = String.format("git clone https://%s@github.com/%s/%s.git %s", token, repoOwnerName, repoName, path);
+        commandRunnerService.run(command);
+    }
+    @Override
+    public void gitCloneGitlab(String userOrTokenType, String passwordOrToken, String gitlabInstance, String instancePath, String localPath){
+        var command = "";
+        if(userOrTokenType == null || passwordOrToken == null)
+            command = String.format("git clone https://%s/%s.git %s", gitlabInstance, instancePath, localPath);
+        else
+            command = String.format("git clone https://%s:%s@%s/%s.git %s", userOrTokenType, passwordOrToken, gitlabInstance, instancePath, localPath);
         commandRunnerService.run(command);
     }
 

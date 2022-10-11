@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import static com.google.common.base.MoreObjects.toStringHelper;
 
 /**
- * Author: Matthew Horridge<br>
- * Stanford University<br>
- * Bio-Medical Informatics Research Group<br>
- * Date: 06/06/2012
+ * author Erhun Giray TUNCAY
+ * email giray.tuncay@tib.eu
+ * TIB-Leibniz Information Centre for Science and Technology
+ * 11.10.2022
  * <p>
  *     Wraps a HttpServletRequest to enable information about a download request to be extracted.
  * </p>

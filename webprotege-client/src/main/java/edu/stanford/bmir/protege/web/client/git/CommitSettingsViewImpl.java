@@ -15,21 +15,21 @@ import com.google.gwt.user.client.ui.TextBox;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
 import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
 import edu.stanford.bmir.protege.web.shared.git.CommitFormatExtension;
+
 import javax.inject.Inject;
 
 
 /**
- * Author Nenad Krdzavac<br>
- * Email nenad.krdzavac@tib.eu <br>
+ * Author Erhun Giray Tuncay<br>
+ * Email giray.tuncay@tib.eu <br>
  * TIB-Leibniz Information Centre for Science and Technology and University Library<br>
- * Date 31.08.2022
+ * Date 11.10.2022
  */
 public class CommitSettingsViewImpl extends Composite implements CommitSettingsView {
 
     interface CommitSettingsViewImplUiBinder extends UiBinder<HTMLPanel, CommitSettingsViewImpl> {
 
     }
-
 
     private static CommitSettingsViewImplUiBinder ourUiBinder = GWT.create(CommitSettingsViewImplUiBinder.class);
 
@@ -55,29 +55,61 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     }
 
     private void populateBranchListBox(String repoURI, String token){
-
-        String[] parsedRepoUrl = repoURI.split("/");
-        StringBuilder sb = new StringBuilder();
-        String institution = "";
-        String user = "";
-        for (int i = 0;i<parsedRepoUrl.length;i++) {
-            if(i == 2)
-                sb.append("api.");
-            if (i == 3) {
-                sb.append("repos").append("/");
-                institution = parsedRepoUrl[i];
-            }
-            if (i ==4)
-                user = parsedRepoUrl[i];
-            sb.append(parsedRepoUrl[i]).append("/");
-        }
-        sb.append("branches");
-        System.out.println("repoURI: "+sb.toString());
+        String trackerType = "github";
+        if (repoURI.toLowerCase().contains("github"))
+            trackerType = "github";
+        else if (repoURI.toLowerCase().contains("gitlab"))
+            trackerType = "gitlab";
+        System.out.println("repoURI: "+convertRepoURI2CallURL(repoURI, trackerType));
         System.out.println("token: "+token);
-        callGithub(sb.toString(),token);
+        if(trackerType.equals("github"))
+            callGithub(convertRepoURI2CallURL(repoURI, trackerType),token, trackerType);
+        else if (trackerType.equals("gitlab"))
+            callGitlab(convertRepoURI2CallURL(repoURI, trackerType),token, trackerType);
     }
 
-    public String callGithub(String callUrl, String token) {
+    public String convertRepoURI2CallURL(String repoURI, String trackerType){
+        if (trackerType.equals("github")){
+            String[] parsedRepoUrl = repoURI.split("/");
+            StringBuilder sb = new StringBuilder();
+            String institution = "";
+            String user = "";
+            for (int i = 0;i<parsedRepoUrl.length;i++) {
+                if(i == 2)
+                    sb.append("api.");
+                if (i == 3) {
+                    sb.append("repos").append("/");
+                    institution = parsedRepoUrl[i];
+                }
+                if (i ==4)
+                    user = parsedRepoUrl[i];
+                sb.append(parsedRepoUrl[i]).append("/");
+            }
+            sb.append("branches");
+            return sb.toString();
+        } else if (trackerType.equals("gitlab")) {
+            String[] parsedRepoUrl = repoURI.split("/");
+            StringBuilder sb = new StringBuilder();
+            String gitlabInstance = "gitlab.com";
+            for (int i = 0;i<parsedRepoUrl.length;i++) {
+                if (i ==2) {
+                    gitlabInstance = parsedRepoUrl[i];
+                    sb.append("https://"+gitlabInstance+"/api/v4/projects/");
+                }
+
+                if (i > 2) {
+                    sb.append(parsedRepoUrl[i]);
+                }
+                if (i > 2 && i <parsedRepoUrl.length - 1)
+                    sb.append("%2F");
+
+            }
+
+            return sb.toString();
+        } else return "";
+    }
+
+    public String callGithub(String callUrl, String token, String trackerType) {
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
         requestBuilder.setHeader("Authorization", "Bearer " + token);
 
@@ -101,9 +133,50 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
         } catch (RequestException e) {
             throw new RuntimeException(e);
         }
-
         return "";
+    }
 
+    public String callGitlab(String callUrl, String token, String trackerType){
+        String gitlabInstance = "gitlab.com";
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
+   //     requestBuilder.setHeader("PRIVATE-TOKEN", token);
+        try {
+            Request response = requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
+                        JSONValue jsonValue = JSONParser.parseStrict(response.getText());
+                        JSONObject jsonObject = jsonValue.isObject();
+                        double id = jsonObject.get("id").isNumber().doubleValue();
+                        String branchesUrl = "https://"+gitlabInstance+"/api/v4/projects/"+id+"/repository/branches";
+                        RequestBuilder reqBuild = new RequestBuilder(RequestBuilder.GET, branchesUrl);
+                       // reqBuild.setHeader("PRIVATE-TOKEN", token);
+                        try {
+                            Request res = reqBuild.sendRequest(null, new RequestCallback() {
+                                @Override
+                                public void onResponseReceived(Request request, Response response) {
+                                    if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
+                                        returnResponse(response.getText());
+                                    }
+                                }
+                                public void onError(Request request, Throwable exception) {
+                                    exception.printStackTrace();
+                                }
+                            });
+                        } catch (RequestException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                    }
+                }
+                public void onError(Request request, Throwable exception) {
+                    exception.printStackTrace();
+                }
+            });
+        } catch (RequestException e) {
+            throw new RuntimeException(e);
+        }
+        return "";
     }
 
     public void returnResponse(String result) {
