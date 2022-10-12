@@ -27,12 +27,6 @@ public interface ProjectManagerView extends HasCreateProjectRequestHandler, HasS
 
     void setCreateProjectEnabled(boolean enabled);
 
-    /**
-     * @author nenad.krdzavac@tib.eu
-     * @param enabled
-     */
-    void setCreateGitRepoProjectEnabled(boolean enabled);
-
     void setViewFilters(List<ProjectManagerViewFilter> viewFilters);
 
     List<ProjectManagerViewFilter> getViewFilters();

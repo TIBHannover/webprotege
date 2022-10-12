@@ -54,8 +54,6 @@ public class ProjectManagerPresenter implements Presenter {
 
     private final CreateProjectRequestHandler createProjectRequestHandler;
 
-    private final CreateGithubProjectRequestHandler createGithubProjectRequestHandler ;
-
     private final Map<ProjectManagerViewFilter, AvailableProjectFilter> viewCat2Filter = new HashMap<>();
 
     private AvailableProjectFilter currentFilter = new AvailableProjectOrFilter(Collections.emptyList());
@@ -69,26 +67,12 @@ public class ProjectManagerPresenter implements Presenter {
                                    @Nonnull DispatchServiceManager dispatchServiceManager,
                                    @Nonnull LoggedInUserManager loggedInUserManager,
                                    @Nonnull LoggedInUserPresenter loggedInUserPresenter,
-                                   @Nonnull CreateProjectRequestHandler createProjectRequestHandler,
-                                   /**
-                                        * Author Nenad Krdzavac
-                                        * Email nenad.krdzavac@tib.eu
-                                        *
-                                        * Github project request handler
-                                        */
-                                   @Nonnull CreateGithubProjectRequestHandler createGithubProjectRequestHandler) {
+                                   @Nonnull CreateProjectRequestHandler createProjectRequestHandler) {
         this.projectManagerView = projectManagerView;
         this.dispatchServiceManager = dispatchServiceManager;
         this.loggedInUserManager = loggedInUserManager;
         this.loggedInUserPresenter = loggedInUserPresenter;
         this.createProjectRequestHandler = createProjectRequestHandler;
-        /**
-         * Author Nenad Krdzavac
-         * Email nenad.krdzavac@tib.eu
-         *
-         * Github project request handler
-         */
-        this.createGithubProjectRequestHandler = createGithubProjectRequestHandler;
 
         viewCat2Filter.put(OWNED_BY_ME,
                            p -> !p.isInTrash() && p.getOwner().equals(loggedInUserManager.getLoggedInUserId()));
@@ -115,14 +99,6 @@ public class ProjectManagerPresenter implements Presenter {
         eventBus.addHandler(ON_PROJECT_SETTINGS_CHANGED, event -> reloadFromServer());
 
         projectManagerView.setCreateProjectRequestHandler(createProjectRequestHandler);
-
-        /**
-         * Author Nenad Krdzavac
-         * Email  nenad.krdzavac@tib.eu
-         *
-         * set Github project request handler.
-         */
-        projectManagerView.setCreateGithubProjectRequestHandler(createGithubProjectRequestHandler);
 
         loggedInUserPresenter.start(projectManagerView.getLoggedInUserButton(), eventBus);
         container.setWidget(projectManagerView);
@@ -250,11 +226,6 @@ public class ProjectManagerPresenter implements Presenter {
     private void updateView() {
 
         projectManagerView.setCreateProjectEnabled(loggedInUserManager.isAllowedApplicationAction(CREATE_EMPTY_PROJECT));
-        /**
-         * Author Nenad Krdzavac
-         * Email nenad.krdzavac@tib.eu
-         */
-        projectManagerView.setCreateGitRepoProjectEnabled(true);
 
         reloadFromServer();
     }

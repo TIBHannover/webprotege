@@ -91,11 +91,6 @@
                 <g:Button ui:field="createProjectButton" text="{msg.createProject}" enabled="false" addStyleNames="{wp.buttons.button} {wp.buttons.pageButton} {wp.buttons.primaryButton}"/>
                 <div style="height: 50px;"/>
 
-                <!--Added a new button to craete ontology project from Github repository -->
-
-                <g:Button ui:field="createGitRepoProjectButton" text="{msg.createProjectFromGithub}" enabled="false" addStyleNames="{wp.buttons.button} {wp.buttons.pageButton} {wp.buttons.primaryButton}"/>
-                <div style="height: 50px;"/>
-
                 <g:HTMLPanel addStyleNames="{style.filterPanel}">
                     <g:HTMLPanel addStyleNames="{style.checkBoxHolder}">
                         <g:CheckBox ui:field="ownedByMeCheckBox" text="{msg.ownedByMe}" addStyleNames="{style.checkBox}"/>

@@ -275,19 +275,6 @@ public class ClientApplicationModule {
         return impl;
     }
 
-    /**
-     * Author Nenad Krdzavac <br>
-     * Email nenad.krdzavac@tib.eu <br>
-     * Date 25.08.2022.
-     *
-     * @param impl
-     * @return
-     */
-    @Provides
-    GithubManagerRequestHandler provideGithubManagerRequestHandler(GithubManagerRequestHandlerImpl impl){
-        return impl;
-    }
-
     @Provides
     LoginView provideLoginView(LoginViewImpl loginView) {
         return loginView;
@@ -388,21 +375,6 @@ public class ClientApplicationModule {
         return impl;
     }
 
-    /**
-     * Author Nenad Krdzavac
-     * Email nenad.krdzavac@tib.eu
-     * TIB-Leibniz Information Centre for Science and Technology and University Library
-     * 04.08.2022
-     *
-     * @param impl
-     * @return
-     */
-    @Provides
-    CreateGithubProjectRequestHandler provideCreateGithubProjectRequestHandler(CreateGithubProjectRequestHandlerImpl impl){
-
-        return impl;
-    }
-
     @Provides
     CommentedEntitiesView provideCommentedEntitiesView(CommentedEntitiesViewImpl impl) {
         return impl;
@@ -445,19 +417,6 @@ public class ClientApplicationModule {
 
     @Provides
     CreateNewProjectView providesCreateNewProjectView(CreateNewProjectViewImpl impl) {
-        return impl;
-    }
-
-    /**
-     * Аuthor Nenad Krdzavac
-     * Еmail nenad.krdzavac@tib.eu
-     * TIB-Leibniz Information Centre for Science and Technology and University Library
-     * 04.08.2022.
-     * @param impl
-     * @return
-     */
-    @Provides
-    CreateNewGithubProjectView providesCreateNewGithubProjectView(CreateNewGithubProjectViewImpl impl){
         return impl;
     }
 

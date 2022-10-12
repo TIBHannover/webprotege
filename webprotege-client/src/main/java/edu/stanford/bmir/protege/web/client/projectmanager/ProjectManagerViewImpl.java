@@ -37,15 +37,6 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
     @UiField
     protected Button createProjectButton;
 
-    /**
-     * Author Nenad Krdzavac
-     * Email nenad.krdzavac@tib.eu
-     * Date 31.08.2022.
-     * Button for creating project from Git repository
-     */
-    @UiField
-    protected Button createGitRepoProjectButton ;
-
     @UiField
     SimplePanel loggedInUserButton;
 
@@ -64,8 +55,6 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
 
     private CreateProjectRequestHandler createProjectRequestHandler = () -> {};
 
-    private CreateGithubProjectRequestHandler createGithubProjectRequestHandler = () -> {};
-
     private ViewFilterChangedHandler viewFilterChangedHandler = () -> {};
 
     @Inject
@@ -74,12 +63,6 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
         setCreateProjectEnabled(false);
-        /**
-         * Author Nenad Krdzavac
-         * Email nenad.krdzavac@tib.eu
-         * Date 31.08.2022.
-         */
-        setCreateGitRepoProjectEnabled(false);
     }
 
     @Override
@@ -100,20 +83,6 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
     public void setCreateProjectEnabled(boolean enabled) {
         createProjectButton.setEnabled(enabled);
         createProjectButton.setVisible(enabled);
-    }
-    /**
-     * Author Nenad Krdzavac
-     * Email nenad.krdzavac@tib.eu
-     * Date 31.08.2022.
-     *
-     * @param enabled
-     */
-    @Override
-    public void setCreateGitRepoProjectEnabled(boolean enabled){
-
-        createGitRepoProjectButton.setEnabled(enabled);
-        createGitRepoProjectButton.setVisible(enabled);
-
     }
 
     @Override
@@ -159,11 +128,6 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
         createProjectRequestHandler.handleCreateProjectRequest();
     }
 
-    @UiHandler("createGitRepoProjectButton")
-    protected void handleCreateGithubProject(ClickEvent clickEvent){
-      createGithubProjectRequestHandler.handleGithubProjectRequestHandler();
-    }
-
     @UiHandler("sharedWithMeCheckBox")
     protected void handleSharedWithMeCheckBoxClicked(ClickEvent event) {
         viewFilterChangedHandler.handleViewFilterChanged();
@@ -182,19 +146,6 @@ public class ProjectManagerViewImpl extends Composite implements ProjectManagerV
     @Override
     public void setCreateProjectRequestHandler(CreateProjectRequestHandler handler) {
         this.createProjectRequestHandler = handler;
-    }
-
-    /**
-     * Author Nenad Krdzavac
-     * Email nenad.krdzavac@tib.eu
-     * Date 31.08.2022.
-     *
-     * @param handler
-     */
-    @Override
-    public void setCreateGithubProjectRequestHandler (CreateGithubProjectRequestHandler handler){
-
-        this.createGithubProjectRequestHandler = handler;
     }
 
     @Override

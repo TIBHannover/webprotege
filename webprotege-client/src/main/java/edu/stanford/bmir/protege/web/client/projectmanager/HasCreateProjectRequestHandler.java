@@ -10,10 +10,4 @@ public interface HasCreateProjectRequestHandler {
 
     void setCreateProjectRequestHandler(CreateProjectRequestHandler handler);
 
-    /**
-     * @author nenad.krdzavaC@tib.eu
-     * @param handler
-     */
-    void setCreateGithubProjectRequestHandler(CreateGithubProjectRequestHandler handler);
-
 }
