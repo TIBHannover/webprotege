@@ -118,7 +118,6 @@ public class AvailableProjectPresenter {
         addDowloadAction();
         addTrashAction();
         addCommitAction();
-        addPushAction();
     }
 
     /**
@@ -137,24 +136,6 @@ public class AvailableProjectPresenter {
         };
         commitAction.setEnabled(true);
         view.addAction(commitAction);
-    }
-    /**
-     * Author Nenad Krdzavac
-     * Email nenad.krdzavac@tib.eu
-     * Date 02.09.2022.
-     *
-     * Adds Github push to a list of project actions.
-     */
-
-    private void addPushAction() {
-        AbstractUiAction pushAction = new AbstractUiAction("Github push") {
-            @Override
-            public void execute() {
-
-            }
-        };
-        pushAction.setEnabled(true);
-        view.addAction(pushAction);
     }
 
     private void addOpenAction() {
