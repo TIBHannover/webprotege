@@ -1,5 +1,6 @@
 package eu.tib.protege.github.commands.impl;
 
+import com.google.gwt.http.client.URL;
 import eu.tib.protege.github.commands.CommandRunnerService;
 import eu.tib.protege.github.exception.CommandRunnerException;
 import org.slf4j.Logger;
@@ -7,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandRunnerServiceImpl implements CommandRunnerService {
     private static final Logger logger = LoggerFactory.getLogger(CommandRunnerServiceImpl.class);
@@ -17,8 +20,20 @@ public class CommandRunnerServiceImpl implements CommandRunnerService {
      */
     @Override
     public int run(String command) {
+
         logger.info("Going to run command: {}", command);
-        ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
+
+        String[] commandFields = command.split(" ");
+        List<String> temp = new ArrayList<String>();
+
+        for (int i = 0; i<commandFields.length; i++){
+            if(commandFields[i].contains("%20"))
+                temp.add(commandFields[i].replace("%20", " "));
+            else
+                temp.add(commandFields[i]);
+        }
+
+        ProcessBuilder processBuilder = new ProcessBuilder(temp);
         Process process = null;
         int exitCode;
         try {

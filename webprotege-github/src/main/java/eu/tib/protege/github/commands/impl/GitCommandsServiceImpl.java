@@ -66,7 +66,7 @@ public class GitCommandsServiceImpl implements GitCommandsService {
      */
     @Override
     public void gitCommit(String path, String message) {
-        var command = String.format("git -C %s commit -m \"%s\"", path, message);
+        var command = String.format("git -C %s commit -m \"%s\"", path, message.replace(" ", "%20" ));
         commandRunnerService.run(command);
     }
 
