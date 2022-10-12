@@ -48,10 +48,8 @@ public abstract class AvailableProject implements IsSerializable, Comparable<Ava
      * @param downloadable        A flag indicating whether the project is downloadable by the current
      *                            user (in the current session).
      * @param trashable           A flag indicating whether the project can be moved to the trash by
-     * @param canBeCommitted      A flag indicating whether the project can be committed to Github by the current user
+     * @param canBeCommitted      A flag indicating whether the project can be committed and pushed to Github by the current user
      *                            (in the current session)
-     * @param canBePushed         A flag indicating whether the project can be pushed to Github
-     *                            by the current user (in current session)
      * @param lastOpenedTimestamp A time stamp of when the project was last opened by the current
      *                            user.  A zero or negative value indicates unknown.
      */
@@ -59,13 +57,11 @@ public abstract class AvailableProject implements IsSerializable, Comparable<Ava
                                        boolean downloadable,
                                        boolean trashable,
                                        boolean canBeCommitted,
-                                       boolean canBePushed,
                                        long lastOpenedTimestamp) {
         return new AutoValue_AvailableProject(projectDetails,
                                               downloadable,
                                               trashable,
                                               canBeCommitted,
-                                              canBePushed,
                                               lastOpenedTimestamp);
     }
 
@@ -219,15 +215,6 @@ public abstract class AvailableProject implements IsSerializable, Comparable<Ava
      */
     public abstract boolean canBeCommited();
 
-    /**
-     * Author Nenad Krdzavac
-     * Email nenad.krdzavac@tibe.u
-     *
-     * Determines if this project can be pushed (by the current user) to Github.
-     *
-     * @return true is project can be pushed, otherwise false.
-     */
-    public abstract boolean canBePushed();
     /**
      * Gets the timestamp of when the project was last opened by the current user.
      *

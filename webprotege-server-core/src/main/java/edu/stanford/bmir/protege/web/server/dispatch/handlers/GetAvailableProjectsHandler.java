@@ -85,7 +85,7 @@ public class GetAvailableProjectsHandler implements ApplicationActionHandler<Get
                                                                                  *
                                                                                  * assign false to canBeCommitted and canBePushed
                                                                                  */
-                                                                                return AvailableProject.get(details, downloadable, trashable, false, false,lastOpened);
+                                                                                return AvailableProject.get(details, downloadable, trashable, false, lastOpened);
                                                                             })
                                                                             .collect(toList());
         return new GetAvailableProjectsResult(availableProjects);

@@ -124,7 +124,7 @@ public class ProjectManagerPresenter implements Presenter {
          *
          * Assigned true to canBeCommitted and assign false to canBePushed
          */
-        AvailableProject availableProject = AvailableProject.get(event.getProjectDetails(), true, true, true, true,UNKNOWN);
+        AvailableProject availableProject = AvailableProject.get(event.getProjectDetails(), true, true, true,UNKNOWN);
         insertAndSelectAvailableProject(availableProject, event.getProjectId());
     }
 

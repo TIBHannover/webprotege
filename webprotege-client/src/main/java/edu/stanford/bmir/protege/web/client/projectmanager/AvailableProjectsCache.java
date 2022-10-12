@@ -60,7 +60,7 @@ public class AvailableProjectsCache {
          *  - availableProject.isCommitted(),
          *  - availableProject.isPushed().
          */
-        cache.put(projectId, AvailableProject.get(replacementDetails, availableProject.isDownloadable(), availableProject.isTrashable(), availableProject.isCommitted(), availableProject.isPushed(),
+        cache.put(projectId, AvailableProject.get(replacementDetails, availableProject.isDownloadable(), availableProject.isTrashable(), availableProject.isCommitted(),
                                                   availableProject.getLastOpenedAt()));
         return true;
     }

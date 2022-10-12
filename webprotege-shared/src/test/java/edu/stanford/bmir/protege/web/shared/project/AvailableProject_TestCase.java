@@ -35,8 +35,6 @@ public class AvailableProject_TestCase {
 
     private boolean canBeCommitted = true;
 
-    private boolean canBePushed = true;
-
     @Mock
     private ProjectId projectId;
 
@@ -47,7 +45,7 @@ public class AvailableProject_TestCase {
 
     @Before
     public void setUp() {
-        availableProject = AvailableProject.get(projectDetails, downloadable, trashable, canBeCommitted, canBePushed,lastOpenedTimestamp);
+        availableProject = AvailableProject.get(projectDetails, downloadable, trashable, canBeCommitted, lastOpenedTimestamp);
         when(projectDetails.getDisplayName()).thenReturn(DISPLAY_NAME);
         when(projectDetails.getDescription()).thenReturn(DESCRIPTION);
         when(projectDetails.getCreatedAt()).thenReturn(CREATED_AT);
@@ -62,7 +60,7 @@ public class AvailableProject_TestCase {
     @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionIf_projectDetails_IsNull() {
-        AvailableProject.get(null, downloadable, trashable, canBeCommitted, canBePushed,lastOpenedTimestamp);
+        AvailableProject.get(null, downloadable, trashable, canBeCommitted, lastOpenedTimestamp);
     }
 
     @Test
@@ -98,32 +96,32 @@ public class AvailableProject_TestCase {
 
     @Test
     public void shouldBeEqualToOther() {
-        assertThat(availableProject, is(AvailableProject.get(projectDetails, downloadable, trashable, canBeCommitted, canBePushed,lastOpenedTimestamp)));
+        assertThat(availableProject, is(AvailableProject.get(projectDetails, downloadable, trashable, canBeCommitted, lastOpenedTimestamp)));
     }
 
     @Test
     public void shouldNotBeEqualToOtherThatHasDifferent_projectDetails() {
-        assertThat(availableProject, is(not(AvailableProject.get(mock(ProjectDetails.class), downloadable, trashable, canBeCommitted, canBePushed,lastOpenedTimestamp))));
+        assertThat(availableProject, is(not(AvailableProject.get(mock(ProjectDetails.class), downloadable, trashable, canBeCommitted, lastOpenedTimestamp))));
     }
 
     @Test
     public void shouldNotBeEqualToOtherThatHasDifferent_downloadable() {
-        assertThat(availableProject, is(not(AvailableProject.get(projectDetails, false, trashable, canBeCommitted, canBePushed,lastOpenedTimestamp))));
+        assertThat(availableProject, is(not(AvailableProject.get(projectDetails, false, trashable, canBeCommitted, lastOpenedTimestamp))));
     }
 
     @Test
     public void shouldNotBeEqualToOtherThatHasDifferent_trashable() {
-        assertThat(availableProject, is(not(AvailableProject.get(projectDetails, downloadable, false, canBeCommitted, canBePushed,lastOpenedTimestamp))));
+        assertThat(availableProject, is(not(AvailableProject.get(projectDetails, downloadable, false, canBeCommitted, lastOpenedTimestamp))));
     }
 
     @Test
     public void shouldNotBeEqualToOtherThatHasDifferent_lastOpened() {
-        assertThat(availableProject, is(not(AvailableProject.get(projectDetails, downloadable, trashable, canBeCommitted, canBePushed,33L))));
+        assertThat(availableProject, is(not(AvailableProject.get(projectDetails, downloadable, trashable, canBeCommitted, 33L))));
     }
 
     @Test
     public void shouldBeEqualToOtherHashCode() {
-        assertThat(availableProject.hashCode(), is(AvailableProject.get(projectDetails, downloadable, trashable,canBeCommitted,canBePushed, lastOpenedTimestamp).hashCode()));
+        assertThat(availableProject.hashCode(), is(AvailableProject.get(projectDetails, downloadable, trashable,canBeCommitted,lastOpenedTimestamp).hashCode()));
     }
 
     @Test
