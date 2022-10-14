@@ -180,7 +180,7 @@ public class GitFileCommitServlet extends HttpServlet {
                 gitCommandsService.gitPush(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getNewBranch());
             else
                 gitCommandsService.gitPush(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getBranch());
-            
+
         } catch (Exception e) {
             logger.info("Commit failed because of an error: {}", e.getMessage(), e);
             sendErrorMessage(resp, "Commit failed");

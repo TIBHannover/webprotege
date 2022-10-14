@@ -89,4 +89,9 @@ public interface CreateNewProjectView extends HasInitialFocusable, IsWidget {
      * Displays a message saying that the project name is missing
      */
     void showProjectNameMissingMessage();
+
+    /**
+     * Displays a message saying that the project repo URI is missing
+     */
+    void showProjectRepoURIMissingMessage();
 }

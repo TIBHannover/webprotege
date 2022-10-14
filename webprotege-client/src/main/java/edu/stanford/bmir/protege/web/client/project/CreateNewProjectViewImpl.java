@@ -239,6 +239,12 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     }
 
     @Override
+    public void showProjectRepoURIMissingMessage() {
+        messageBox.showAlert("Project repo URI missing", "Please enter a project repo URI");
+    }
+
+
+    @Override
     public void clear() {
         projectNameField.setText("");
         projectDescriptionField.setText("");

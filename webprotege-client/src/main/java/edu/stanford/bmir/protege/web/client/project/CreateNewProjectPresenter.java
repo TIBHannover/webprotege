@@ -105,6 +105,13 @@ public class CreateNewProjectPresenter {
             view.showProjectNameMissingMessage();
             return false;
         }
+
+        if (view.getRepoCreationSelector())
+            if(view.getRepoURI().isEmpty()){
+                view.showProjectRepoURIMissingMessage();
+                return false;
+            }
+
         return true;
     }
 
