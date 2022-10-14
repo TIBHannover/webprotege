@@ -37,6 +37,9 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     protected ListBox branchListBox;
 
     @UiField
+    protected TextBox newBranchTextBox;
+
+    @UiField
     protected ListBox formatListBox;
 
     @UiField
@@ -228,6 +231,17 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
         branchListBox.setSelectedIndex(index);
 
     }
+
+    @Override
+    public String getNewBranch() {
+        return newBranchTextBox.getValue();
+    }
+
+    @Override
+    public void setNewBranch(String newBranch) {
+        newBranchTextBox.setValue(newBranch);
+    }
+
     @Override
     public String getMessage(){
         return messageTextBox.getValue();
@@ -245,7 +259,7 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
 
     @Override
     public CommitData getCommitData(){
-        return new CommitData(getGithubFormatExtension(),getBranch(),getMessage(),getPath());
+        return new CommitData(getGithubFormatExtension(),getBranch(),getNewBranch(), getMessage(),getPath());
     }
 
 

@@ -42,6 +42,12 @@ public class GitCommandsServiceImpl implements GitCommandsService {
      */
     @Override
     public void gitCheckout(String path, String branch) {
+        var command = String.format("git -C %s checkout %s", path, branch);
+        commandRunnerService.run(command);
+    }
+
+    @Override
+    public void gitCheckoutNewBranch(String path, String branch) {
         var command = String.format("git -C %s checkout -b %s", path, branch);
         commandRunnerService.run(command);
     }

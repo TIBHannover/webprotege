@@ -22,6 +22,10 @@ public interface CommitSettingsView extends IsWidget, HasInitialFocusable {
 
     void setBranch(int index);
 
+    String getNewBranch();
+
+    void setNewBranch(String newBranch);
+
     String getMessage();
 
     void setMessage(String branch);

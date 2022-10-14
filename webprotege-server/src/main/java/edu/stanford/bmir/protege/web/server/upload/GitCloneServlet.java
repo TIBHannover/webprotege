@@ -79,15 +79,52 @@ public class GitCloneServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         logger.info("GitCloneServlet: This is doGet method in servlet GitCloneServlet!");
-        String repoData = req.getParameter("repoData");
+/*        String repoData = req.getParameter("repoData");
         String repoURI = repoData.split("#parse#")[0];
         String personalAccessToken = repoData.split("#parse#")[1];
         String user = repoData.split("#parse#")[2];
         String project = repoData.split("#parse#")[3];
+        String path = repoData.split("#parse#")[4];
+        String branch = repoData.split("#parse#")[5];*/
+
+        Set<String> parameters = new HashSet<String>(req.getParameterMap().keySet());
+        String repoURI = "";
+        String personalAccessToken = "";
+        String user = "";
+        String project = "";
+        String path = "";
+        String branch = "";
+        for (String parameter : parameters){
+            switch (parameter){
+                case "repoURI":
+                    repoURI = req.getParameter("repoURI");
+                    break;
+                case "personalAccessToken":
+                    personalAccessToken = req.getParameter("personalAccessToken");
+                    break;
+                case "user":
+                    user = req.getParameter("user");
+                    break;
+                case "project":
+                    project = req.getParameter("project");
+                    break;
+                case "path":
+                    path = req.getParameter("path");
+                    break;
+                case "branch":
+                    branch = req.getParameter("branch");
+                    break;
+                default:
+                    ;
+            }
+        }
+
         logger.info("repoURI: "+repoURI);
         logger.info("personalAccessToken: "+personalAccessToken);
         logger.info("User Name: "+user);
         logger.info("Project: "+project);
+        logger.info("Path: "+path);
+        logger.info("Branch: "+branch);
 
         String institution = "";
         String repo = "";
@@ -113,6 +150,9 @@ public class GitCloneServlet extends HttpServlet {
             instancePath = temp.split(gitlabInstance+"/")[1];
             gitCommandsService.gitCloneGitlab("oauth2",personalAccessToken,gitlabInstance, instancePath, uploadsDirectory.getAbsolutePath()+"/temp-"+user);
         }
+        if(branch != null)
+            if(!branch.isEmpty())
+                gitCommandsService.gitCheckout(uploadsDirectory.getAbsolutePath()+"/temp-"+user, branch);
 
         WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
         UserId userId = webProtegeSession.getUserInSession();
@@ -124,6 +164,22 @@ public class GitCloneServlet extends HttpServlet {
 
         try {
 
+            if (path != null )
+                if (!path.isEmpty())
+                    if (path.endsWith(".owl") || path.endsWith(".ttl") || path.endsWith(".owx") || path.endsWith(".omn") || path.endsWith(".ofn")){
+                        if(Files.exists(Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path))){
+                            logger.info("Stored the user specified file from clone with name {}", Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path).getFileName().toString());
+                            resp.setStatus(HttpServletResponse.SC_CREATED);
+                            Path copied = Paths.get(uploadsDirectory.getAbsolutePath()+"/"+Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path).getFileName().toString());
+                            if(Files.exists(copied))
+                                Files.delete(copied);
+                            Files.copy(Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path), copied, StandardCopyOption.REPLACE_EXISTING);
+                            sendSuccessMessage(resp, Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path).getFileName().toString());
+                            return;
+                        }
+                    }
+
+
             List<File> files = listFilesIteratively(new File(uploadsDirectory.getAbsolutePath()+"/temp-"+user));
 
             for (File repoFile : files){
@@ -132,12 +188,12 @@ public class GitCloneServlet extends HttpServlet {
                 if ((repoFile.getName().toLowerCase().contains(repo.toLowerCase())
                         || repoFile.getName().toLowerCase().contains(project.toLowerCase()))
                         &&
-                        (repoFile.getName().contains(".owl")
-                                || repoFile.getName().contains(".ttl")
-                                || repoFile.getName().contains(".owx")
-                                || repoFile.getName().contains(".omn")
-                                || repoFile.getName().contains(".ofn"))){
-                    logger.info("Stored cloned file with name {}", repoFile.getName());
+                        (repoFile.getName().endsWith(".owl")
+                                || repoFile.getName().endsWith(".ttl")
+                                || repoFile.getName().endsWith(".owx")
+                                || repoFile.getName().endsWith(".omn")
+                                || repoFile.getName().endsWith(".ofn"))){
+                    logger.info("Stored the first matching file from clone with name {}", repoFile.getName());
                     resp.setStatus(HttpServletResponse.SC_CREATED);
                     Path copied = Paths.get(uploadsDirectory.getAbsolutePath()+"/"+repoFile.getName());
                     if(Files.exists(copied))
@@ -150,7 +206,7 @@ public class GitCloneServlet extends HttpServlet {
 
             }
 
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Could not a proper ontology");
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Could not load a proper ontology");
 
         } catch (Exception e) {
             logger.info("Clone failed because of an error when trying to write the file item: {}", e.getMessage(), e);

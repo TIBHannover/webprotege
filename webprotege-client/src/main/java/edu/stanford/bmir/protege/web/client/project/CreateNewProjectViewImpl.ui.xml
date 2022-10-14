@@ -37,9 +37,28 @@
             <g:TextBox ui:field="repoURIField" addStyleNames="{style.formField}"/>
         </div>
 
+        <g:HTMLPanel ui:field="repoCloneArea" addStyleNames="{wp.style.formGroup}">
+            <div class="{wp.style.formGroup}">
+                <g:InlineLabel text="Relative Path in Repo: " addStyleNames="{wp.style.formLabel}"/>
+                <g:TextBox ui:field="pathField" />
+            </div>
+
+            <div class="{wp.style.formGroup}">
+                <g:InlineLabel text="Branch: " addStyleNames="{wp.style.formLabel}"/>
+                <g:TextBox ui:field="branchField" />
+            </div>
+        </g:HTMLPanel>
+
         <div class="{wp.style.formGroup}">
             <g:FormPanel ui:field="repoFormPanel">
-                <g:Hidden ui:field="repoData" />
+                <g:VerticalPanel ui:field="repoVerticalPanel">
+                    <g:Hidden ui:field="repoURI" />
+                    <g:Hidden ui:field="personalAccessToken" />
+                    <g:Hidden ui:field="user" />
+                    <g:Hidden ui:field="project" />
+                    <g:Hidden ui:field="path" />
+                    <g:Hidden ui:field="branch" />
+                </g:VerticalPanel>
             </g:FormPanel>
         </div>
         <div class="{wp.style.formGroup}">

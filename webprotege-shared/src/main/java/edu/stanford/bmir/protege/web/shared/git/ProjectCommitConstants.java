@@ -19,6 +19,8 @@ public class ProjectCommitConstants {
 
     public static final String BRANCH = "branch";
 
+    public static final String NEW_BRANCH = "newBranch";
+
     public static final String MESSAGE = "message";
 
     public static final String PATH = "path";

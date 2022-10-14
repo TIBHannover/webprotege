@@ -48,6 +48,12 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     TextBox repoURIField;
 
     @UiField
+    TextBox pathField;
+
+    @UiField
+    TextBox branchField;
+
+    @UiField
     FileUpload fileUpload;
 
     @UiField
@@ -57,10 +63,31 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     FormPanel repoFormPanel;
 
     @UiField
-    Hidden repoData;
+    VerticalPanel repoVerticalPanel;
+
+    @UiField
+    Hidden repoURI;
+
+    @UiField
+    Hidden personalAccessToken;
+
+    @UiField
+    Hidden user;
+
+    @UiField
+    Hidden project;
+
+    @UiField
+    Hidden path;
+
+    @UiField
+    Hidden branch;
 
     @UiField
     HTMLPanel fileUploadArea;
+
+    @UiField
+    HTMLPanel repoCloneArea;
 
     @UiField(provided = true)
     DefaultLanguageEditor projectLanguageField;
@@ -77,6 +104,11 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
         this.projectLanguageField = checkNotNull(languageEditor);
         this.messageBox = messageBox;
         initWidget(ourUiBinder.createAndBindUi(this));
+        repoCloneArea.setVisible(false);
+        branchField.setVisible(false);
+        branchField.setEnabled(false);
+        pathField.setVisible(false);
+        pathField.setEnabled(false);
 
         repoCreationSelectorField.addClickHandler( new ClickHandler() {
             @Override
@@ -85,10 +117,21 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
                     fileUploadArea.setVisible(false);
                     fileUpload.setVisible(false);
                     fileUpload.setEnabled(false);
+                    repoCloneArea.setVisible(true);
+                    branchField.setVisible(true);
+                    branchField.setEnabled(true);
+                    pathField.setVisible(true);
+                    pathField.setEnabled(true);
+
                 } else {
                     fileUploadArea.setVisible(true);
                     fileUpload.setVisible(true);
                     fileUpload.setEnabled(true);
+                    repoCloneArea.setVisible(false);
+                    branchField.setVisible(false);
+                    branchField.setEnabled(false);
+                    pathField.setVisible(false);
+                    pathField.setEnabled(false);
                 }
             }
         } );
@@ -145,8 +188,20 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     @Override
     public void setGitClonePostUrl(@Nonnull String url, LoggedInUserProvider loggedInUserProvider, String projectName){
         Log.info("url in method setGitClonePostUrl of CreateNewProjectViewImpl class : " + url);
-        repoData.setName("repoData");
-        repoData.setValue(repoURIField.getValue()+"#parse#"+loggedInUserProvider.getCurrentUserToken()+"#parse#"+loggedInUserProvider.getCurrentUserId().getUserName()+"#parse#"+ projectName);
+
+        repoURI.setName("repoURI");
+        repoURI.setValue(repoURIField.getValue());
+        personalAccessToken.setName("personalAccessToken");
+        personalAccessToken.setValue(loggedInUserProvider.getCurrentUserToken());
+        user.setName("user");
+        user.setValue(loggedInUserProvider.getCurrentUserId().getUserName());
+        project.setName("project");
+        project.setValue(projectName);
+        path.setName("path");
+        path.setValue(pathField.getValue());
+        branch.setName("branch");
+        branch.setValue(branchField.getValue());
+
         repoFormPanel.setMethod(METHOD_GET);
         repoFormPanel.setEncoding(ENCODING_URLENCODED);
         repoFormPanel.setAction(checkNotNull(url));

@@ -57,6 +57,7 @@ public class ProjectRevisionCommiter {
                 "&" + REPO_URI + "=" + encodedRepoURI +
                 "&" + PERSONAL_ACCESS_TOKEN + "=" + token +
                 "&" + BRANCH + "=" + commitData.getBranch() +
+                "&" + NEW_BRANCH + "=" + commitData.getNewBranch() +
                 "&" + MESSAGE + "=" + encodedMessage +
                 "&" + PATH + "=" + encodedPath +
                 "&" + FORMAT + "=" + commitData.getGfe().getExtension();

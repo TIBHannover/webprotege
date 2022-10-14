@@ -109,6 +109,12 @@ public class GitFileCommitServlet extends HttpServlet {
         String gitlabInstance = "";
         String instancePath = "";
 
+        logger.info("Message: "+commitParameters.getMessage());
+        logger.info("repoURI: "+commitParameters.getRepoURI());
+        logger.info("Branch: "+commitParameters.getBranch());
+        logger.info("New Branch: "+commitParameters.getNewBranch());
+        logger.info("Personal Access Token: "+commitParameters.getPersonalAccessToken());
+
         removeDirectory(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
 
         if(repoURI.startsWith("https://github.com") || repoURI.startsWith("http://github.com")){
@@ -130,6 +136,10 @@ public class GitFileCommitServlet extends HttpServlet {
         }
 
         gitCommandsService.gitCheckout(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getBranch());
+
+        if(!commitParameters.getNewBranch().isEmpty())
+            gitCommandsService.gitCheckoutNewBranch(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getNewBranch());
+
 
         WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
         UserId userId = webProtegeSession.getUserInSession();
@@ -159,14 +169,18 @@ public class GitFileCommitServlet extends HttpServlet {
                 else {
                     logger.info("Stored uploaded file with name {}", uploadedFile.getName());
                     resp.setStatus(HttpServletResponse.SC_CREATED);
+                    logger.info("resp.getStatus(): " + resp.getStatus());
                     sendSuccessMessage(resp, uploadedFile.getName());
                 }
             }
 
             gitCommandsService.gitAddAll(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
             gitCommandsService.gitCommit(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getMessage());
-            gitCommandsService.gitPush(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getBranch());
-
+            if(!commitParameters.getNewBranch().isEmpty())
+                gitCommandsService.gitPush(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getNewBranch());
+            else
+                gitCommandsService.gitPush(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getBranch());
+            
         } catch (Exception e) {
             logger.info("Commit failed because of an error: {}", e.getMessage(), e);
             sendErrorMessage(resp, "Commit failed");

@@ -8,6 +8,8 @@ public interface GitCommandsService {
 
     void gitCheckout(String path, String branch);
 
+    void gitCheckoutNewBranch(String path, String branch);
+
     void gitAddAll(String path);
 
     void gitCommit(String path, String message);

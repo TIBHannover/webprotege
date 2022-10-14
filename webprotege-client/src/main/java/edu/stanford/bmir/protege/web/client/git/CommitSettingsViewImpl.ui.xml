@@ -12,6 +12,10 @@
             <g:ListBox ui:field="branchListBox" visibleItemCount="1"/>
         </div>
         <div class="{wp.style.formGroup}">
+            <g:InlineLabel text="New Branch from Selection: " addStyleNames="{wp.style.formLabel}"/>
+            <g:TextBox ui:field="newBranchTextBox" />
+        </div>
+        <div class="{wp.style.formGroup}">
             <g:InlineLabel text="Ontology Format: " addStyleNames="{wp.style.formLabel}"/>
             <g:ListBox ui:field="formatListBox" visibleItemCount="1"/>
         </div>

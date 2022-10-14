@@ -73,6 +73,14 @@ public class GitCommitParameters {
         return branch;
     }
 
+    public String getNewBranch() {
+        String branch = getRawNewBranchParameter();
+        if(branch == null || branch.equals(getRawBranchParameter())) {
+            branch = "";
+        }
+        return branch;
+    }
+
     public String getMessage() {
         String message = getRawMessageParameter();
         if(message == null) {
@@ -143,6 +151,8 @@ public class GitCommitParameters {
 
     private String getRawBranchParameter() { return request.getParameter(ProjectCommitConstants.BRANCH);}
 
+    private String getRawNewBranchParameter() { return request.getParameter(ProjectCommitConstants.NEW_BRANCH);}
+
     private String getRawMessageParameter() { return request.getParameter(ProjectCommitConstants.MESSAGE);}
 
     private String getRawRepoURIParameter() { return request.getParameter(ProjectCommitConstants.REPO_URI);}
@@ -173,6 +183,7 @@ public class GitCommitParameters {
                 .add("revision", getRequestedRevision())
                 .add("format", getFormat())
                 .add("branch",getBranch())
+                .add("newBranch",getNewBranch())
                 .add("message",getMessage())
                 .add("repoURI",getRepoURI())
                 .add("personalAccessToken",getPersonalAccessToken())
