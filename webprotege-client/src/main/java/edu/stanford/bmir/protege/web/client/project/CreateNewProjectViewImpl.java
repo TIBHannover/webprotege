@@ -104,6 +104,9 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
         this.projectLanguageField = checkNotNull(languageEditor);
         this.messageBox = messageBox;
         initWidget(ourUiBinder.createAndBindUi(this));
+        branchField.setTitle("No blanks. Example: master-2");
+        pathField.setTitle("Example: src/dev");
+        repoURIField.setTitle("Example: https://github.com/obophenotype/chiro");
         repoCloneArea.setVisible(false);
         branchField.setVisible(false);
         branchField.setEnabled(false);

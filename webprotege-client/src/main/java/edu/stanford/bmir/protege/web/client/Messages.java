@@ -697,7 +697,7 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("repoURISelector")
     String repoURISelector();
 
-    @DefaultMessage("Repo URI")
+    @DefaultMessage("Git Repo URI")
     @Key("repoURI")
     String repoURI();
 
