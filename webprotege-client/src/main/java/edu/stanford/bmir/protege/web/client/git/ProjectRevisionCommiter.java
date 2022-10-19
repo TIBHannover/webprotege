@@ -48,18 +48,23 @@ public class ProjectRevisionCommiter {
     public void commit(String token) {
         String encodedProjectName = URL.encode(project.getProjectId().getId());
         String encodedRepoURI = URL.encode(project.getRepoURI());
+        String encodedToken = URL.encode(token);
         String encodedPath = URL.encode(commitData.getPath());
+        String encodedImportsPath = URL.encode(commitData.getImportsPath());
+        String encodedOntologyName = URL.encode(commitData.getOntologyName());
         String encodedMessage = URL.encode(commitData.getMessage());
         String baseURL = GWT.getHostPageBaseURL();
         String commitURL = baseURL + "commit?"
                 + PROJECT + "=" + encodedProjectName  +
                 "&" + REVISION + "=" + revisionNumber.getValue() +
                 "&" + REPO_URI + "=" + encodedRepoURI +
-                "&" + PERSONAL_ACCESS_TOKEN + "=" + token +
+                "&" + PERSONAL_ACCESS_TOKEN + "=" + encodedToken +
                 "&" + BRANCH + "=" + commitData.getBranch() +
                 "&" + NEW_BRANCH + "=" + commitData.getNewBranch() +
                 "&" + MESSAGE + "=" + encodedMessage +
                 "&" + PATH + "=" + encodedPath +
+                "&" + IMPORTS_PATH + "=" + encodedImportsPath +
+                "&" + ONTOLOGY_NAME + "=" + encodedOntologyName +
                 "&" + FORMAT + "=" + commitData.getGfe().getExtension();
         Window.open(commitURL, "Commit ontology", "");
     }

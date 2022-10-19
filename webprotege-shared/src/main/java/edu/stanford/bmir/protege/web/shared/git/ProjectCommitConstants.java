@@ -24,4 +24,8 @@ public class ProjectCommitConstants {
     public static final String MESSAGE = "message";
 
     public static final String PATH = "path";
+
+    public static final String IMPORTS_PATH = "importsPath";
+
+    public static final String ONTOLOGY_NAME = "ontologyName";
 }

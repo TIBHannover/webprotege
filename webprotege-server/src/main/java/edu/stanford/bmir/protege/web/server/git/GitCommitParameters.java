@@ -108,9 +108,25 @@ public class GitCommitParameters {
     public String getPath() {
         String path = getRawPathParameter();
         if (path == null) {
-            throw new UnsupportedOperationException("getPath can only be called if the request includes a path");
+            path = "";
         }
         return path;
+    }
+
+    public String getImportsPath() {
+        String path = getRawImportsPathParameter();
+        if (path == null) {
+            path = "";
+        }
+        return path;
+    }
+
+    public String getOntologyName() {
+        String name = getRawOntologyNameParameter();
+        if (name == null) {
+            name = "";
+        }
+        return name;
     }
 
     /**
@@ -161,6 +177,10 @@ public class GitCommitParameters {
 
     private String getRawPathParameter() { return request.getParameter(ProjectCommitConstants.PATH);}
 
+    private String getRawImportsPathParameter() { return request.getParameter(ProjectCommitConstants.IMPORTS_PATH);}
+
+    private String getRawOntologyNameParameter() { return request.getParameter(ProjectCommitConstants.ONTOLOGY_NAME);}
+
     private String getRawRevisionParameter() {
         return request.getParameter(ProjectDownloadConstants.REVISION);
     }
@@ -187,6 +207,9 @@ public class GitCommitParameters {
                 .add("message",getMessage())
                 .add("repoURI",getRepoURI())
                 .add("personalAccessToken",getPersonalAccessToken())
+                .add("path",getPath())
+                .add("importsPath",getImportsPath())
+                .add("ontologyName",getOntologyName())
                 .toString();
     }
 }

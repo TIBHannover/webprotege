@@ -34,6 +34,14 @@ public interface CommitSettingsView extends IsWidget, HasInitialFocusable {
 
     void setPath(String path);
 
+    String getImportsPath();
+
+    void setImportsPath(String path);
+
+    String getOntologyName();
+
+    void setOntologyName(String name);
+
     CommitData getCommitData();
 
 }

@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -157,7 +158,7 @@ public class GitFileCommitServlet extends HttpServlet {
 
         try {
 
-            List<File> uploadedFiles = writeOntologies(commitParameters.getRequestedRevision(),commitParameters.getProjectId(), commitParameters.getPath(), commitParameters.getFormat());
+            List<File> uploadedFiles = writeOntologies(commitParameters.getRequestedRevision(),commitParameters.getProjectId(), commitParameters.getPath(), commitParameters.getImportsPath(), commitParameters.getOntologyName(), commitParameters.getFormat());
 
             for (File uploadedFile : uploadedFiles){
                 long sizeInBytes = uploadedFile.length();
@@ -284,25 +285,70 @@ public class GitFileCommitServlet extends HttpServlet {
     private List<File> writeOntologies(@Nonnull RevisionNumber revisionNumber,
                                               @Nonnull ProjectId projectId,
                                               @Nonnull String path,
+                                              @Nonnull String importsPath,
+                                              @Nonnull String ontologyName,
                                               @Nonnull CommitFileFormat format) throws IOException, OWLOntologyStorageException {
 
         if (path.length() >=1)
             if(path.charAt(path.length() -1) != '/')
                 path = path + "/";
+
+        if (importsPath.length() >=1)
+            if(importsPath.charAt(importsPath.length() -1) != '/')
+                importsPath = importsPath + "/";
+
         // TODO: Separate object
         List<File> ontologies = new ArrayList<File>();
         OWLOntologyManager manager = projectManager.getRevisionManager(projectId).getOntologyManagerForRevision(revisionNumber);
         String baseFolder = uploadsDirectory.getAbsolutePath()+"/"+projectId.getId();
+        int count = 0;
         for(var ontology : manager.getOntologies()) {
+            count++;
             var documentFormat = format.getDocumentFormat();
             if(documentFormat.isPrefixOWLOntologyFormat()) {
                 var prefixDocumentFormat = documentFormat.asPrefixOWLOntologyFormat();
                 Map<String, String> prefixes = prefixDeclarationsStore.find(projectId).getPrefixes();
                 prefixes.forEach(prefixDocumentFormat::setPrefix);
             }
-            var ontologyShortForm = getOntologyShortForm(ontology);
-            var ontologyDocumentFileName = ontologyShortForm.replace(":", "_");
-            File ontologyFile = new File(baseFolder + "/" + path +ontologyDocumentFileName + "." + format.getExtension());
+
+            StringBuilder importsClosure = new StringBuilder("imports closure: ");
+            ontology.getImportsClosure().forEach(x ->importsClosure.append(correctShortForm(x)).append(" ; "));
+            logger.info(String.format("shortForm: %s imports closure: %s ", correctShortForm(ontology), importsClosure.toString()));
+
+            File ontologyFile = null;
+            if (count==1) {
+                if(!path.isEmpty()){
+                    String directoryPath = baseFolder + "/" + path;
+                    File file = new File(directoryPath);
+                    boolean directoriesCreated = file.mkdirs();
+                    if(directoriesCreated)
+                        logger.info(String.format("%s directories created", directoryPath ));
+                }
+                if(!ontologyName.isEmpty()){
+                    ontologyFile = new File(baseFolder + "/" + path +ontologyName + "." + format.getExtension());
+                    logger.info("File: "+baseFolder + "/" + path +ontologyName + "." + format.getExtension());
+                } else
+                {
+                    ontologyFile = new File(baseFolder + "/" + path +correctShortForm(ontology) + "." + format.getExtension());
+                    logger.info("File: "+baseFolder + "/" + path +correctShortForm(ontology) + "." + format.getExtension());
+                }
+            } else {
+                if(!importsPath.isEmpty()){
+                    String directoryPath = baseFolder + "/" + importsPath;
+                    File file = new File(directoryPath);
+                    boolean directoriesCreated = file.mkdirs();
+                    if(directoriesCreated)
+                        logger.info(String.format("%s directories created", directoryPath ));
+
+                    ontologyFile = new File(baseFolder + "/" + importsPath +correctShortForm(ontology) + "." + format.getExtension());
+                    logger.info("File: ", baseFolder + "/" + importsPath +correctShortForm(ontology) + "." + format.getExtension());
+                } else{
+                    ontologyFile = new File(baseFolder + "/" + path +correctShortForm(ontology) + "." + format.getExtension());
+                    logger.info("File: "+baseFolder + "/" + path +correctShortForm(ontology) + "." + format.getExtension());
+                }
+
+            }
+
             FileOutputStream fos = new FileOutputStream(ontologyFile);
             ontologies.add(ontologyFile);
             ontology.getOWLOntologyManager().saveOntology(ontology, documentFormat, fos);
@@ -311,6 +357,20 @@ public class GitFileCommitServlet extends HttpServlet {
             }
 
         return ontologies;
+    }
+
+    private String correctShortForm(OWLOntology ontology){
+        var ontologyShortForm = getOntologyShortForm(ontology);
+        String ontologyDocumentFileName = ontologyShortForm.replace("http://","").
+                replace("https://","").
+                replace("ftp://","").
+                replace("http:/","").
+                replace("https:/","").
+                replace("ftp:/","").
+                replace("www.","").
+                replace(".", "-").
+                replace("/","-");
+        return ontologyDocumentFileName;
     }
 
     private void logMemoryUsage() {

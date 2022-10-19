@@ -48,6 +48,12 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     @UiField
     protected TextBox pathTextBox;
 
+    @UiField
+    protected TextBox importsPathTextBox;
+
+    @UiField
+    protected TextBox ontologyNameTextBox;
+
     @Inject
     public CommitSettingsViewImpl(String repoURI, String token) {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
@@ -256,12 +262,20 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     @Override
     public void setPath(String path) {pathTextBox.setValue(path);}
 
+    @Override
+    public String getImportsPath() {return importsPathTextBox.getValue(); }
+    @Override
+    public void setImportsPath(String path) { importsPathTextBox.setValue(path);}
+
+    @Override
+    public String getOntologyName(){ return ontologyNameTextBox.getValue();}
+    @Override
+    public void setOntologyName(String name){ ontologyNameTextBox.setValue(name);}
 
     @Override
     public CommitData getCommitData(){
-        return new CommitData(getGithubFormatExtension(),getBranch(),getNewBranch(), getMessage(),getPath());
+        return new CommitData(getGithubFormatExtension(),getBranch(),getNewBranch(), getMessage(),getPath(), getImportsPath(), getOntologyName());
     }
-
 
     @Override
     public java.util.Optional<HasRequestFocus> getInitialFocusable() {

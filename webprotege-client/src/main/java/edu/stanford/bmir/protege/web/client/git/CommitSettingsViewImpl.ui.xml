@@ -16,16 +16,24 @@
             <g:TextBox ui:field="newBranchTextBox" />
         </div>
         <div class="{wp.style.formGroup}">
+            <g:InlineLabel text="Relative Path in Repo: " addStyleNames="{wp.style.formLabel}"/>
+            <g:TextBox ui:field="pathTextBox" />
+        </div>
+        <div class="{wp.style.formGroup}">
+            <g:InlineLabel text="Ontology Name: " addStyleNames="{wp.style.formLabel}"/>
+            <g:TextBox ui:field="ontologyNameTextBox" />
+        </div>
+        <div class="{wp.style.formGroup}">
             <g:InlineLabel text="Ontology Format: " addStyleNames="{wp.style.formLabel}"/>
             <g:ListBox ui:field="formatListBox" visibleItemCount="1"/>
         </div>
         <div class="{wp.style.formGroup}">
-            <g:InlineLabel text="Commit message: " addStyleNames="{wp.style.formLabel}"/>
-            <g:TextBox ui:field="messageTextBox" />
+            <g:InlineLabel text="Imports Path in Repo: " addStyleNames="{wp.style.formLabel}"/>
+            <g:TextBox ui:field="importsPathTextBox" />
         </div>
         <div class="{wp.style.formGroup}">
-            <g:InlineLabel text="Relative Path in Repo: " addStyleNames="{wp.style.formLabel}"/>
-            <g:TextBox ui:field="pathTextBox" />
+            <g:InlineLabel text="Commit message: " addStyleNames="{wp.style.formLabel}"/>
+            <g:TextBox ui:field="messageTextBox" />
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>
