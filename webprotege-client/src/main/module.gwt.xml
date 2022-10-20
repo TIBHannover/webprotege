@@ -38,7 +38,7 @@
     <!--https://github.com/fredsa/gwt-log/wiki/GettingStarted -->
     <!-- In gwt-log-3.0.3 or later -->
 
-    <inherits name="com.allen_sauer.gwt.log.gwt-log-INFO" />
+    <inherits name="com.allen_sauer.gwt.log.gwt-log-OFF" />
 
     <!-- end -->
 
