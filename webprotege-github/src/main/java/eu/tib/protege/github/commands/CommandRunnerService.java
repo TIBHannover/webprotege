@@ -1,5 +1,7 @@
 package eu.tib.protege.github.commands;
 
+import eu.tib.protege.github.commands.impl.Output;
+
 public interface CommandRunnerService {
-    int run(String command);
+    Output run(String command);
 }

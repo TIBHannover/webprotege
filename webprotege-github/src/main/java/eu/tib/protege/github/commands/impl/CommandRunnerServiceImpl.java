@@ -19,10 +19,11 @@ public class CommandRunnerServiceImpl implements CommandRunnerService {
      * @return exit code
      */
     @Override
-    public int run(String command) {
-
+    public Output run(String command) {
+        int exitCode = 1;
+        String message = "There was an unidentified error";
+        Output output = new Output(exitCode,message, command);
         logger.info("Going to run command: {}", command);
-
         String[] commandFields = command.split(" ");
         List<String> temp = new ArrayList<String>();
 
@@ -35,7 +36,6 @@ public class CommandRunnerServiceImpl implements CommandRunnerService {
 
         ProcessBuilder processBuilder = new ProcessBuilder(temp);
         Process process = null;
-        int exitCode;
         try {
             process = processBuilder.start();
             process.waitFor();
@@ -43,13 +43,16 @@ public class CommandRunnerServiceImpl implements CommandRunnerService {
             logger.info("Command: {}, exit code: {}", command, exitCode);
 
             if (process.exitValue() == 0) {
-                String message = getMessage(process.getInputStream());
+                message = getMessage(process.getInputStream());
                 logger.info(message);
             } else {
-                String message = getMessage(process.getErrorStream());
+                message = getMessage(process.getErrorStream());
                 logger.error(message);
             }
+
+            output = new Output(exitCode,message, command);
         } catch (Exception e) {
+            output = new Output(exitCode,message, command);
             throw new CommandRunnerException(
                 String.format("An error occurred while running command %s: %s", command, e.getLocalizedMessage())
             );
@@ -59,7 +62,7 @@ public class CommandRunnerServiceImpl implements CommandRunnerService {
             }
         }
 
-        return exitCode;
+        return output;
     }
 
     private String getMessage(InputStream inputStream) throws IOException {

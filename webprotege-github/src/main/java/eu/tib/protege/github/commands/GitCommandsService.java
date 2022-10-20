@@ -1,18 +1,20 @@
 package eu.tib.protege.github.commands;
 
+import eu.tib.protege.github.commands.impl.Output;
+
 public interface GitCommandsService {
 
-    void gitCloneGitHub(String token, String repoOwnerName, String repoName, String path);
+    Output gitCloneGitHub(String token, String repoOwnerName, String repoName, String path);
 
-    public void gitCloneGitlab(String userOrTokenType, String token, String gitlabInstance, String instancePath, String localPath);
+    Output gitCloneGitlab(String userOrTokenType, String token, String gitlabInstance, String instancePath, String localPath);
 
-    void gitCheckout(String path, String branch);
+    Output gitCheckout(String path, String branch);
 
-    void gitCheckoutNewBranch(String path, String branch);
+    Output gitCheckoutNewBranch(String path, String branch);
 
-    void gitAddAll(String path);
+    Output gitAddAll(String path);
 
-    void gitCommit(String path, String message);
+    Output gitCommit(String path, String message);
 
-    void gitPush(String path, String branch);
+    Output gitPush(String path, String branch);
 }

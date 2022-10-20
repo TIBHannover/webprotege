@@ -23,6 +23,7 @@ import edu.stanford.bmir.protege.web.shared.upload.FileUploadResponseAttributes;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
 import eu.tib.protege.github.commands.GitCommandsService;
 import eu.tib.protege.github.commands.impl.GitCommandsServiceImpl;
+import eu.tib.protege.github.commands.impl.Output;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
@@ -31,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -109,6 +109,8 @@ public class GitFileCommitServlet extends HttpServlet {
         String repo = "";
         String gitlabInstance = "";
         String instancePath = "";
+        List<Output> gitOutputs= new ArrayList<Output>();
+        String repoDirectory = uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId();
 
         logger.info("Message: "+commitParameters.getMessage());
         logger.info("repoURI: "+commitParameters.getRepoURI());
@@ -116,7 +118,7 @@ public class GitFileCommitServlet extends HttpServlet {
         logger.info("New Branch: "+commitParameters.getNewBranch());
         logger.info("Personal Access Token: "+commitParameters.getPersonalAccessToken());
 
-        removeDirectory(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
+        removeDirectory(repoDirectory);
 
         if(repoURI.startsWith("https://github.com") || repoURI.startsWith("http://github.com")){
             String[] parsedRepoUrl = repoURI.split("/");
@@ -127,19 +129,19 @@ public class GitFileCommitServlet extends HttpServlet {
                 if (i ==4)
                     repo = parsedRepoUrl[i];
             }
-            gitCommandsService.gitCloneGitHub(commitParameters.getPersonalAccessToken(),
-                    institution,repo,uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
+            gitOutputs.add(gitCommandsService.gitCloneGitHub(commitParameters.getPersonalAccessToken(),
+                    institution,repo,repoDirectory));
         } else {
             String temp = repoURI;
             gitlabInstance = temp.split("://")[1].split("/")[0];
             instancePath = temp.split(gitlabInstance+"/")[1];
-            gitCommandsService.gitCloneGitlab("oauth2",commitParameters.getPersonalAccessToken(),gitlabInstance, instancePath, uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
+            gitOutputs.add(gitCommandsService.gitCloneGitlab("oauth2",commitParameters.getPersonalAccessToken(),gitlabInstance, instancePath, repoDirectory));
         }
 
-        gitCommandsService.gitCheckout(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getBranch());
+        gitOutputs.add(gitCommandsService.gitCheckout(repoDirectory, commitParameters.getBranch()));
 
         if(!commitParameters.getNewBranch().isEmpty())
-            gitCommandsService.gitCheckoutNewBranch(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getNewBranch());
+            gitOutputs.add(gitCommandsService.gitCheckoutNewBranch(repoDirectory, commitParameters.getNewBranch()));
 
 
         WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
@@ -147,7 +149,7 @@ public class GitFileCommitServlet extends HttpServlet {
         if(!accessManager.hasPermission(Subject.forUser(userId),
                                     ApplicationResource.get(),
                                     BuiltInAction.UPLOAD_PROJECT)) {
-            sendErrorMessage(resp, "You do not have permission to upload files to " + applicationNameSupplier.get());
+            sendUploadErrorMessage(resp, "You do not have permission to upload files to " + applicationNameSupplier.get());
         }
 
         logger.info("Received upload request from {} at {}",
@@ -171,20 +173,21 @@ public class GitFileCommitServlet extends HttpServlet {
                     logger.info("Stored uploaded file with name {}", uploadedFile.getName());
                     resp.setStatus(HttpServletResponse.SC_CREATED);
                     logger.info("resp.getStatus(): " + resp.getStatus());
-                    sendSuccessMessage(resp, uploadedFile.getName());
+                    sendUploadSuccessMessage(resp, uploadedFile.getName());
                 }
             }
 
-            gitCommandsService.gitAddAll(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId());
-            gitCommandsService.gitCommit(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getMessage());
+            gitOutputs.add(gitCommandsService.gitAddAll(repoDirectory));
+            gitOutputs.add(gitCommandsService.gitCommit(repoDirectory, commitParameters.getMessage()));
             if(!commitParameters.getNewBranch().isEmpty())
-                gitCommandsService.gitPush(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getNewBranch());
+                gitOutputs.add(gitCommandsService.gitPush(repoDirectory, commitParameters.getNewBranch()));
             else
-                gitCommandsService.gitPush(uploadsDirectory.getAbsolutePath()+"/"+commitParameters.getProjectId().getId(), commitParameters.getBranch());
-
+                gitOutputs.add(gitCommandsService.gitPush(repoDirectory, commitParameters.getBranch()));
+            sendGitStatusMessage(resp, gitOutputs, repoDirectory, commitParameters.getPersonalAccessToken());
         } catch (Exception e) {
             logger.info("Commit failed because of an error: {}", e.getMessage(), e);
-            sendErrorMessage(resp, "Commit failed");
+            writeJSONPairs(resp.getWriter(),new Pair("Commit failed due to an exception", e.getMessage()));
+            sendGitStatusMessage(resp, gitOutputs, repoDirectory, commitParameters.getPersonalAccessToken());
         }
     }
 
@@ -210,20 +213,29 @@ public class GitFileCommitServlet extends HttpServlet {
 
     private void sendFileSizeTooLargeResponse(HttpServletResponse resp) throws IOException {
         logger.info("File upload failed because the file exceeds the maximum allowed size.");
-        sendErrorMessage(resp, String.format("The file that you attempted to upload is too large.  " +
+        sendUploadErrorMessage(resp, String.format("The file that you attempted to upload is too large.  " +
                                                      "Files (or zipped file contents) must not exceed %d MB.",
                                              maxUploadSizeSupplier.get() / (1024 * 1024)));
     }
 
-    private void sendSuccessMessage(HttpServletResponse response, String fileName) throws IOException {
+    private void sendUploadSuccessMessage(HttpServletResponse response, String fileName) throws IOException {
         PrintWriter writer = response.getWriter();
         writeJSONPairs(writer,
                 new Pair(FileUploadResponseAttributes.RESPONSE_TYPE_ATTRIBUTE.name(), FileUploadResponseAttributes.RESPONSE_TYPE_VALUE_UPLOAD_ACCEPTED.name()),
                 new Pair(FileUploadResponseAttributes.UPLOAD_FILE_ID.name(), fileName));
-
     }
 
-    private void sendErrorMessage(HttpServletResponse response, String errorMessage) throws IOException {
+    private void sendGitStatusMessage(HttpServletResponse response, List<Output> gitOutputs, String repoDirectory, String token) throws IOException {
+        PrintWriter writer = response.getWriter();
+        Pair[] pairs = new Pair[gitOutputs.size()];
+
+        for (int i = 0; i<gitOutputs.size();i++){
+            pairs[i] = new Pair(String.format("Message of command %s exited with %d exit code", gitOutputs.get(i).getCommand().replace(repoDirectory, "/repo/directory").replace(token,"personal-access-token"),gitOutputs.get(i).getExitCode()),gitOutputs.get(i).getMessage());
+        }
+        writeJSONPairs(writer,pairs);
+    }
+
+    private void sendUploadErrorMessage(HttpServletResponse response, String errorMessage) throws IOException {
         writeJSONPairs(response.getWriter(), 
                 new Pair(FileUploadResponseAttributes.RESPONSE_TYPE_ATTRIBUTE.name(), FileUploadResponseAttributes.RESPONSE_TYPE_VALUE_UPLOAD_REJECTED.name()),
                 new Pair(FileUploadResponseAttributes.UPLOAD_REJECTED_MESSAGE_ATTRIBUTE.name(), errorMessage)

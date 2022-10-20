@@ -4,6 +4,7 @@ import edu.stanford.bmir.protege.web.server.access.AccessManager;
 import edu.stanford.bmir.protege.web.server.access.ApplicationResource;
 import edu.stanford.bmir.protege.web.server.access.Subject;
 import edu.stanford.bmir.protege.web.server.app.ApplicationNameSupplier;
+import edu.stanford.bmir.protege.web.server.git.GitFileCommitServlet;
 import edu.stanford.bmir.protege.web.server.inject.UploadsDirectory;
 import edu.stanford.bmir.protege.web.server.session.WebProtegeSession;
 import edu.stanford.bmir.protege.web.server.session.WebProtegeSessionImpl;
@@ -15,6 +16,7 @@ import edu.stanford.bmir.protege.web.shared.upload.FileUploadResponseAttributes;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
 import eu.tib.protege.github.commands.GitCommandsService;
 import eu.tib.protege.github.commands.impl.GitCommandsServiceImpl;
+import eu.tib.protege.github.commands.impl.Output;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,13 +81,6 @@ public class GitCloneServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         logger.info("GitCloneServlet: This is doGet method in servlet GitCloneServlet!");
-/*        String repoData = req.getParameter("repoData");
-        String repoURI = repoData.split("#parse#")[0];
-        String personalAccessToken = repoData.split("#parse#")[1];
-        String user = repoData.split("#parse#")[2];
-        String project = repoData.split("#parse#")[3];
-        String path = repoData.split("#parse#")[4];
-        String branch = repoData.split("#parse#")[5];*/
 
         Set<String> parameters = new HashSet<String>(req.getParameterMap().keySet());
         String repoURI = "";
@@ -130,7 +125,7 @@ public class GitCloneServlet extends HttpServlet {
         String repo = "";
         String gitlabInstance = "";
         String instancePath = "";
-
+        List<Output> gitOutputs= new ArrayList<Output>();
         removeDirectory(uploadsDirectory.getAbsolutePath()+"/temp-"+user);
 
         if(repoURI.startsWith("https://github.com") || repoURI.startsWith("http://github.com")){
@@ -142,17 +137,17 @@ public class GitCloneServlet extends HttpServlet {
                 if (i ==4)
                     repo = parsedRepoUrl[i];
             }
-            gitCommandsService.gitCloneGitHub(personalAccessToken,
-                    institution,repo,uploadsDirectory.getAbsolutePath()+"/temp-"+user);
+            gitOutputs.add(gitCommandsService.gitCloneGitHub(personalAccessToken,
+                    institution,repo,uploadsDirectory.getAbsolutePath()+"/temp-"+user));
         } else {
             String temp = repoURI;
             gitlabInstance = temp.split("://")[1].split("/")[0];
             instancePath = temp.split(gitlabInstance+"/")[1];
-            gitCommandsService.gitCloneGitlab("oauth2",personalAccessToken,gitlabInstance, instancePath, uploadsDirectory.getAbsolutePath()+"/temp-"+user);
+            gitOutputs.add(gitCommandsService.gitCloneGitlab("oauth2",personalAccessToken,gitlabInstance, instancePath, uploadsDirectory.getAbsolutePath()+"/temp-"+user));
         }
         if(branch != null)
             if(!branch.isEmpty())
-                gitCommandsService.gitCheckout(uploadsDirectory.getAbsolutePath()+"/temp-"+user, branch);
+                gitOutputs.add(gitCommandsService.gitCheckout(uploadsDirectory.getAbsolutePath()+"/temp-"+user, branch));
 
         WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
         UserId userId = webProtegeSession.getUserInSession();
@@ -210,7 +205,8 @@ public class GitCloneServlet extends HttpServlet {
 
         } catch (Exception e) {
             logger.info("Clone failed because of an error when trying to write the file item: {}", e.getMessage(), e);
-            sendErrorMessage(resp, "Clone failed");
+            writeJSONPairs(resp.getWriter(),new Pair("Commit failed due to an exception", e.getMessage()));
+            sendGitStatusMessage(resp, gitOutputs, uploadsDirectory.getAbsolutePath()+"/temp-"+user, personalAccessToken);
         }
     }
 
@@ -268,7 +264,6 @@ public class GitCloneServlet extends HttpServlet {
         writeJSONPairs(writer,
                 new Pair(FileUploadResponseAttributes.RESPONSE_TYPE_ATTRIBUTE.name(), FileUploadResponseAttributes.RESPONSE_TYPE_VALUE_UPLOAD_ACCEPTED.name()),
                 new Pair(FileUploadResponseAttributes.UPLOAD_FILE_ID.name(), fileName));
-
     }
 
     private void sendErrorMessage(HttpServletResponse response, String errorMessage) throws IOException {
@@ -276,7 +271,16 @@ public class GitCloneServlet extends HttpServlet {
                 new Pair(FileUploadResponseAttributes.RESPONSE_TYPE_ATTRIBUTE.name(), FileUploadResponseAttributes.RESPONSE_TYPE_VALUE_UPLOAD_REJECTED.name()),
                 new Pair(FileUploadResponseAttributes.UPLOAD_REJECTED_MESSAGE_ATTRIBUTE.name(), errorMessage)
         );
+    }
 
+    private void sendGitStatusMessage(HttpServletResponse response, List<Output> gitOutputs, String repoDirectory, String token) throws IOException {
+        PrintWriter writer = response.getWriter();
+        Pair[] pairs = new Pair[gitOutputs.size()];
+
+        for (int i = 0; i<gitOutputs.size();i++){
+            pairs[i] = new Pair(String.format("Message of command %s exited with %d exit code", gitOutputs.get(i).getCommand().replace(repoDirectory, "/repo/directory").replace(token,"personal-access-token"),gitOutputs.get(i).getExitCode()),gitOutputs.get(i).getMessage());
+        }
+        writeJSONPairs(writer,pairs);
     }
 
     private void writeJSONPairs(PrintWriter printWriter, Pair ... pairs) {

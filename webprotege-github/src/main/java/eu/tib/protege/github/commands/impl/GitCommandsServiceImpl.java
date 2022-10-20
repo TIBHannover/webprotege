@@ -16,22 +16,22 @@ public class GitCommandsServiceImpl implements GitCommandsService {
      * @param path          path to local directory
      */
     @Override
-    public void gitCloneGitHub(String token, String repoOwnerName, String repoName, String path) {
+    public Output gitCloneGitHub(String token, String repoOwnerName, String repoName, String path) {
         var command = "";
         if(token == null)
             command = String.format("git clone https://github.com/%s/%s.git %s", repoOwnerName, repoName, path);
         else
             command = String.format("git clone https://%s@github.com/%s/%s.git %s", token, repoOwnerName, repoName, path);
-        commandRunnerService.run(command);
+        return commandRunnerService.run(command);
     }
     @Override
-    public void gitCloneGitlab(String userOrTokenType, String passwordOrToken, String gitlabInstance, String instancePath, String localPath){
+    public Output gitCloneGitlab(String userOrTokenType, String passwordOrToken, String gitlabInstance, String instancePath, String localPath){
         var command = "";
         if(userOrTokenType == null || passwordOrToken == null)
             command = String.format("git clone https://%s/%s.git %s", gitlabInstance, instancePath, localPath);
         else
             command = String.format("git clone https://%s:%s@%s/%s.git %s", userOrTokenType, passwordOrToken, gitlabInstance, instancePath, localPath);
-        commandRunnerService.run(command);
+        return commandRunnerService.run(command);
     }
 
     /**
@@ -41,15 +41,15 @@ public class GitCommandsServiceImpl implements GitCommandsService {
      * @param branch branch name
      */
     @Override
-    public void gitCheckout(String path, String branch) {
+    public Output gitCheckout(String path, String branch) {
         var command = String.format("git -C %s checkout %s", path, branch);
-        commandRunnerService.run(command);
+        return commandRunnerService.run(command);
     }
 
     @Override
-    public void gitCheckoutNewBranch(String path, String branch) {
+    public Output gitCheckoutNewBranch(String path, String branch) {
         var command = String.format("git -C %s checkout -b %s", path, branch);
-        commandRunnerService.run(command);
+        return commandRunnerService.run(command);
     }
 
     /**
@@ -59,9 +59,9 @@ public class GitCommandsServiceImpl implements GitCommandsService {
      * @param path path to Git local working directory
      */
     @Override
-    public void gitAddAll(String path) {
+    public Output gitAddAll(String path) {
         var command = String.format("git -C %s add .", path);
-        commandRunnerService.run(command);
+        return commandRunnerService.run(command);
     }
 
     /**
@@ -71,9 +71,9 @@ public class GitCommandsServiceImpl implements GitCommandsService {
      * @param message commit message
      */
     @Override
-    public void gitCommit(String path, String message) {
+    public Output gitCommit(String path, String message) {
         var command = String.format("git -C %s commit -m \"%s\"", path, message.replace(" ", "%20" ));
-        commandRunnerService.run(command);
+        return commandRunnerService.run(command);
     }
 
     /**
@@ -83,8 +83,8 @@ public class GitCommandsServiceImpl implements GitCommandsService {
      * @param branch branch to be pushed
      */
     @Override
-    public void gitPush(String path, String branch) {
+    public Output gitPush(String path, String branch) {
         var command = String.format("git -C %s push -f origin %s", path, branch);
-        commandRunnerService.run(command);
+        return commandRunnerService.run(command);
     }
 }
