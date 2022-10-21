@@ -33,6 +33,20 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     interface CreateNewProjectViewImplUiBinder extends UiBinder<HTMLPanel, CreateNewProjectViewImpl> {
     }
 
+    public final class RadioButtonClickHandler implements ClickHandler {
+        private Boolean value;
+
+        public RadioButtonClickHandler(Boolean value) {
+            this.value = value;
+        }
+
+        @Override
+        public void onClick(ClickEvent event) {
+            backingSelectorValue = value;
+            setValue(value);
+        }
+    }
+
     private static CreateNewProjectViewImplUiBinder ourUiBinder = GWT.create(CreateNewProjectViewImplUiBinder.class);
 
     @UiField
@@ -42,7 +56,12 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     TextArea projectDescriptionField;
 
     @UiField
-    CheckBox repoCreationSelectorField;
+    RadioButton cloneSelectorField;
+
+    @UiField
+    RadioButton uploadSelectorField;
+
+    Boolean backingSelectorValue;
 
     @UiField
     TextBox repoURIField;
@@ -105,39 +124,10 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
         this.messageBox = messageBox;
         initWidget(ourUiBinder.createAndBindUi(this));
         branchField.setTitle("No blanks. Example: master-2");
-        pathField.setTitle("Example: src/dev");
-        repoURIField.setTitle("Example: https://github.com/obophenotype/chiro");
-        repoCloneArea.setVisible(false);
-        branchField.setVisible(false);
-        branchField.setEnabled(false);
-        pathField.setVisible(false);
-        pathField.setEnabled(false);
-
-        repoCreationSelectorField.addClickHandler( new ClickHandler() {
-            @Override
-            public void onClick(final ClickEvent event) {
-                if(getRepoCreationSelector()){
-                    fileUploadArea.setVisible(false);
-                    fileUpload.setVisible(false);
-                    fileUpload.setEnabled(false);
-                    repoCloneArea.setVisible(true);
-                    branchField.setVisible(true);
-                    branchField.setEnabled(true);
-                    pathField.setVisible(true);
-                    pathField.setEnabled(true);
-
-                } else {
-                    fileUploadArea.setVisible(true);
-                    fileUpload.setVisible(true);
-                    fileUpload.setEnabled(true);
-                    repoCloneArea.setVisible(false);
-                    branchField.setVisible(false);
-                    branchField.setEnabled(false);
-                    pathField.setVisible(false);
-                    pathField.setEnabled(false);
-                }
-            }
-        } );
+        pathField.setTitle("Example: src/dev/tbox/oais-ip-tbox.owl");
+        repoURIField.setTitle("Example: https://github.com/fengel/OAIS-IP-Ontology");
+        setValue(false);
+        setupHandlers();
     }
 
     @Nonnull
@@ -160,7 +150,7 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
 
     @Nullable
     @Override
-    public boolean getRepoCreationSelector(){ return repoCreationSelectorField.getValue(); }
+    public boolean getRepoCreationSelector(){ return backingSelectorValue; }
 
     @Nullable
     @Override
@@ -214,6 +204,36 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     public boolean isFileUploadSpecified() {
         String filename = fileUpload.getFilename();
         return !filename.trim().isEmpty();
+    }
+
+    private void setupHandlers() {
+        cloneSelectorField.addClickHandler(new RadioButtonClickHandler(true));
+        uploadSelectorField.addClickHandler(new RadioButtonClickHandler(false));
+    }
+
+    public void setValue(Boolean value) {
+        this.backingSelectorValue = value;
+        if (this.backingSelectorValue) {
+            cloneSelectorField.setValue(true);
+            fileUploadArea.setVisible(false);
+            fileUpload.setVisible(false);
+            fileUpload.setEnabled(false);
+            repoCloneArea.setVisible(true);
+            branchField.setVisible(true);
+            branchField.setEnabled(true);
+            pathField.setVisible(true);
+            pathField.setEnabled(true);
+        } else {
+            uploadSelectorField.setValue(true);
+            fileUploadArea.setVisible(true);
+            fileUpload.setVisible(true);
+            fileUpload.setEnabled(true);
+            repoCloneArea.setVisible(false);
+            branchField.setVisible(false);
+            branchField.setEnabled(false);
+            pathField.setVisible(false);
+            pathField.setEnabled(false);
+        }
     }
 
     @Override

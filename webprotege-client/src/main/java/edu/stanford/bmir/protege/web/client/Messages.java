@@ -730,6 +730,14 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("projectSettings.language.helpText")
     SafeHtml projectSettings_language_helpText();
 
+    @DefaultMessage("The path of the ontology file relative to the repo root.  Automatic ontology search will be carried out if the specified file does not exist.")
+    @Key("projectSettings.repopath.helpText")
+    SafeHtml projectSettings_repopath_helpText();
+
+    @DefaultMessage("The branch of the repo that contains the ontology file.  The default master/main branch will be used if the specified banch does not exist.")
+    @Key("projectSettings.branch.helpText")
+    SafeHtml projectSettings_branch_helpText();
+
     @DefaultMessage("Any owl:import that cannot be loaded will be silently ignored")
     @Key("projectSettings.owlimport.helpText")
     SafeHtml projectSettings_owl_import_helpText();

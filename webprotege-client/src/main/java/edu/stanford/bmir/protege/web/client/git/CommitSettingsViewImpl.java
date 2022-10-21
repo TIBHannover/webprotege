@@ -62,7 +62,7 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
         pathTextBox.setTitle("Not mandatory. Unexisting directories will automatically be created. Example: src ");
         newBranchTextBox.setTitle("No blanks. Example: master-2");
         ontologyNameTextBox.setTitle("No blanks and no extension. Example: oais-ip-tbox");
-        messageTextBox.setTitle("Cannot be empty. Example: updated tbox concepts for #9");
+        messageTextBox.setTitle("Example: updated tbox concepts for #9");
         populateBranchListBox(repoURI, token);
         populateFormatListBox();
 

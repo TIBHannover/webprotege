@@ -37,18 +37,6 @@
             <g:TextBox ui:field="repoURIField" addStyleNames="{style.formField}"/>
         </div>
 
-        <g:HTMLPanel ui:field="repoCloneArea" addStyleNames="{wp.style.formGroup}">
-            <div class="{wp.style.formGroup}">
-                <g:InlineLabel text="Relative Path in Repo: " addStyleNames="{wp.style.formLabel}"/>
-                <g:TextBox ui:field="pathField" />
-            </div>
-
-            <div class="{wp.style.formGroup}">
-                <g:InlineLabel text="Branch: " addStyleNames="{wp.style.formLabel}"/>
-                <g:TextBox ui:field="branchField" />
-            </div>
-        </g:HTMLPanel>
-
         <div class="{wp.style.formGroup}">
             <g:FormPanel ui:field="repoFormPanel">
                 <g:VerticalPanel ui:field="repoVerticalPanel">
@@ -61,13 +49,32 @@
                 </g:VerticalPanel>
             </g:FormPanel>
         </div>
-        <div class="{wp.style.formGroup}">
-            <g:Label text="{msg.repoURISelector}" addStyleNames="{wp.style.formLabel}"/>
-            <g:CheckBox ui:field="repoCreationSelectorField" addStyleNames="{style.formField}"/>
-        </div>
+
+        <g:HTMLPanel>
+            <g:Label text="Select Project Creation Source" addStyleNames="{wp.style.formLabel}"/>
+            <span>
+                <g:RadioButton ui:field="cloneSelectorField" name="yesNoButton" value="true" enabled="true">Clone from repo</g:RadioButton>
+
+                <g:HTMLPanel ui:field="repoCloneArea" addStyleNames="{wp.style.formGroup}">
+                    <div class="{wp.style.formGroup}">
+                        <g:InlineLabel text="Relative Path in Repo: " addStyleNames="{wp.style.formLabel}"/>
+                        <g:TextBox ui:field="pathField" />
+                        <label class="{wp.style.formHelpText} {style.helpText}"><ui:safehtml from="{msg.projectSettings_repopath_helpText}"/></label>
+                    </div>
+
+                    <div class="{wp.style.formGroup}">
+                        <g:InlineLabel text="Branch: " addStyleNames="{wp.style.formLabel}"/>
+                        <g:TextBox ui:field="branchField" />
+                        <label class="{wp.style.formHelpText} {style.helpText}"><ui:safehtml from="{msg.projectSettings_branch_helpText}"/></label>
+                    </div>
+                </g:HTMLPanel>
+
+                <g:RadioButton ui:field="uploadSelectorField" name="yesNoButton" value="false" enabled="true">Upload from file</g:RadioButton>
+            </span>
+        </g:HTMLPanel>
 
         <g:HTMLPanel ui:field="fileUploadArea" addStyleNames="{wp.style.formGroup}">
-            <g:Label text="Create from existing sources" addStyleNames="{wp.style.formLabel}"/>
+            <g:Label text="Source File" addStyleNames="{wp.style.formLabel}"/>
             <g:HTMLPanel addStyleNames="{style.uploadContainer}">
                 <g:FormPanel ui:field="formPanel">
                     <g:FileUpload ui:field="fileUpload"/>
