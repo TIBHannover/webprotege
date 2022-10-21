@@ -25,7 +25,7 @@ public class CommitSettingsDialog {
         view.setCommitFormatExtension(lastExtension);
         view.setBranch(0);
 
-        WebProtegeOKCancelDialogController<CommitData> controller = new WebProtegeOKCancelDialogController<CommitData>("Commit project") {
+        WebProtegeOKCancelDialogController<CommitData> controller = new WebProtegeOKCancelDialogController<CommitData>("Commit & Push project") {
 
             @Override
             public Widget getWidget() {

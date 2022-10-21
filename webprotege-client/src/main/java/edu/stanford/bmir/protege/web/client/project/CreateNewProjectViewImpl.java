@@ -129,9 +129,12 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
         this.projectLanguageField = checkNotNull(languageEditor);
         this.messageBox = messageBox;
         initWidget(ourUiBinder.createAndBindUi(this));
-        branchField.setTitle("No blanks. Example: master-2");
-        pathField.setTitle("Example: src/dev/tbox/oais-ip-tbox.owl");
-        repoURIField.setTitle("Example: https://github.com/fengel/OAIS-IP-Ontology");
+        branchField.setTitle("No blanks in text.");
+        branchField.getElement().setPropertyString("placeholder", "master-2");
+        pathField.getElement().setPropertyString("placeholder", "src/dev/tbox/oais-ip-tbox.owl");
+        pathField.setTitle("Relative path of the clone file.");
+        repoURIField.setTitle("Main html page of the repo");
+        repoURIField.getElement().setPropertyString("placeholder", "https://github.com/fengel/OAIS-IP-Ontology");
         setValue(false);
         setupHandlers();
     }

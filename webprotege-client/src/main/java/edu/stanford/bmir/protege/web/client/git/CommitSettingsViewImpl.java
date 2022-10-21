@@ -58,14 +58,20 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     public CommitSettingsViewImpl(String repoURI, String token) {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
-        importsPathTextBox.setTitle("Directory path. Unexisting directories will automatically be created. Example: src/imports");
-        pathTextBox.setTitle("Directory path. Unexisting directories will automatically be created. Example: src ");
-        newBranchTextBox.setTitle("No blanks. Example: master-2");
-        ontologyNameTextBox.setTitle("No blanks and no extension. The file will be created with its name and its selected extension if it doesn't exist. Example: oais-ip-tbox");
-        messageTextBox.setTitle("Example: updated tbox concepts for #9");
+        importsPathTextBox.setTitle("Directory path of the imported ontologies. Unexisting directories will automatically be created.");
+        importsPathTextBox.getElement().setPropertyString("placeholder", "src/imports");
+        pathTextBox.setTitle("Directory path of the actual ontology. Unexisting directories will automatically be created.");
+        pathTextBox.getElement().setPropertyString("placeholder", "src");
+        newBranchTextBox.setTitle("Branches from the original branch specified in the dropdown list. Can be left empty. No blanks in text.");
+        newBranchTextBox.getElement().setPropertyString("placeholder", "master-2");
+        ontologyNameTextBox.setTitle("No blanks and no extension. The file will be created with its name and its selected extension if it doesn't exist.");
+        ontologyNameTextBox.getElement().setPropertyString("placeholder", "oais-ip-tbox");
+        messageTextBox.setTitle("Message to be displayed in the repo");
+        messageTextBox.getElement().setPropertyString("placeholder", "Updated tbox concepts for #9");
+        formatListBox.setTitle("The extension of the ontology document to be committed.");
+        branchListBox.setTitle("The original branch to commit to if new branch field is left empty.");
         populateBranchListBox(repoURI, token);
         populateFormatListBox();
-
     }
 
     private void populateBranchListBox(String repoURI, String token){
