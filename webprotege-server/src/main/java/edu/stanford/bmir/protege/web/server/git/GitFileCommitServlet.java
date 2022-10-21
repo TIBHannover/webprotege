@@ -120,6 +120,15 @@ public class GitFileCommitServlet extends HttpServlet {
 
         removeDirectory(repoDirectory);
 
+        WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
+        UserId userId = webProtegeSession.getUserInSession();
+        if(!accessManager.hasPermission(Subject.forUser(userId),
+                ApplicationResource.get(),
+                BuiltInAction.UPLOAD_PROJECT)) {
+            sendUploadErrorMessage(resp, "You do not have permission to upload files to " + applicationNameSupplier.get());
+            return;
+        }
+
         if(repoURI.startsWith("https://github.com") || repoURI.startsWith("http://github.com")){
             String[] parsedRepoUrl = repoURI.split("/");
             for (int i = 0;i<parsedRepoUrl.length;i++) {
@@ -144,14 +153,6 @@ public class GitFileCommitServlet extends HttpServlet {
             gitOutputs.add(gitCommandsService.gitCheckoutNewBranch(repoDirectory, commitParameters.getNewBranch()));
 
 
-        WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
-        UserId userId = webProtegeSession.getUserInSession();
-        if(!accessManager.hasPermission(Subject.forUser(userId),
-                                    ApplicationResource.get(),
-                                    BuiltInAction.UPLOAD_PROJECT)) {
-            sendUploadErrorMessage(resp, "You do not have permission to upload files to " + applicationNameSupplier.get());
-        }
-
         logger.info("Received upload request from {} at {}",
                     webProtegeSession.getUserInSession(),
                     formatAddr(req));
@@ -164,10 +165,10 @@ public class GitFileCommitServlet extends HttpServlet {
 
             for (File uploadedFile : uploadedFiles){
                 long sizeInBytes = uploadedFile.length();
-                long computedFileSizeInBytes = computeFileSize(uploadedFile);
-                logger.info("File size is {} bytes.  Computed file size is {} bytes.", sizeInBytes, computedFileSizeInBytes);
-                if(computedFileSizeInBytes > maxUploadSizeSupplier.get()) {
+                logger.info("File size is {} bytes.", sizeInBytes);
+                if(sizeInBytes > maxUploadSizeSupplier.get()) {
                     sendFileSizeTooLargeResponse(resp);
+                    uploadedFile.delete();
                 }
                 else {
                     logger.info("Stored uploaded file with name {}", uploadedFile.getName());
@@ -266,11 +267,6 @@ public class GitFileCommitServlet extends HttpServlet {
         printWriter.print("\"");
         printWriter.print(string);
         printWriter.print("\"");
-    }
-
-    private long computeFileSize(@Nonnull File uploadedFile) throws IOException {
-        FileContentsSizeCalculator sizeCalculator = new FileContentsSizeCalculator(new ZipInputStreamChecker());
-        return sizeCalculator.getContentsSize(uploadedFile);
     }
     
     private static class Pair {

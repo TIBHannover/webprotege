@@ -1,10 +1,15 @@
 package edu.stanford.bmir.protege.web.server.upload;
 
 import edu.stanford.bmir.protege.web.server.access.AccessManager;
+import edu.stanford.bmir.protege.web.server.access.ApplicationResource;
+import edu.stanford.bmir.protege.web.server.access.Subject;
 import edu.stanford.bmir.protege.web.server.app.ApplicationNameSupplier;
 import edu.stanford.bmir.protege.web.server.inject.UploadsDirectory;
 import edu.stanford.bmir.protege.web.server.session.WebProtegeSession;
 import edu.stanford.bmir.protege.web.server.session.WebProtegeSessionImpl;
+import edu.stanford.bmir.protege.web.server.util.FileContentsSizeCalculator;
+import edu.stanford.bmir.protege.web.server.util.ZipInputStreamChecker;
+import edu.stanford.bmir.protege.web.shared.access.BuiltInAction;
 import edu.stanford.bmir.protege.web.shared.inject.ApplicationSingleton;
 import edu.stanford.bmir.protege.web.shared.upload.FileUploadResponseAttributes;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
@@ -57,6 +62,9 @@ public class GitCloneServlet extends HttpServlet {
 
     private final AccessManager accessManager;
 
+
+    private final MaxUploadSizeSupplier maxUploadSizeSupplier;
+
     private final ApplicationNameSupplier applicationNameSupplier;
 
     GitCommandsService gitCommandsService = new GitCommandsServiceImpl();
@@ -65,9 +73,11 @@ public class GitCloneServlet extends HttpServlet {
     public GitCloneServlet(
             @Nonnull AccessManager accessManager,
             @Nonnull ApplicationNameSupplier applicationNameSupplier,
+            @Nonnull MaxUploadSizeSupplier maxUploadSizeSupplier,
             @Nonnull @UploadsDirectory File uploadsDirectory) {
         this.accessManager = checkNotNull(accessManager);
         this.applicationNameSupplier = checkNotNull(applicationNameSupplier);
+        this.maxUploadSizeSupplier = checkNotNull(maxUploadSizeSupplier);
         this.uploadsDirectory = checkNotNull(uploadsDirectory);
     }
 
@@ -122,6 +132,15 @@ public class GitCloneServlet extends HttpServlet {
         List<Output> gitOutputs= new ArrayList<Output>();
         removeDirectory(uploadsDirectory.getAbsolutePath()+"/temp-"+user);
 
+        WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
+        UserId userId = webProtegeSession.getUserInSession();
+        if(!accessManager.hasPermission(Subject.forUser(userId),
+                ApplicationResource.get(),
+                BuiltInAction.UPLOAD_PROJECT)) {
+            sendErrorMessage(resp, "You do not have permission to upload files to " + applicationNameSupplier.get());
+            return;
+        }
+
         if(repoURI.startsWith("https://github.com") || repoURI.startsWith("http://github.com")){
             String[] parsedRepoUrl = repoURI.split("/");
             for (int i = 0;i<parsedRepoUrl.length;i++) {
@@ -143,8 +162,6 @@ public class GitCloneServlet extends HttpServlet {
             if(!branch.isEmpty())
                 gitOutputs.add(gitCommandsService.gitCheckout(uploadsDirectory.getAbsolutePath()+"/temp-"+user, branch));
 
-        WebProtegeSession webProtegeSession = new WebProtegeSessionImpl(req.getSession());
-        UserId userId = webProtegeSession.getUserInSession();
         logger.info("Received upload request from {} at {}",
                     webProtegeSession.getUserInSession(),
                     formatAddr(req));
@@ -157,23 +174,35 @@ public class GitCloneServlet extends HttpServlet {
                 if (!path.isEmpty())
                     if (path.endsWith(".owl") || path.endsWith(".ttl") || path.endsWith(".owx") || path.endsWith(".omn") || path.endsWith(".ofn")){
                         if(Files.exists(Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path))){
-                            logger.info("Stored the user specified file from clone with name {}", Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path).getFileName().toString());
-                            resp.setStatus(HttpServletResponse.SC_CREATED);
-                            Path copied = Paths.get(uploadsDirectory.getAbsolutePath()+"/"+Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path).getFileName().toString());
-                            if(Files.exists(copied))
-                                Files.delete(copied);
-                            Files.copy(Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path), copied, StandardCopyOption.REPLACE_EXISTING);
-                            sendSuccessMessage(resp, Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path).getFileName().toString());
-                            return;
+                            long sizeInBytes = Files.size(Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path));
+                            logger.info("File size of the specified file is {} bytes.", sizeInBytes);
+                            if(sizeInBytes > maxUploadSizeSupplier.get()) {
+                                sendFileSizeTooLargeResponse(resp);
+                                Files.delete(Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path));
+                            } else {
+                                logger.info("Stored the user specified file from clone with name {}", Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path).getFileName().toString());
+                                resp.setStatus(HttpServletResponse.SC_CREATED);
+                                Path copied = Paths.get(uploadsDirectory.getAbsolutePath()+"/"+Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path).getFileName().toString());
+                                if(Files.exists(copied))
+                                    Files.delete(copied);
+                                Files.copy(Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path), copied, StandardCopyOption.REPLACE_EXISTING);
+                                sendSuccessMessage(resp, Paths.get(uploadsDirectory.getAbsolutePath()+"/temp-"+user+"/"+path).getFileName().toString());
+                                return;
+                            }
                         }
                     }
-
 
             List<File> files = listFilesIteratively(new File(uploadsDirectory.getAbsolutePath()+"/temp-"+user));
 
             for (File repoFile : files){
                 long sizeInBytes = repoFile.length();
-                logger.info("File size is {} bytes.  Computed file size is {} bytes.", sizeInBytes);
+                logger.info("Computed file size of {} is {} bytes.", repoFile.getName(), sizeInBytes);
+                if(sizeInBytes > maxUploadSizeSupplier.get()) {
+                    sendFileSizeTooLargeResponse(resp);
+                    repoFile.delete();
+                    continue;
+                }
+
                 if ((repoFile.getName().toLowerCase().contains(repo.toLowerCase())
                         || repoFile.getName().toLowerCase().contains(project.toLowerCase()))
                         &&
@@ -251,6 +280,13 @@ public class GitCloneServlet extends HttpServlet {
             }
         }
         return temp;
+    }
+
+    private void sendFileSizeTooLargeResponse(HttpServletResponse resp) throws IOException {
+        logger.info("File upload failed because the file exceeds the maximum allowed size.");
+        sendErrorMessage(resp, String.format("The file that you attempted to upload is too large.  " +
+                        "Files (or zipped file contents) must not exceed %d MB.",
+                maxUploadSizeSupplier.get() / (1024 * 1024)));
     }
 
     private void sendSuccessMessage(HttpServletResponse response, String fileName) throws IOException {
