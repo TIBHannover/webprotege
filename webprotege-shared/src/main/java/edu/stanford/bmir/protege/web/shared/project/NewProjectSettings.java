@@ -46,7 +46,7 @@ public abstract class NewProjectSettings implements IsSerializable {
      *                           which to initialise a project.  May be null.
      * @throws NullPointerException if either projectOwner, displayName, projectDescription or sourceDocumentId are
      *                              null.
-     * @param personalAccessToken The desired project personal access token for the new project.  May be null.
+     * @param repoURI The desired project personal access token for the new project.  May be null.
      */
     public static NewProjectSettings get(@Nonnull UserId projectOwner,
                                          @Nonnull String displayName,

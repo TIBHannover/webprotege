@@ -19,7 +19,7 @@
     </ui:style>
     <g:HTMLPanel addStyleNames="{wp.style.form}">
         <div class="{wp.style.formGroup}">
-            <g:Label text="{msg.projectName}" addStyleNames="{wp.style.formLabel}"/>
+            <g:Label text="{msg.projectName} (*)" addStyleNames="{wp.style.formLabel}"/>
             <g:TextBox ui:field="projectNameField" addStyleNames="{style.formField}"/>
         </div>
         <div class="{wp.style.formGroup}">
@@ -33,7 +33,7 @@
         </div>
 
         <div class="{wp.style.formGroup}">
-            <g:Label text="{msg.repoURI}" addStyleNames="{wp.style.formLabel}"/>
+            <g:Label ui:field="repoURILabel" text="{msg.repoURI}" addStyleNames="{wp.style.formLabel}"/>
             <g:TextBox ui:field="repoURIField" addStyleNames="{style.formField}"/>
         </div>
 
@@ -70,18 +70,18 @@
                 </g:HTMLPanel>
 
                 <g:RadioButton ui:field="uploadSelectorField" name="yesNoButton" value="false" enabled="true">Upload from file</g:RadioButton>
+
+                <g:HTMLPanel ui:field="fileUploadArea" addStyleNames="{wp.style.formGroup}">
+                    <g:Label text="Source File" addStyleNames="{wp.style.formLabel}"/>
+                    <g:HTMLPanel addStyleNames="{style.uploadContainer}">
+                        <g:FormPanel ui:field="formPanel">
+                            <g:FileUpload ui:field="fileUpload"/>
+                        </g:FormPanel>
+                    </g:HTMLPanel>
+                    <label class="{wp.style.formHelpText} {style.helpText}"><ui:safehtml from="{msg.projectSettings_owl_import_helpText}"/></label>
+                </g:HTMLPanel>
+
             </span>
         </g:HTMLPanel>
-
-        <g:HTMLPanel ui:field="fileUploadArea" addStyleNames="{wp.style.formGroup}">
-            <g:Label text="Source File" addStyleNames="{wp.style.formLabel}"/>
-            <g:HTMLPanel addStyleNames="{style.uploadContainer}">
-                <g:FormPanel ui:field="formPanel">
-                    <g:FileUpload ui:field="fileUpload"/>
-                </g:FormPanel>
-            </g:HTMLPanel>
-            <label class="{wp.style.formHelpText} {style.helpText}"><ui:safehtml from="{msg.projectSettings_owl_import_helpText}"/></label>
-        </g:HTMLPanel>
-
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -7,6 +7,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
+import edu.stanford.bmir.protege.web.client.Messages;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
 import edu.stanford.bmir.protege.web.client.library.msgbox.MessageBox;
 import edu.stanford.bmir.protege.web.client.primitive.DefaultLanguageEditor;
@@ -64,6 +65,9 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     Boolean backingSelectorValue;
 
     @UiField
+    Label repoURILabel;
+
+    @UiField
     TextBox repoURIField;
 
     @UiField
@@ -113,6 +117,8 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
 
     @Nonnull
     private final MessageBox messageBox;
+
+    private static final Messages MESSAGES = GWT.create(Messages.class);
 
     private HandlerRegistration submitCompleteHandlerRegistration = () -> {};
 
@@ -223,6 +229,7 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
             branchField.setEnabled(true);
             pathField.setVisible(true);
             pathField.setEnabled(true);
+            repoURILabel.setText(MESSAGES.repoURI()+" (*)");
         } else {
             uploadSelectorField.setValue(true);
             fileUploadArea.setVisible(true);
@@ -233,6 +240,7 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
             branchField.setEnabled(false);
             pathField.setVisible(false);
             pathField.setEnabled(false);
+            repoURILabel.setText(MESSAGES.repoURI());
         }
     }
 
