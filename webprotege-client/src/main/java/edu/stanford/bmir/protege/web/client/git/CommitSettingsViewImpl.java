@@ -58,10 +58,10 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     public CommitSettingsViewImpl(String repoURI, String token) {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
-        importsPathTextBox.setTitle("Not mandatory. Unexisting directories will automatically be created. Example: src/imports");
-        pathTextBox.setTitle("Not mandatory. Unexisting directories will automatically be created. Example: src ");
+        importsPathTextBox.setTitle("Directory path. Unexisting directories will automatically be created. Example: src/imports");
+        pathTextBox.setTitle("Directory path. Unexisting directories will automatically be created. Example: src ");
         newBranchTextBox.setTitle("No blanks. Example: master-2");
-        ontologyNameTextBox.setTitle("No blanks and no extension. Example: oais-ip-tbox");
+        ontologyNameTextBox.setTitle("No blanks and no extension. The file will be created with its name and its selected extension if it doesn't exist. Example: oais-ip-tbox");
         messageTextBox.setTitle("Example: updated tbox concepts for #9");
         populateBranchListBox(repoURI, token);
         populateFormatListBox();
