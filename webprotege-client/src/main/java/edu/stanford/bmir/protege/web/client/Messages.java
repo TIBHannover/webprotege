@@ -1052,6 +1052,10 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("userName")
     String userName();
 
+    @DefaultMessage("Enter a <em>personal access token</em> from <a href='https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'>github</a> or <a href='https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html'>gitlab</a> for being able to clone, commit & push  projects from their respective repositories.")
+    @Key("userSettings.token.helpText")
+    SafeHtml userSettings_token_helpText();
+
     
     @DefaultMessage("View Projects")
     @Key("viewProjects")

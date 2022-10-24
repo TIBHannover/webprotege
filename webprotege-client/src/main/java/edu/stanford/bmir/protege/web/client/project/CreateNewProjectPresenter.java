@@ -112,6 +112,14 @@ public class CreateNewProjectPresenter {
                 return false;
             }
 
+        if (loggedInUserProvider.getCurrentUserToken() == null){
+            view.showUserTokenMissingMessage();
+            return false;
+        } else if(loggedInUserProvider.getCurrentUserToken().isEmpty()){
+            view.showUserTokenMissingMessage();
+            return false;
+        }
+
         return true;
     }
 

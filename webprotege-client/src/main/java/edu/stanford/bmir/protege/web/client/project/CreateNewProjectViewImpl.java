@@ -276,6 +276,10 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     public void showProjectRepoURIMissingMessage() {
         messageBox.showAlert("Project repo URI missing", "Please enter a project repo URI");
     }
+    @Override
+    public void showUserTokenMissingMessage(){
+        messageBox.showAlert("Personal Access Token for this User is missing.", "Please enter a Personal Access Token that provides access to this repository from User Settings and try again.");
+    }
 
 
     @Override

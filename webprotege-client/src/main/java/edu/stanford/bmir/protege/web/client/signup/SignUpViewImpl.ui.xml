@@ -3,11 +3,15 @@
              xmlns:text="urn:import:edu.stanford.bmir.protege.web.client.library.text">
 
     <ui:with field="wp" type="edu.stanford.bmir.protege.web.resources.WebProtegeClientBundle"/>
+    <ui:with field="msg" type="edu.stanford.bmir.protege.web.client.Messages"/>
     <ui:style>
         .main {
             padding-top: 50px;
             margin-left: 70px;
             margin-right: 70px;
+        }
+        .helpText {
+            max-width: 480px;
         }
     </ui:style>
 
@@ -49,6 +53,7 @@
                     <div class="{wp.style.formGroup}">
                         <g:Label text="Personal Access Token" addStyleNames="{wp.style.formLabel}"/>
                         <g:TextBox ui:field="personalAccessTokenField"/>
+                        <label class="{wp.style.formHelpText} {style.helpText}"><ui:safehtml from="{msg.userSettings_token_helpText}"/></label>
                         <g:Label ui:field="personalAccessTokenErrorLabel" text="Please enter a personal access token"
                                  addStyleNames="{wp.style.errorLabel}"/>
                     </div>
