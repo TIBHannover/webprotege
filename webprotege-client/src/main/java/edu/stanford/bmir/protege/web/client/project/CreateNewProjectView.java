@@ -96,4 +96,6 @@ public interface CreateNewProjectView extends HasInitialFocusable, IsWidget {
     void showProjectRepoURIMissingMessage();
 
     void showUserTokenMissingMessage();
+
+    void showRepoUnavailableMessage();
 }

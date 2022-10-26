@@ -281,6 +281,12 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
         messageBox.showAlert("Personal Access Token for this User is missing.", "Please enter a Personal Access Token that provides access to this repository from User Settings and try again.");
     }
 
+    @Override
+    public void showRepoUnavailableMessage() {
+
+        messageBox.showAlert("Repository is not available.", "Please enter another repository URI or configure a Personal Access Token that provides access to this repository from User Settings and try again.");
+    }
+
 
     @Override
     public void clear() {

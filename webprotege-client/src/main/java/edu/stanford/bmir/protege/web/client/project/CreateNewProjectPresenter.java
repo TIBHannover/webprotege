@@ -4,6 +4,7 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.*;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
@@ -64,6 +65,8 @@ public class CreateNewProjectPresenter {
 
     @Nonnull
     private final MessageBox messageBox;
+
+    private boolean validRepoURI = true;
     @AutoFactory
     @Inject
     public CreateNewProjectPresenter(DispatchErrorMessageDisplay errorDisplay, ProgressDisplay progressDisplay, @Nonnull CreateNewProjectView view,
@@ -101,6 +104,9 @@ public class CreateNewProjectPresenter {
     }
 
     private boolean validate() {
+
+        validRepoURI = true;
+
         if (view.getProjectName().isEmpty()) {
             view.showProjectNameMissingMessage();
             return false;
@@ -119,6 +125,7 @@ public class CreateNewProjectPresenter {
             view.showUserTokenMissingMessage();
             return false;
         }
+        validateRepoURI(view.getRepoURI(), loggedInUserProvider.getCurrentUserToken());
 
         return true;
     }
@@ -143,13 +150,13 @@ public class CreateNewProjectPresenter {
     }
 
     private void createEmptyProject(ProjectCreatedHandler projectCreatedHandler) {
-            NewProjectSettings newProjectSettings = NewProjectSettings.get(
-                    loggedInUserManager.getLoggedInUserId(),
-                    view.getProjectName(),
-                    view.getProjectLanguage(),
-                    view.getProjectDescription(),
-                    view.getRepoURI());
-            submitCreateNewProjectRequest(newProjectSettings, projectCreatedHandler);
+        NewProjectSettings newProjectSettings = NewProjectSettings.get(
+                loggedInUserManager.getLoggedInUserId(),
+                view.getProjectName(),
+                view.getProjectLanguage(),
+                view.getProjectDescription(),
+                view.getRepoURI());
+        submitCreateNewProjectRequest(newProjectSettings, projectCreatedHandler);
     }
 
     private void cloneRepoAndCreateProject(@Nonnull ProjectCreatedHandler projectCreatedHandler){
@@ -293,5 +300,116 @@ public class CreateNewProjectPresenter {
 
     public NewProjectInfo getNewProjectInfo() {
         return new NewProjectInfo(view.getProjectName(), view.getProjectDescription());
+    }
+
+    private void validateRepoURI(String repoURI, String token){
+        String trackerType = "github";
+        if (repoURI.toLowerCase().contains("github"))
+            trackerType = "github";
+        else if (repoURI.toLowerCase().contains("gitlab"))
+            trackerType = "gitlab";
+        if(trackerType.equals("github"))
+            callGithub(convertRepoURI2CallURL(repoURI, trackerType),token, trackerType);
+        else if (trackerType.equals("gitlab"))
+            callGitlab(convertRepoURI2CallURL(repoURI, trackerType),token, trackerType);
+        else
+            repoExists(false);
+    }
+
+    public String convertRepoURI2CallURL(String repoURI, String trackerType){
+        if (trackerType.equals("github")){
+            String[] parsedRepoUrl = repoURI.split("/");
+            StringBuilder sb = new StringBuilder();
+            String institution = "";
+            String user = "";
+            for (int i = 0;i<parsedRepoUrl.length;i++) {
+                if(i == 2)
+                    sb.append("api.");
+                if (i == 3) {
+                    sb.append("repos").append("/");
+                    institution = parsedRepoUrl[i];
+                }
+                if (i ==4)
+                    user = parsedRepoUrl[i];
+                sb.append(parsedRepoUrl[i]).append("/");
+            }
+            sb.append("branches");
+            return sb.toString();
+        } else if (trackerType.equals("gitlab")) {
+            String[] parsedRepoUrl = repoURI.split("/");
+            StringBuilder sb = new StringBuilder();
+            String gitlabInstance = "gitlab.com";
+            for (int i = 0;i<parsedRepoUrl.length;i++) {
+                if (i ==2) {
+                    gitlabInstance = parsedRepoUrl[i];
+                    sb.append("https://"+gitlabInstance+"/api/v4/projects/");
+                }
+
+                if (i > 2) {
+                    sb.append(parsedRepoUrl[i]);
+                }
+                if (i > 2 && i <parsedRepoUrl.length - 1)
+                    sb.append("%2F");
+
+            }
+
+            return sb.toString();
+        } else return "";
+    }
+
+    public void callGithub(String callUrl, String token, String trackerType) {
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
+        requestBuilder.setHeader("Authorization", "Bearer " + token);
+
+        try {
+            Request response = requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
+                        repoExists(true);
+                    } else {
+                        repoExists(false);
+                    }
+                }
+
+                public void onError(Request request, Throwable exception) {
+                    repoExists(false);
+                }
+
+            });
+
+        } catch (RequestException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void callGitlab(String callUrl, String token, String trackerType){
+        String gitlabInstance = "gitlab.com";
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
+        //     requestBuilder.setHeader("PRIVATE-TOKEN", token);
+        try {
+            Request response = requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
+                        repoExists(true);
+                    } else {
+                        repoExists(false);
+                    }
+                }
+                public void onError(Request request, Throwable exception) {
+                    repoExists(false);
+                }
+            });
+        } catch (RequestException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void repoExists(boolean success) {
+        if(!success){
+            validRepoURI = false;
+            view.showRepoUnavailableMessage();
+        }
     }
 }
