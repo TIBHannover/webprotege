@@ -730,11 +730,15 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("projectSettings.language.helpText")
     SafeHtml projectSettings_language_helpText();
 
-    @DefaultMessage("The path of the ontology file relative to the repo root.  Automatic ontology search will be carried out if the specified file does not exist.")
+    @DefaultMessage("The optional <em>project source repository</em> in which specific ontology file and branch can be specified below. Also used in committing & pushing the revised ontology into its repository. ")
+    @Key("projectSettings.repouri.helpText")
+    SafeHtml projectSettings_repouri_helpText();
+
+    @DefaultMessage("The path of the <em>specific ontology file</em> relative to the repo root.  Automatic ontology search will be carried out if the specified file does not exist.")
     @Key("projectSettings.repopath.helpText")
     SafeHtml projectSettings_repopath_helpText();
 
-    @DefaultMessage("The branch of the repo that contains the ontology file.  The default master/main branch will be used if the specified banch does not exist.")
+    @DefaultMessage("The <em>specific branch</em> of the repo that contains the ontology file.  The default master/main branch will be used if the specified branch does not exist.")
     @Key("projectSettings.branch.helpText")
     SafeHtml projectSettings_branch_helpText();
 

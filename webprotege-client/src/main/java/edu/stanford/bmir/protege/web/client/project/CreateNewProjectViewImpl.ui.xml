@@ -35,6 +35,7 @@
         <div class="{wp.style.formGroup}">
             <g:Label ui:field="repoURILabel" text="{msg.repoURI}" addStyleNames="{wp.style.formLabel}"/>
             <g:TextBox ui:field="repoURIField" addStyleNames="{style.formField}"/>
+            <label class="{wp.style.formHelpText} {style.helpText}"><ui:safehtml from="{msg.projectSettings_repouri_helpText}"/></label>
         </div>
 
         <div class="{wp.style.formGroup}">

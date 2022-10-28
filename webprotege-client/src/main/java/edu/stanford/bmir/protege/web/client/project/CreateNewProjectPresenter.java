@@ -112,20 +112,22 @@ public class CreateNewProjectPresenter {
             return false;
         }
 
-        if (view.getRepoCreationSelector())
+        if (view.getRepoCreationSelector()){
             if(view.getRepoURI().isEmpty()){
                 view.showProjectRepoURIMissingMessage();
                 return false;
             }
 
-        if (loggedInUserProvider.getCurrentUserToken() == null){
-            view.showUserTokenMissingMessage();
-            return false;
-        } else if(loggedInUserProvider.getCurrentUserToken().isEmpty()){
-            view.showUserTokenMissingMessage();
-            return false;
+            if (loggedInUserProvider.getCurrentUserToken() == null){
+                view.showUserTokenMissingMessage();
+                return false;
+            } else if(loggedInUserProvider.getCurrentUserToken().isEmpty()){
+                view.showUserTokenMissingMessage();
+                return false;
+            }
+
+            validateRepoURI(view.getRepoURI(), loggedInUserProvider.getCurrentUserToken());
         }
-        validateRepoURI(view.getRepoURI(), loggedInUserProvider.getCurrentUserToken());
 
         return true;
     }
