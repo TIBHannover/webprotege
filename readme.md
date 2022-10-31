@@ -69,7 +69,7 @@ To run WebProtégé using Docker containers:
    docker-compose up -d
    ```
 
-2. Create the admin user (follow the questions prompted to provider username, email and password)
+2. Create the admin user (follow the questions prompted to provider username, personal access token, and password)
 
    ```bash
    docker exec -it webprotege java -jar /webprotege-cli.jar create-admin-account
