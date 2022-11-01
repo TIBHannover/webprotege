@@ -1,5 +1,6 @@
 package edu.stanford.bmir.protege.web.client.git;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.*;
 import com.google.gwt.json.client.JSONArray;
@@ -75,19 +76,29 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     }
 
     private void populateBranchListBox(String repoURI, String token){
-        String trackerType = "github";
-        if (repoURI.toLowerCase().contains("github"))
-            trackerType = "github";
-        else if (repoURI.toLowerCase().contains("gitlab"))
-            trackerType = "gitlab";
-        if(trackerType.equals("github"))
+        String trackerType = null;
+        if (repoURI.toLowerCase().startsWith("https://github.com") || repoURI.toLowerCase().startsWith("http://github.com"))
+            trackerType = "github.com";
+        else if (repoURI.toLowerCase().startsWith("https://gitlab.com") || repoURI.toLowerCase().startsWith("http://gitlab.com"))
+            trackerType = "gitlab.com";
+        else {
+            if(repoURI.toLowerCase().split("https://").length > 1)
+                trackerType = repoURI.toLowerCase().split("https://")[1].split("/")[0];
+            else if(repoURI.toLowerCase().split("http://").length > 1)
+                trackerType = repoURI.toLowerCase().split("http://")[1].split("/")[0];
+        }
+        if(trackerType.equals("github.com"))
             callGithub(convertRepoURI2CallURL(repoURI, trackerType),token, trackerType);
-        else if (trackerType.equals("gitlab"))
+        else if (trackerType != null)
             callGitlab(convertRepoURI2CallURL(repoURI, trackerType),token, trackerType);
+        else {
+            branchListBox.addItem("master");
+            branchListBox.addItem("main");
+        }
     }
 
     public String convertRepoURI2CallURL(String repoURI, String trackerType){
-        if (trackerType.equals("github")){
+        if (trackerType.equals("github.com")){
             String[] parsedRepoUrl = repoURI.split("/");
             StringBuilder sb = new StringBuilder();
             String institution = "";
@@ -105,14 +116,16 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
             }
             sb.append("branches");
             return sb.toString();
-        } else if (trackerType.equals("gitlab")) {
+        } else if (trackerType.contains(".")){
             String[] parsedRepoUrl = repoURI.split("/");
             StringBuilder sb = new StringBuilder();
-            String gitlabInstance = "gitlab.com";
             for (int i = 0;i<parsedRepoUrl.length;i++) {
                 if (i ==2) {
-                    gitlabInstance = parsedRepoUrl[i];
-                    sb.append("https://"+gitlabInstance+"/api/v4/projects/");
+                    Log.info("trackerType: "+trackerType);
+                    Log.info("parsedRepoUrl[i]: "+parsedRepoUrl[i]);
+                    if(!trackerType.equals(parsedRepoUrl[i]))
+                        return "";
+                    sb.append("https://"+trackerType+"/api/v4/projects/");
                 }
 
                 if (i > 2) {
@@ -128,6 +141,7 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     }
 
     public String callGithub(String callUrl, String token, String trackerType) {
+        Log.info("callUrl: "+callUrl);
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
 
         requestBuilder.setHeader("Accept", "application/vnd.github+json");
@@ -158,7 +172,7 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     }
 
     public String callGitlab(String callUrl, String token, String trackerType){
-        String gitlabInstance = "gitlab.com";
+        Log.info("callUrl: "+callUrl);
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
         requestBuilder.setHeader("Authorization", "Bearer "+token);
         // requestBuilder.setIncludeCredentials(true);
@@ -170,9 +184,9 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
                         JSONValue jsonValue = JSONParser.parseStrict(response.getText());
                         JSONObject jsonObject = jsonValue.isObject();
                         double id = jsonObject.get("id").isNumber().doubleValue();
-                        String branchesUrl = "https://"+gitlabInstance+"/api/v4/projects/"+id+"/repository/branches";
+                        String branchesUrl = "https://"+trackerType+"/api/v4/projects/"+id+"/repository/branches?access_token="+token;
+                        Log.info("branchesUrl: "+branchesUrl);
                         RequestBuilder reqBuild = new RequestBuilder(RequestBuilder.GET, branchesUrl);
-                        requestBuilder.setHeader("Authorization", "Bearer "+token);
                         try {
                             Request res = reqBuild.sendRequest(null, new RequestCallback() {
                                 @Override
