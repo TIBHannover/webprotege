@@ -361,7 +361,9 @@ public class CreateNewProjectPresenter {
 
     public void callGithub(String callUrl, String token, String trackerType) {
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
-        requestBuilder.setHeader("Authorization", "Bearer " + token);
+        requestBuilder.setHeader("Accept", "application/vnd.github+json");
+        requestBuilder.setHeader("Authorization", "Bearer "+token);
+        // requestBuilder.setIncludeCredentials(true);
 
         try {
             Request response = requestBuilder.sendRequest(null, new RequestCallback() {
@@ -388,7 +390,8 @@ public class CreateNewProjectPresenter {
     public void callGitlab(String callUrl, String token, String trackerType){
         String gitlabInstance = "gitlab.com";
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
-        //     requestBuilder.setHeader("PRIVATE-TOKEN", token);
+        requestBuilder.setHeader("Authorization", "Bearer "+token);
+        // requestBuilder.setIncludeCredentials(true);
         try {
             Request response = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override

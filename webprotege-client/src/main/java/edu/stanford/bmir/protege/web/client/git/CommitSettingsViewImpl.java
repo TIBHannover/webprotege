@@ -80,8 +80,6 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
             trackerType = "github";
         else if (repoURI.toLowerCase().contains("gitlab"))
             trackerType = "gitlab";
-        System.out.println("repoURI: "+convertRepoURI2CallURL(repoURI, trackerType));
-        System.out.println("token: "+token);
         if(trackerType.equals("github"))
             callGithub(convertRepoURI2CallURL(repoURI, trackerType),token, trackerType);
         else if (trackerType.equals("gitlab"))
@@ -131,7 +129,10 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
 
     public String callGithub(String callUrl, String token, String trackerType) {
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
-        requestBuilder.setHeader("Authorization", "Bearer " + token);
+
+        requestBuilder.setHeader("Accept", "application/vnd.github+json");
+        requestBuilder.setHeader("Authorization", "Bearer "+token);
+        // requestBuilder.setIncludeCredentials(true);
 
         try {
             Request response = requestBuilder.sendRequest(null, new RequestCallback() {
@@ -159,7 +160,8 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     public String callGitlab(String callUrl, String token, String trackerType){
         String gitlabInstance = "gitlab.com";
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
-   //     requestBuilder.setHeader("PRIVATE-TOKEN", token);
+        requestBuilder.setHeader("Authorization", "Bearer "+token);
+        // requestBuilder.setIncludeCredentials(true);
         try {
             Request response = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
@@ -170,7 +172,7 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
                         double id = jsonObject.get("id").isNumber().doubleValue();
                         String branchesUrl = "https://"+gitlabInstance+"/api/v4/projects/"+id+"/repository/branches";
                         RequestBuilder reqBuild = new RequestBuilder(RequestBuilder.GET, branchesUrl);
-                       // reqBuild.setHeader("PRIVATE-TOKEN", token);
+                        requestBuilder.setHeader("Authorization", "Bearer "+token);
                         try {
                             Request res = reqBuild.sendRequest(null, new RequestCallback() {
                                 @Override
