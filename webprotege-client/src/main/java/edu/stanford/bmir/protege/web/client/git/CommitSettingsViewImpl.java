@@ -9,10 +9,7 @@ import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.*;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
 import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
 import edu.stanford.bmir.protege.web.shared.git.CommitFormatExtension;
@@ -33,6 +30,12 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     }
 
     private static CommitSettingsViewImplUiBinder ourUiBinder = GWT.create(CommitSettingsViewImplUiBinder.class);
+
+    @UiField
+    protected HTMLPanel htmlPanel;
+
+    @UiField
+    protected Label warningLabel;
 
     @UiField
     protected ListBox branchListBox;
@@ -59,20 +62,35 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     public CommitSettingsViewImpl(String repoURI, String token) {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
-        importsPathTextBox.setTitle("Directory path of the imported ontologies. Unexisting directories will automatically be created.");
-        importsPathTextBox.getElement().setPropertyString("placeholder", "src/imports");
-        pathTextBox.setTitle("Directory path of the actual ontology. Unexisting directories will automatically be created.");
-        pathTextBox.getElement().setPropertyString("placeholder", "src");
-        newBranchTextBox.setTitle("Branches from the original branch specified in the dropdown list. Can be left empty. No blanks in text.");
-        newBranchTextBox.getElement().setPropertyString("placeholder", "master-2");
-        ontologyNameTextBox.setTitle("No blanks and no extension. The file will be created with its name and its selected extension if it doesn't exist.");
-        ontologyNameTextBox.getElement().setPropertyString("placeholder", "oais-ip-tbox");
-        messageTextBox.setTitle("Message to be displayed in the repo");
-        messageTextBox.getElement().setPropertyString("placeholder", "Updated tbox concepts for #9");
-        formatListBox.setTitle("The extension of the ontology document to be committed.");
-        branchListBox.setTitle("The original branch to commit to if new branch field is left empty.");
-        populateBranchListBox(repoURI, token);
-        populateFormatListBox();
+
+        if(token!=null){
+            if(!token.isEmpty()){
+                htmlPanel.setVisible(true);
+                warningLabel.setVisible(false);
+                importsPathTextBox.setTitle("Directory path of the imported ontologies. Unexisting directories will automatically be created.");
+                importsPathTextBox.getElement().setPropertyString("placeholder", "src/imports");
+                pathTextBox.setTitle("Directory path of the actual ontology. Unexisting directories will automatically be created.");
+                pathTextBox.getElement().setPropertyString("placeholder", "src");
+                newBranchTextBox.setTitle("Branches from the original branch specified in the dropdown list. Can be left empty. No blanks in text.");
+                newBranchTextBox.getElement().setPropertyString("placeholder", "master-2");
+                ontologyNameTextBox.setTitle("No blanks and no extension. The file will be created with its name and its selected extension if it doesn't exist.");
+                ontologyNameTextBox.getElement().setPropertyString("placeholder", "oais-ip-tbox");
+                messageTextBox.setTitle("Message to be displayed in the repo");
+                messageTextBox.getElement().setPropertyString("placeholder", "Updated tbox concepts for #9");
+                formatListBox.setTitle("The extension of the ontology document to be committed.");
+                branchListBox.setTitle("The original branch to commit to if new branch field is left empty.");
+                populateBranchListBox(repoURI, token);
+                populateFormatListBox();
+
+            } else {
+                htmlPanel.setVisible(false);
+                warningLabel.setVisible(true);
+            }
+        } else {
+            htmlPanel.setVisible(false);
+            warningLabel.setVisible(true);
+        }
+
     }
 
     private void populateBranchListBox(String repoURI, String token){
@@ -92,8 +110,9 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
         else if (trackerType != null)
             callGitlab(convertRepoURI2CallURL(repoURI, trackerType),token, trackerType);
         else {
-            branchListBox.addItem("master");
-            branchListBox.addItem("main");
+            htmlPanel.setVisible(false);
+            warningLabel.setVisible(true);
+            warningLabel.setText("Please configure a proper repository URI for the project. ");
         }
     }
 
@@ -157,17 +176,26 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
                     if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
                         returnResponse(response.getText());
                     } else {
-                        // Handle the error.  Can get the status text from response.getStatusText()
+                        boolean warning = true;
+                        if (response.getStatusCode() == 401 || response.getStatusCode() == 403)
+                            if(token !=null)
+                                if (!token.isEmpty()){
+                                    warning = false;
+                                    callGithub(callUrl,"",trackerType);
+                                }
+                        if(warning)
+                            displayGenericWarningMessage("Github ResponseCode("+response.getStatusCode()+") "+returnGitErrorMessage(response.getText())+": ");
                     }
                 }
 
                 public void onError(Request request, Throwable exception) {
-                    // Code omitted for clarity
+                    displayGenericWarningMessage("Github Error");
                 }
 
             });
 
         } catch (RequestException e) {
+            displayGenericWarningMessage("Github Exception");
             throw new RuntimeException(e);
         }
         return "";
@@ -207,23 +235,46 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
                                 public void onResponseReceived(Request request, Response response) {
                                     if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
                                         returnResponse(response.getText());
+                                    } else {
+                                        boolean warning = true;
+                                        if (response.getStatusCode() == 401 || response.getStatusCode() == 403)
+                                            if(token !=null)
+                                                if (!token.isEmpty()){
+                                                    warning = false;
+                                                    callGitlab(callUrl,"",trackerType);
+                                                }
+                                        if(warning)
+                                            displayGenericWarningMessage("Gitlab 2nd Call ResponseCode("+response.getStatusCode()+") "+returnGitErrorMessage(response.getText())+": ");
                                     }
                                 }
                                 public void onError(Request request, Throwable exception) {
+                                    displayGenericWarningMessage("Gitlab 2nd Call Error: ");
                                     exception.printStackTrace();
                                 }
                             });
                         } catch (RequestException e) {
+                            displayGenericWarningMessage("Gitlab 2nd Call Exception: ");
                             throw new RuntimeException(e);
                         }
                     } else {
+                        boolean warning = true;
+                        if (response.getStatusCode() == 401 || response.getStatusCode() == 403)
+                            if(token !=null)
+                                if (!token.isEmpty()){
+                                    warning = false;
+                                    callGitlab(callUrl,"",trackerType);
+                                }
+                        if(warning)
+                            displayGenericWarningMessage("Gitlab ResponseCode("+response.getStatusCode()+") "+returnGitErrorMessage(response.getText())+": ");
                     }
                 }
                 public void onError(Request request, Throwable exception) {
+                    displayGenericWarningMessage("Gitlab Error: ");
                     exception.printStackTrace();
                 }
             });
         } catch (RequestException e) {
+            displayGenericWarningMessage("Gitlab Exception: ");
             throw new RuntimeException(e);
         }
         return "";
@@ -237,6 +288,18 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
             final JSONObject branch = branches.get(i).isObject();
             branchListBox.addItem(branch.get("name").isString().stringValue());
         }
+    }
+
+    public String returnGitErrorMessage(String result) {
+        JSONValue jsonValue = JSONParser.parseStrict(result);
+        JSONObject messageObject = jsonValue.isObject();
+        return messageObject.get("message").isString().stringValue();
+    }
+
+    public void displayGenericWarningMessage(String location){
+        htmlPanel.setVisible(false);
+        warningLabel.setVisible(true);
+        warningLabel.setText(location+"Please check your configuration for a proper repository URI of the project and Personal Access Token of the User. ");
     }
 
     private void populateFormatListBox() {
