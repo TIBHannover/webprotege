@@ -145,7 +145,9 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
 
         requestBuilder.setHeader("Accept", "application/vnd.github+json");
-        requestBuilder.setHeader("Authorization", "Bearer "+token);
+        if(token!=null)
+            if(!token.isEmpty())
+                requestBuilder.setHeader("Authorization", "Bearer "+token);
         // requestBuilder.setIncludeCredentials(true);
 
         try {
@@ -174,7 +176,9 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     public String callGitlab(String callUrl, String token, String trackerType){
         Log.info("callUrl: "+callUrl);
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
-        requestBuilder.setHeader("Authorization", "Bearer "+token);
+        if(token!=null)
+            if(!token.isEmpty())
+                requestBuilder.setHeader("Authorization", "Bearer "+token);
         // requestBuilder.setIncludeCredentials(true);
         try {
             Request response = requestBuilder.sendRequest(null, new RequestCallback() {
@@ -184,7 +188,17 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
                         JSONValue jsonValue = JSONParser.parseStrict(response.getText());
                         JSONObject jsonObject = jsonValue.isObject();
                         double id = jsonObject.get("id").isNumber().doubleValue();
-                        String branchesUrl = "https://"+trackerType+"/api/v4/projects/"+id+"/repository/branches?access_token="+token;
+                        String branchesUrl = null;
+                        if(token!=null){
+                            if(!token.isEmpty()){
+                                branchesUrl = "https://"+trackerType+"/api/v4/projects/"+id+"/repository/branches?access_token="+token;
+                            } else {
+                                branchesUrl = "https://"+trackerType+"/api/v4/projects/"+id+"/repository/branches";
+                            }
+                        } else {
+                            branchesUrl = "https://"+trackerType+"/api/v4/projects/"+id+"/repository/branches";
+                        }
+
                         Log.info("branchesUrl: "+branchesUrl);
                         RequestBuilder reqBuild = new RequestBuilder(RequestBuilder.GET, branchesUrl);
                         try {

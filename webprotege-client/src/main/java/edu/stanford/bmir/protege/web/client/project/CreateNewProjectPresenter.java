@@ -118,14 +118,6 @@ public class CreateNewProjectPresenter {
                 return false;
             }
 
-            if (loggedInUserProvider.getCurrentUserToken() == null){
-                view.showUserTokenMissingMessage();
-                return false;
-            } else if(loggedInUserProvider.getCurrentUserToken().isEmpty()){
-                view.showUserTokenMissingMessage();
-                return false;
-            }
-
             validateRepoURI(view.getRepoURI(), loggedInUserProvider.getCurrentUserToken());
         }
 
@@ -371,7 +363,9 @@ public class CreateNewProjectPresenter {
         Log.info("callUrl: "+callUrl);
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
         requestBuilder.setHeader("Accept", "application/vnd.github+json");
-        requestBuilder.setHeader("Authorization", "Bearer "+token);
+        if(token!=null)
+            if(!token.isEmpty())
+                requestBuilder.setHeader("Authorization", "Bearer "+token);
         // requestBuilder.setIncludeCredentials(true);
 
         try {
@@ -399,7 +393,9 @@ public class CreateNewProjectPresenter {
     public void callGitlab(String callUrl, String token, String trackerType){
         Log.info("callUrl: "+callUrl);
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
-        requestBuilder.setHeader("Authorization", "Bearer "+token);
+        if(token!=null)
+            if(!token.isEmpty())
+                requestBuilder.setHeader("Authorization", "Bearer "+token);
         // requestBuilder.setIncludeCredentials(true);
         try {
             Request response = requestBuilder.sendRequest(null, new RequestCallback() {
