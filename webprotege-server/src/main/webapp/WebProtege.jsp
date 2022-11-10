@@ -147,8 +147,12 @@
             UserDetailsManager userDetailsManager = getServerComponent().getUserDetailsManager();
             Optional<String> email = userDetailsManager.getEmail(userId);
             Optional<String> token = userDetailsManager.getToken(userId);
-            if (email.isPresent()) {
+            if (email.isPresent() && token.isPresent()) {
                 userDetails = UserDetails.getUserDetails(userId, userId.getUserName(), Optional.of(email.get()), Optional.of(token.get()));
+            } else if (email.isPresent()){
+                userDetails = UserDetails.getUserDetails(userId, userId.getUserName(), Optional.of(email.get()), Optional.<String>empty());
+            } else if (token.isPresent()){
+                userDetails = UserDetails.getUserDetails(userId, userId.getUserName(), Optional.<String>empty(), Optional.of(token.get()));
             }
             else {
                 userDetails = UserDetails.getUserDetails(userId, userId.getUserName(), Optional.<String>empty(), Optional.<String>empty());
