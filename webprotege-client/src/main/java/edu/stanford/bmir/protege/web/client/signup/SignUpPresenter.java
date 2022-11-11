@@ -110,10 +110,10 @@ public class SignUpPresenter implements Presenter {
         }
 
         String personalAccessToken = view.getPersonalAccessToken();
-        if(personalAccessToken.isEmpty()) {
+        /*if(personalAccessToken.isEmpty()) {
             view.displayEnterPersonalAccessTokenErrorMessage();
             return;
-        }
+        }*/
 
         String password = view.getPassword();
         if(password.isEmpty()) {
