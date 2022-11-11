@@ -58,7 +58,7 @@ public class ChangePersonalAccessTokenPresenter {
     public void changePersonalAccessToken() {
         final UserId userId = loggedInUserProvider.getCurrentUserId();
         if (userId.isGuest()) {
-            messageBox.showAlert("You must be logged in to change your email address");
+            messageBox.showAlert("You must be logged in to change your token");
             return;
         }
         ProgressMonitor.get().showProgressMonitor("Retrieving personal access token", "Please wait.");
@@ -90,7 +90,7 @@ public class ChangePersonalAccessTokenPresenter {
         dispatchServiceManager.execute(new SetPersonalAccessTokenAction(userId, token.getPersonalAccessToken()),
                                        result -> {
                                            if (result.getResult() == TOKEN_ALREADY_EXISTS) {
-                                               messageBox.showMessage("Address already taken",
+                                               messageBox.showMessage("Token already taken",
                                                                       "The personal access token that you have specified is taken by another user.  " +
                                                                               "Please specify a different personal access token.");
                                            }
