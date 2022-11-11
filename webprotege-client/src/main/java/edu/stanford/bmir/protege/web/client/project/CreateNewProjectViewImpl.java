@@ -282,6 +282,12 @@ public class CreateNewProjectViewImpl extends Composite implements CreateNewProj
     }
 
     @Override
+    public void showInvalidUrlMessage() {
+
+        messageBox.showAlert("Invalid Url.", "Please enter a valid URL for the repository.");
+    }
+
+    @Override
     public void showRepoUnavailableMessage() {
 
         messageBox.showAlert("Repository is not available.", "Please enter another repository URI or configure a Personal Access Token that provides access to this repository from User Settings and try again.");

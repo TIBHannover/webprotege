@@ -8,6 +8,7 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import edu.stanford.bmir.protege.web.client.dispatch.DispatchErrorMessageDisplay;
@@ -67,6 +68,10 @@ public class CreateNewProjectPresenter {
     private final MessageBox messageBox;
 
     private boolean validRepoURI = true;
+
+    private RegExp urlValidator;
+    private RegExp urlPlusTldValidator;
+
     @AutoFactory
     @Inject
     public CreateNewProjectPresenter(DispatchErrorMessageDisplay errorDisplay, ProgressDisplay progressDisplay, @Nonnull CreateNewProjectView view,
@@ -103,6 +108,14 @@ public class CreateNewProjectPresenter {
         }
     }
 
+    public boolean isValidUrl(String url, boolean topLevelDomainRequired) {
+        if (urlValidator == null || urlPlusTldValidator == null) {
+            urlValidator = RegExp.compile("^((ftp|http|https)://[\\w@.\\-\\_]+(:\\d{1,5})?(/[\\w#!:.?+=&%@!\\_\\-/]+)*){1}$");
+            urlPlusTldValidator = RegExp.compile("^((ftp|http|https)://[\\w@.\\-\\_]+\\.[a-zA-Z]{2,}(:\\d{1,5})?(/[\\w#!:.?+=&%@!\\_\\-/]+)*){1}$");
+        }
+        return (topLevelDomainRequired ? urlPlusTldValidator : urlValidator).exec(url) != null;
+    }
+
     private boolean validate() {
 
         validRepoURI = true;
@@ -118,7 +131,11 @@ public class CreateNewProjectPresenter {
                 return false;
             }
 
-            validateRepoURI(view.getRepoURI(), loggedInUserProvider.getCurrentUserToken());
+        }
+
+        if(!isValidUrl(view.getRepoURI(),false)){
+            view.showInvalidUrlMessage();
+            return false;
         }
 
         return true;
@@ -126,6 +143,7 @@ public class CreateNewProjectPresenter {
 
     public void validateAndCreateProject(ProjectCreatedHandler handler) {
         if (validate()) {
+            validateRepoURI(view.getRepoURI(), loggedInUserProvider.getCurrentUserToken());
             submitCreateProjectRequest(handler);
         }
     }
@@ -360,6 +378,7 @@ public class CreateNewProjectPresenter {
     }
 
     public void callGithub(String callUrl, String token, String trackerType) {
+        callUrl = callUrl.replace("http://","https://");
         Log.info("callUrl: "+callUrl);
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
         requestBuilder.setHeader("Accept", "application/vnd.github+json");
@@ -391,6 +410,7 @@ public class CreateNewProjectPresenter {
     }
 
     public void callGitlab(String callUrl, String token, String trackerType){
+        callUrl = callUrl.replace("http://","https://");
         Log.info("callUrl: "+callUrl);
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
         if(token!=null)
