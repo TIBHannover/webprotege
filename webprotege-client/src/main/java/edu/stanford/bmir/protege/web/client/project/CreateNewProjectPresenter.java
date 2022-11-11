@@ -131,11 +131,11 @@ public class CreateNewProjectPresenter {
                 return false;
             }
 
-        }
+            if(!isValidUrl(view.getRepoURI(),false)){
+                view.showInvalidUrlMessage();
+                return false;
+            }
 
-        if(!isValidUrl(view.getRepoURI(),false)){
-            view.showInvalidUrlMessage();
-            return false;
         }
 
         return true;
