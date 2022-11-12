@@ -45,6 +45,9 @@ public class AvailableProjectPresenter {
     @Nonnull
     private final CommitProjectRequestHandler commitProjectRequestHandler;
 
+    @Nonnull
+    private final DeleteRemoteBranchRequestHandler deleteRemoteBranchHandler;
+
 
     @Nonnull
     private LoadProjectInNewWindowRequestHandler loadProjectInNewWindowRequestHandler;
@@ -56,6 +59,7 @@ public class AvailableProjectPresenter {
                                      @Provided @Nonnull LoadProjectInNewWindowRequestHandler loadProjectInNewWindowRequestHandler,
                                      @Provided @Nonnull TrashManagerRequestHandler trashManagerRequestHandler,
                                      @Provided @Nonnull CommitProjectRequestHandler commitProjectRequestHandler,
+                                     @Provided @Nonnull DeleteRemoteBranchRequestHandler deleteRemoteBranchHandler,
                                      @Provided @Nonnull LoadProjectRequestHandler loadProjectRequestHandler,
                                      @Provided @Nonnull DownloadProjectRequestHandler downloadProjectRequestHandler) {
         this.view = checkNotNull(view);
@@ -64,6 +68,7 @@ public class AvailableProjectPresenter {
         this.loadProjectInNewWindowRequestHandler = checkNotNull(loadProjectInNewWindowRequestHandler);
         this.trashManagerRequestHandler = checkNotNull(trashManagerRequestHandler);
         this.commitProjectRequestHandler = checkNotNull(commitProjectRequestHandler);
+        this.deleteRemoteBranchHandler = checkNotNull(deleteRemoteBranchHandler);
         this.loadProjectRequestHandler = checkNotNull(loadProjectRequestHandler);
         this.downloadProjectRequestHandler = checkNotNull(downloadProjectRequestHandler);
     }
@@ -118,6 +123,7 @@ public class AvailableProjectPresenter {
         addDowloadAction();
         addTrashAction();
         addCommitAction();
+        addSwitchAction();
     }
 
     /**
@@ -136,6 +142,17 @@ public class AvailableProjectPresenter {
         };
         commitAction.setEnabled(true);
         view.addAction(commitAction);
+    }
+
+    private void addSwitchAction() {
+        AbstractUiAction switchAction = new AbstractUiAction("Git Delete Branch") {
+            @Override
+            public void execute() {
+                deleteRemoteBranchHandler.handleDeleteRemoteBranchRequest(project,loggedInUserProvider.getCurrentUserToken());
+            }
+        };
+        switchAction.setEnabled(true);
+        view.addAction(switchAction);
     }
 
     private void addOpenAction() {

@@ -87,4 +87,10 @@ public class GitCommandsServiceImpl implements GitCommandsService {
         var command = String.format("git -C %s push -f origin %s", path, branch);
         return commandRunnerService.run(command);
     }
+
+    @Override
+    public Output gitDeleteRemoteBranch(String path, String branch) {
+        var command = String.format("git -C %s push -f -d origin %s", path, branch);
+        return commandRunnerService.run(command);
+    }
 }

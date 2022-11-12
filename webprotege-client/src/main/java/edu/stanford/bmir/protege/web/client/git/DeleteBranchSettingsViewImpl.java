@@ -11,8 +11,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import edu.stanford.bmir.protege.web.client.library.dlg.HasRequestFocus;
-import edu.stanford.bmir.protege.web.shared.download.DownloadFormatExtension;
-import edu.stanford.bmir.protege.web.shared.git.CommitFormatExtension;
 
 import javax.inject.Inject;
 
@@ -23,13 +21,13 @@ import javax.inject.Inject;
  * TIB-Leibniz Information Centre for Science and Technology and University Library<br>
  * Date 11.10.2022
  */
-public class CommitSettingsViewImpl extends Composite implements CommitSettingsView {
+public class DeleteBranchSettingsViewImpl extends Composite implements DeleteBranchSettingsView {
 
-    interface CommitSettingsViewImplUiBinder extends UiBinder<HTMLPanel, CommitSettingsViewImpl> {
+    interface DeleteBranchSettingsViewImplUiBinder extends UiBinder<HTMLPanel, DeleteBranchSettingsViewImpl> {
 
     }
 
-    private static CommitSettingsViewImplUiBinder ourUiBinder = GWT.create(CommitSettingsViewImplUiBinder.class);
+    private static DeleteBranchSettingsViewImplUiBinder ourUiBinder = GWT.create(DeleteBranchSettingsViewImplUiBinder.class);
 
     @UiField
     protected HTMLPanel htmlPanel;
@@ -40,26 +38,8 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     @UiField
     protected ListBox branchListBox;
 
-    @UiField
-    protected TextBox newBranchTextBox;
-
-    @UiField
-    protected ListBox formatListBox;
-
-    @UiField
-    protected TextBox messageTextBox;
-
-    @UiField
-    protected TextBox pathTextBox;
-
-    @UiField
-    protected TextBox importsPathTextBox;
-
-    @UiField
-    protected TextBox ontologyNameTextBox;
-
     @Inject
-    public CommitSettingsViewImpl(String repoURI, String token) {
+    public DeleteBranchSettingsViewImpl(String repoURI, String token) {
         HTMLPanel rootElement = ourUiBinder.createAndBindUi(this);
         initWidget(rootElement);
 
@@ -67,20 +47,8 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
             if(!token.isEmpty()){
                 htmlPanel.setVisible(true);
                 warningLabel.setVisible(false);
-                importsPathTextBox.setTitle("Directory path of the imported ontologies. Unexisting directories will automatically be created.");
-                importsPathTextBox.getElement().setPropertyString("placeholder", "src/imports");
-                pathTextBox.setTitle("Directory path of the actual ontology. Unexisting directories will automatically be created.");
-                pathTextBox.getElement().setPropertyString("placeholder", "src");
-                newBranchTextBox.setTitle("Branches from the original branch specified in the dropdown list. Can be left empty. No blanks in text.");
-                newBranchTextBox.getElement().setPropertyString("placeholder", "master-2");
-                ontologyNameTextBox.setTitle("No blanks and no extension. The file will be created with its name and its selected extension if it doesn't exist.");
-                ontologyNameTextBox.getElement().setPropertyString("placeholder", "oais-ip-tbox");
-                messageTextBox.setTitle("Message to be displayed in the repo");
-                messageTextBox.getElement().setPropertyString("placeholder", "Updated tbox concepts for #9");
-                formatListBox.setTitle("The extension of the ontology document to be committed.");
-                branchListBox.setTitle("The original branch to commit to if new branch field is left empty.");
+                branchListBox.setTitle("The remote branch to be deleted.");
                 populateBranchListBox(repoURI, token);
-                populateFormatListBox();
 
             } else {
                 htmlPanel.setVisible(false);
@@ -302,28 +270,6 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
         warningLabel.setText(location+"Please check your configuration for a proper repository URI of the project and Personal Access Token of the User. ");
     }
 
-    private void populateFormatListBox() {
-        for(DownloadFormatExtension extension : DownloadFormatExtension.values()) {
-            formatListBox.addItem(extension.getDisplayName());
-        }
-    }
-
-    @Override
-    public CommitFormatExtension getGithubFormatExtension() {
-        int selIndex = formatListBox.getSelectedIndex();
-        if(selIndex == 0) {
-            return CommitFormatExtension.owl;
-        }
-        else {
-            return CommitFormatExtension.values()[selIndex];
-        }
-    }
-
-    @Override
-    public void setCommitFormatExtension(CommitFormatExtension extension) {
-        int selIndex = extension.ordinal();
-        formatListBox.setSelectedIndex(selIndex);
-    }
     @Override
     public String getBranch(){
         return branchListBox.getSelectedValue();
@@ -343,42 +289,8 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
     }
 
     @Override
-    public String getNewBranch() {
-        return newBranchTextBox.getValue();
-    }
-
-    @Override
-    public void setNewBranch(String newBranch) {
-        newBranchTextBox.setValue(newBranch);
-    }
-
-    @Override
-    public String getMessage(){
-        return messageTextBox.getValue();
-    }
-    @Override
-    public void setMessage(String message){
-        messageTextBox.setValue(message);
-    }
-
-    @Override
-    public String getPath() {return pathTextBox.getValue(); }
-    @Override
-    public void setPath(String path) {pathTextBox.setValue(path);}
-
-    @Override
-    public String getImportsPath() {return importsPathTextBox.getValue(); }
-    @Override
-    public void setImportsPath(String path) { importsPathTextBox.setValue(path);}
-
-    @Override
-    public String getOntologyName(){ return ontologyNameTextBox.getValue();}
-    @Override
-    public void setOntologyName(String name){ ontologyNameTextBox.setValue(name);}
-
-    @Override
-    public CommitData getCommitData(){
-        return new CommitData(getGithubFormatExtension(),getBranch(),getNewBranch(), getMessage(),getPath(), getImportsPath(), getOntologyName());
+    public DeleteRemoteBranchData getDeleteRemoteBranchData(){
+        return new DeleteRemoteBranchData(getBranch());
     }
 
     @Override

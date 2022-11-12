@@ -5,6 +5,7 @@ import edu.stanford.bmir.protege.web.server.access.AccessManager;
 import edu.stanford.bmir.protege.web.server.api.ApiModule;
 import edu.stanford.bmir.protege.web.server.dispatch.DispatchServlet;
 import edu.stanford.bmir.protege.web.server.download.ProjectDownloadServlet;
+import edu.stanford.bmir.protege.web.server.git.GitDeleteBranchServlet;
 import edu.stanford.bmir.protege.web.server.git.GitFileCommitServlet;
 import edu.stanford.bmir.protege.web.server.inject.*;
 import edu.stanford.bmir.protege.web.server.inject.project.ProjectModule;
@@ -52,6 +53,8 @@ public interface ServerComponent {
     ProjectDownloadServlet getProjectDownloadServlet();
 
     GitFileCommitServlet getGitFileCommitServlet();
+
+    GitDeleteBranchServlet getGitDeleteBranchServlet();
 
     DispatchServlet getDispatchServlet();
 

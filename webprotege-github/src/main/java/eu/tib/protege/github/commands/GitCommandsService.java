@@ -17,4 +17,6 @@ public interface GitCommandsService {
     Output gitCommit(String path, String message);
 
     Output gitPush(String path, String branch);
+
+    Output gitDeleteRemoteBranch(String path, String branch);
 }

@@ -331,9 +331,9 @@ public class CreateNewProjectPresenter {
                 trackerType = repoURI.toLowerCase().split("http://")[1].split("/")[0];
         }
         if(trackerType.equals("github.com"))
-            callGithub(convertRepoURI2CallURL(repoURI, trackerType),token, trackerType);
+            callGithub(convertRepoURI2CallURL(repoURI, trackerType).replace("http://","https://"),token, trackerType);
         else if (trackerType != null)
-            callGitlab(convertRepoURI2CallURL(repoURI, trackerType),token, trackerType);
+            callGitlab(convertRepoURI2CallURL(repoURI, trackerType).replace("http://","https://"),token, trackerType);
         else
             repoExists(false);
     }
@@ -382,8 +382,7 @@ public class CreateNewProjectPresenter {
     }
 
     public void callGithub(String callUrl, String token, String trackerType) {
-        callUrl = callUrl.replace("http://","https://");
-        Log.info("callUrl: "+callUrl);
+        Log.info("callUrl: "+callUrl+" - "+"token: "+token+" - "+"trackerType: "+trackerType);
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
         requestBuilder.setHeader("Accept", "application/vnd.github+json");
         if(token!=null)
@@ -414,8 +413,7 @@ public class CreateNewProjectPresenter {
     }
 
     public void callGitlab(String callUrl, String token, String trackerType){
-        callUrl = callUrl.replace("http://","https://");
-        Log.info("callUrl: "+callUrl);
+        Log.info("callUrl: "+callUrl+" - "+"token: "+token+" - "+"trackerType: "+trackerType);
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, callUrl);
         if(token!=null)
             if(!token.isEmpty())

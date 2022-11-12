@@ -271,6 +271,12 @@ public class ClientApplicationModule {
     }
 
     @Provides
+    DeleteRemoteBranchRequestHandler provideRemoteBranchRequestHandler(DeleteRemoteBranchRequestHandlerImpl impl){
+
+        return impl;
+    }
+
+    @Provides
     TrashManagerRequestHandler provideTrashManagerRequestHandler(TrashManagerRequestHandlerImpl impl) {
         return impl;
     }

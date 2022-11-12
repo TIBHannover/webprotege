@@ -10,11 +10,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Date;
-
 import static edu.stanford.bmir.protege.web.server.logging.WebProtegeLogger.WebProtegeMarker;
 
 public class WebProtegeServletContextListener implements ServletContextListener {
@@ -41,6 +36,8 @@ public class WebProtegeServletContextListener implements ServletContextListener 
 
             servletContext.addServlet("GitFileCommitServlet", serverComponent.getGitFileCommitServlet())
                     .addMapping("/commit");
+            servletContext.addServlet("GitDeleteBranchServlet", serverComponent.getGitDeleteBranchServlet())
+                    .addMapping("/delete");
 
             servletContext.addServlet("FileUploadServlet", serverComponent.getFileUploadServlet())
                           .addMapping("/webprotege/submitfile");
