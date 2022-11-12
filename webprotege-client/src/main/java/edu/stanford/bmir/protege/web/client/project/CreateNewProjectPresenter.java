@@ -126,16 +126,19 @@ public class CreateNewProjectPresenter {
         }
 
         if (view.getRepoCreationSelector()){
-            if(view.getRepoURI().isEmpty()){
+            if(view.getRepoURI().isEmpty() || view.getRepoURI() == null){
                 view.showProjectRepoURIMissingMessage();
                 return false;
             }
+        }
 
-            if(!isValidUrl(view.getRepoURI(),false)){
-                view.showInvalidUrlMessage();
-                return false;
-            }
+        if(!view.getRepoCreationSelector())
+            if(view.getRepoURI().isEmpty() || view.getRepoURI() == null)
+                return true;
 
+        if(!isValidUrl(view.getRepoURI(),false)){
+            view.showInvalidUrlMessage();
+            return false;
         }
 
         return true;
@@ -143,7 +146,8 @@ public class CreateNewProjectPresenter {
 
     public void validateAndCreateProject(ProjectCreatedHandler handler) {
         if (validate()) {
-            validateRepoURI(view.getRepoURI(), loggedInUserProvider.getCurrentUserToken());
+            if(!view.getRepoURI().isEmpty() && view.getRepoURI() != null)
+                validateRepoURI(view.getRepoURI(), loggedInUserProvider.getCurrentUserToken());
             submitCreateProjectRequest(handler);
         }
     }
