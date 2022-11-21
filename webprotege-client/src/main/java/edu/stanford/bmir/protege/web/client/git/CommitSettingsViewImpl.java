@@ -75,7 +75,7 @@ public class CommitSettingsViewImpl extends Composite implements CommitSettingsV
                 newBranchTextBox.getElement().setPropertyString("placeholder", "master-2");
                 ontologyNameTextBox.setTitle("No blanks and no extension. The file will be created with its name and its selected extension if it doesn't exist.");
                 ontologyNameTextBox.getElement().setPropertyString("placeholder", "oais-ip-tbox");
-                messageTextBox.setTitle("Message to be displayed in the repo");
+                messageTextBox.setTitle("Message to be displayed in the respective commit of the repo");
                 messageTextBox.getElement().setPropertyString("placeholder", "Updated tbox concepts for #9");
                 formatListBox.setTitle("The extension of the ontology document to be committed.");
                 branchListBox.setTitle("The original branch to commit to if new branch field is left empty.");

@@ -730,7 +730,7 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     @Key("projectSettings.language.helpText")
     SafeHtml projectSettings_language_helpText();
 
-    @DefaultMessage("The optional <em>project source repository</em> in which specific ontology file and branch can be specified below. Also used in committing & pushing the revised ontology into its repository. ")
+    @DefaultMessage("The <em>project source repository</em> that can be used in committing & pushing the revised ontology into. Optional when creating the project from uploaded file. Mandatory when creating the project from repository clone. Specific ontology file and branch can further be specified below when creating the project from repository clone. ")
     @Key("projectSettings.repouri.helpText")
     SafeHtml projectSettings_repouri_helpText();
 
