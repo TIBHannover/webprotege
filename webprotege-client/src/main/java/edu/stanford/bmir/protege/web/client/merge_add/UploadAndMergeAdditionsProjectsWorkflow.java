@@ -9,8 +9,9 @@ import edu.stanford.bmir.protege.web.client.library.dlg.DialogButton;
 import edu.stanford.bmir.protege.web.client.library.dlg.WebProtegeDialog;
 import edu.stanford.bmir.protege.web.client.library.dlg.WebProtegeDialogButtonHandler;
 import edu.stanford.bmir.protege.web.client.library.dlg.WebProtegeDialogCloser;
-import edu.stanford.bmir.protege.web.client.upload.UploadFileDialogController;
+import edu.stanford.bmir.protege.web.client.upload.UploadAndCloneDialogController;
 import edu.stanford.bmir.protege.web.client.upload.UploadFileResultHandler;
+import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
 import edu.stanford.bmir.protege.web.shared.csv.DocumentId;
 import edu.stanford.bmir.protege.web.shared.merge_add.GetAllOntologiesAction;
 import edu.stanford.bmir.protege.web.shared.merge_add.GetAllOntologiesResult;
@@ -21,6 +22,8 @@ import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UploadAndMergeAdditionsProjectsWorkflow {
 
@@ -36,15 +39,21 @@ public class UploadAndMergeAdditionsProjectsWorkflow {
     @Nonnull
     private final ProgressDisplay progressDisplay;
 
+    @Nonnull
+    private final LoggedInUserProvider loggedInUserProvider;
+
     @Inject
     public UploadAndMergeAdditionsProjectsWorkflow(@Nonnull SelectOptionForMergeAdditionsWorkflow selectOptionsWorkflow,
                                                    @Nonnull DispatchServiceManager dispatchServiceManager,
                                                    @Nonnull DispatchErrorMessageDisplay errorDisplay,
-                                                   @Nonnull ProgressDisplay progressDisplay) {
+                                                   @Nonnull ProgressDisplay progressDisplay,
+                                                   @Nonnull LoggedInUserProvider loggedInUserProvider
+                                                   ) {
         this.selectOptionsWorkflow = selectOptionsWorkflow;
         this.dispatchServiceManager = dispatchServiceManager;
         this.errorDisplay = errorDisplay;
         this.progressDisplay = progressDisplay;
+        this.loggedInUserProvider = checkNotNull(loggedInUserProvider);
     }
 
     public void start(ProjectId projectId) {
@@ -52,7 +61,7 @@ public class UploadAndMergeAdditionsProjectsWorkflow {
     }
 
     private void uploadProject(final ProjectId projectId) {
-        UploadFileDialogController uploadFileDialogController = new UploadFileDialogController("Upload ontologies", new UploadFileResultHandler() {
+        UploadAndCloneDialogController uploadFileDialogController = new UploadAndCloneDialogController("Upload ontologies", loggedInUserProvider.getCurrentUserToken(), loggedInUserProvider.getCurrentUserId().getUserName(), "project.getDisplayName()", new UploadFileResultHandler() {
             @Override
             public void handleFileUploaded(DocumentId fileDocumentId) {
                 getOntologies(projectId, fileDocumentId);

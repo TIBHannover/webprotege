@@ -62,20 +62,6 @@ public class ProjectMenuPresenter implements HasDispose, Presenter {
         }
     };
 
-    /**
-     * Author Nenad Krdzavac<br>
-     * email nenad.krdzavac@tib.eu <br>
-     * TIB-Leibniz Information Centre for Science and Technology and University Library<br>
-     * Date 01.08.2022
-     */
-    private AbstractUiAction uploadAndMergeGitProject = new AbstractUiAction(MESSAGES.uploadAndMerge()) {
-        @Override
-        public void execute() {
-            uploadAndMergeHandler.handleUploadAndMergeGitProject();
-        }
-    };
-
-
     private AbstractUiAction uploadAndMergeAdditions = new AbstractUiAction(MESSAGES.uploadAndMergeAdditions()) {
         @Override
         public void execute() {
@@ -146,34 +132,14 @@ public class ProjectMenuPresenter implements HasDispose, Presenter {
         editProjectSettings.setEnabled(false);
         uploadAndMerge.setEnabled(false);
 
-        /**
-         * Author Nenad Krdzavac<br>
-         * email nenad.krdzavac@tib.eu <br>
-         * TIB-Leibniz Information Centre for Science and Technology and University Library<br>
-         * Date 01.08.2022
-         */
-        uploadAndMergeGitProject.setEnabled(false);
-        /**
-         * --------------------------------------------------------------------------------------
-         */
+
         uploadAndMergeAdditions.setEnabled(false);
         displayButton(container);
         permissionChecker.hasPermission(EDIT_PROJECT_SETTINGS,
                                         canEdit -> editProjectSettings.setEnabled(canEdit));
         permissionChecker.hasPermission(UPLOAD_AND_MERGE,
                                         canUploadAndMerge -> uploadAndMerge.setEnabled(canUploadAndMerge));
-        /**
-         * Author Nenad Krdzavac<br>
-         * email nenad.krdzavac@tib.eu <br>
-         * TIB-Leibniz Information Centre for Science and Technology and University Library<br>
-         * Date 01.08.2022
-         */
-        permissionChecker.hasPermission(UPLOAD_AND_MERGE,
-                canUploadAndMerge -> uploadAndMergeGitProject.setEnabled(canUploadAndMerge));
 
-        /**
-         * --------------------------------------------------------------------------------------
-         */
         permissionChecker.hasPermission(EDIT_PROJECT_PREFIXES,
                                         canEdit -> editProjectPrefixes.setEnabled(canEdit));
         permissionChecker.hasPermission(EDIT_PROJECT_TAGS,

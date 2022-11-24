@@ -226,7 +226,7 @@ public class GitCloneServlet extends HttpServlet {
 
         } catch (Exception e) {
             logger.info("Clone failed because of an error when trying to write the file item: {}", e.getMessage(), e);
-            writeJSONPairs(resp.getWriter(),new Pair("Commit failed due to an exception", e.getMessage()));
+            writeJSONPairs(resp.getWriter(),new Pair("Clone failed due to an exception", e.getMessage()));
             sendGitStatusMessage(resp, gitOutputs, uploadsDirectory.getAbsolutePath()+"/temp-"+user, personalAccessToken);
         }
     }
