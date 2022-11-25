@@ -1,6 +1,7 @@
 package edu.stanford.bmir.protege.web.client.merge;
 
 import com.google.gwt.core.client.GWT;
+import edu.stanford.bmir.protege.web.client.projectsettings.GeneralSettingsView;
 import edu.stanford.bmir.protege.web.client.upload.UploadAndCloneDialogController;
 import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
 import edu.stanford.bmir.protege.web.shared.csv.DocumentId;
@@ -24,8 +25,8 @@ public class UploadAndMergeProjectWorkflow {
     @Nonnull
     private final MergeUploadedProjectWorkflow mergeWorkflow;
 
- //   @Nonnull
-//    private final AvailableProject project;
+    @Nonnull
+    private final GeneralSettingsView generalSettingsView;
 
     @Nonnull
     private final LoggedInUserProvider loggedInUserProvider;
@@ -33,11 +34,10 @@ public class UploadAndMergeProjectWorkflow {
 
 
     @Inject
-    public UploadAndMergeProjectWorkflow(@Nonnull MergeUploadedProjectWorkflow mergeWorkflow/*, @Nonnull
-    AvailableProject project*/, @Nonnull LoggedInUserProvider loggedInUserProvider) {
+    public UploadAndMergeProjectWorkflow(@Nonnull MergeUploadedProjectWorkflow mergeWorkflow, @Nonnull GeneralSettingsView generalSettingsView,@Nonnull LoggedInUserProvider loggedInUserProvider) {
         this.mergeWorkflow = checkNotNull(mergeWorkflow);
-    //    this.project = checkNotNull(project);
         this.loggedInUserProvider = checkNotNull(loggedInUserProvider);
+        this.generalSettingsView = checkNotNull(generalSettingsView);
     }
 
     public void start(ProjectId projectId) {
@@ -46,7 +46,7 @@ public class UploadAndMergeProjectWorkflow {
 
 
     private void uploadProject(final ProjectId projectId) {
-        UploadAndCloneDialogController uploadFileDialogController = new UploadAndCloneDialogController("Upload ontologies", loggedInUserProvider.getCurrentUserToken(), loggedInUserProvider.getCurrentUserId().getUserName(), "project.getDisplayName()", new UploadFileResultHandler() {
+        UploadAndCloneDialogController uploadFileDialogController = new UploadAndCloneDialogController("Upload ontologies", loggedInUserProvider.getCurrentUserToken(), loggedInUserProvider.getCurrentUserId().getUserName(), generalSettingsView.getDisplayName(), new UploadFileResultHandler() {
             @Override
             public void handleFileUploaded(DocumentId fileDocumentId) {
                 startMergeWorkflow(projectId, fileDocumentId);

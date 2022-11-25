@@ -9,6 +9,7 @@ import edu.stanford.bmir.protege.web.client.library.dlg.DialogButton;
 import edu.stanford.bmir.protege.web.client.library.dlg.WebProtegeDialog;
 import edu.stanford.bmir.protege.web.client.library.dlg.WebProtegeDialogButtonHandler;
 import edu.stanford.bmir.protege.web.client.library.dlg.WebProtegeDialogCloser;
+import edu.stanford.bmir.protege.web.client.projectsettings.GeneralSettingsView;
 import edu.stanford.bmir.protege.web.client.upload.UploadAndCloneDialogController;
 import edu.stanford.bmir.protege.web.client.upload.UploadFileResultHandler;
 import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
@@ -42,10 +43,14 @@ public class UploadAndMergeAdditionsProjectsWorkflow {
     @Nonnull
     private final LoggedInUserProvider loggedInUserProvider;
 
+    @Nonnull
+    private final GeneralSettingsView generalSettingsView;
+
     @Inject
     public UploadAndMergeAdditionsProjectsWorkflow(@Nonnull SelectOptionForMergeAdditionsWorkflow selectOptionsWorkflow,
                                                    @Nonnull DispatchServiceManager dispatchServiceManager,
                                                    @Nonnull DispatchErrorMessageDisplay errorDisplay,
+                                                   @Nonnull GeneralSettingsView generalSettingsView,
                                                    @Nonnull ProgressDisplay progressDisplay,
                                                    @Nonnull LoggedInUserProvider loggedInUserProvider
                                                    ) {
@@ -54,6 +59,7 @@ public class UploadAndMergeAdditionsProjectsWorkflow {
         this.errorDisplay = errorDisplay;
         this.progressDisplay = progressDisplay;
         this.loggedInUserProvider = checkNotNull(loggedInUserProvider);
+        this.generalSettingsView = checkNotNull(generalSettingsView);
     }
 
     public void start(ProjectId projectId) {
@@ -61,7 +67,7 @@ public class UploadAndMergeAdditionsProjectsWorkflow {
     }
 
     private void uploadProject(final ProjectId projectId) {
-        UploadAndCloneDialogController uploadFileDialogController = new UploadAndCloneDialogController("Upload ontologies", loggedInUserProvider.getCurrentUserToken(), loggedInUserProvider.getCurrentUserId().getUserName(), "project.getDisplayName()", new UploadFileResultHandler() {
+        UploadAndCloneDialogController uploadFileDialogController = new UploadAndCloneDialogController("Upload ontologies", loggedInUserProvider.getCurrentUserToken(), loggedInUserProvider.getCurrentUserId().getUserName(), generalSettingsView.getDisplayName(), new UploadFileResultHandler() {
             @Override
             public void handleFileUploaded(DocumentId fileDocumentId) {
                 getOntologies(projectId, fileDocumentId);
