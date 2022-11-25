@@ -35,84 +35,104 @@ public class UploadAndCloneDialogController extends WebProtegeOKCancelDialogCont
             @Override
             public void handleHide(String data, final WebProtegeDialogCloser closer) {
 
+                String fileMessage = "";
+                String URLMessage = "";
+                boolean validFile = true;
+                boolean validURL = true;
+
+                for (WebProtegeDialogValidator validator : uploadAndCloneForm.getDialogValidators())
+                    if(validator.getValidationMessage().startsWith("A file")){
+                        validFile = validator.getValidationState().equals(ValidationState.VALID);
+                        fileMessage = validator.getValidationMessage();
+                    } else if (validator.getValidationMessage().startsWith("A valid url")){
+                        validURL= validator.getValidationState().equals(ValidationState.VALID);
+                        URLMessage = validator.getValidationMessage();
+                    }
+
+
                 if(uploadAndCloneForm.uploadSelectorField.getValue()){
-                    ProgressMonitor.get().showProgressMonitor("Uploading", "Uploading file");
-                    uploadAndCloneForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-                        public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
-                            ProgressMonitor.get().hideProgressMonitor();
-                            GWT.log("Submission of file is complete");
-                            Log.info("Submission of file is complete");
-                            FileUploadResponse result = new FileUploadResponse(event.getResults());
-                            if(result.wasUploadAccepted()) {
-                                GWT.log("Successful upload");
-                                Log.info("Successful upload");
-                                resultHandler.handleFileUploaded(result.getDocumentId());
-
-                            }
-                            else {
-                                GWT.log("Upload rejected: " + result.getUploadRejectedMessage());
-                                Log.info("Upload rejected: " + result.getUploadRejectedMessage());
-                                resultHandler.handleFileUploadFailed(result.getUploadRejectedMessage());
-                            }
-                            closer.hide();
-
-                        }
-                    });
-                    uploadAndCloneForm.submit();
-                } else {
-
-                    uploadAndCloneForm.storeServletValuesInHidden(token, userName, projectName);
-
-                    ProgressMonitor.get().showProgressMonitor("Cloning", "Cloning repository");
-                    uploadAndCloneForm.repoFormPanel.addSubmitCompleteHandler(
-                            new FormPanel.SubmitCompleteHandler() {
-                                public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
-                                    ProgressMonitor.get().hideProgressMonitor();
-                                    GWT.log("Submission of repo file is complete");
-                                    Log.info("Submission of repo file is complete");
-                                    GWT.log("result: "+event.getResults());
-                                    Log.info("result: "+event.getResults());
-
-                                    JSONValue value = JSONParser.parseLenient(event.getResults());
-                                    JSONObject object = value.isObject();
-                                    DocumentId documentId;
-                                    if (object == null)
-                                        documentId = new DocumentId("");
-                                    else {
-                                        JSONValue value1 = object.get(FileUploadResponseAttributes.UPLOAD_FILE_ID.name());
-                                        if (value1.isString() == null)
-                                            documentId = new DocumentId("");
-                                        else
-                                            documentId = new DocumentId(value1.isString().stringValue().trim());
-                                    }
-                                    if(documentId != null)
-                                    if(!documentId.getDocumentId().isEmpty()){
-                                        GWT.log("Successful clone and upload!");
-                                        Log.info("Successful clone and upload!");
-                                        resultHandler.handleFileUploaded(documentId);
-
-                                    }
-                                    else {
-                                        GWT.log("No document found");
-                                        Log.info("No document found");
-                                        resultHandler.handleFileUploadFailed("Clone failed!");
-                                    }
-                                    closer.hide();
+                    if (validFile){
+                        ProgressMonitor.get().showProgressMonitor("Uploading", "Uploading file");
+                        uploadAndCloneForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+                            public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
+                                ProgressMonitor.get().hideProgressMonitor();
+                                GWT.log("Submission of file is complete");
+                                Log.info("Submission of file is complete");
+                                FileUploadResponse result = new FileUploadResponse(event.getResults());
+                                if(result.wasUploadAccepted()) {
+                                    GWT.log("Successful upload");
+                                    Log.info("Successful upload");
+                                    resultHandler.handleFileUploaded(result.getDocumentId());
 
                                 }
+                                else {
+                                    GWT.log("Upload rejected: " + result.getUploadRejectedMessage());
+                                    Log.info("Upload rejected: " + result.getUploadRejectedMessage());
+                                    resultHandler.handleFileUploadFailed(result.getUploadRejectedMessage());
+                                }
+                                closer.hide();
+
                             }
-                    );
+                        });
+                        uploadAndCloneForm.submit();
+                    } else {
+                        uploadAndCloneForm.errorLabel.setVisible(true);
+                        uploadAndCloneForm.errorLabel.setText(fileMessage);
+                    }
 
-                    GWT.log("action: "+uploadAndCloneForm.repoFormPanel.getAction());
-                    Log.info("action: "+uploadAndCloneForm.repoFormPanel.getAction());
-                    GWT.log("encoding: "+uploadAndCloneForm.repoFormPanel.getEncoding());
-                    Log.info("encoding: "+uploadAndCloneForm.repoFormPanel.getEncoding());
-                    GWT.log("method: "+uploadAndCloneForm.repoFormPanel.getMethod());
-                    Log.info("method: "+uploadAndCloneForm.repoFormPanel.getMethod());
-                    uploadAndCloneForm.repoFormPanel.submit();
+                } else {
+                    if(validURL){
+                        uploadAndCloneForm.storeServletValuesInHidden(token, userName, projectName);
+
+                        ProgressMonitor.get().showProgressMonitor("Cloning", "Cloning repository");
+                        uploadAndCloneForm.repoFormPanel.addSubmitCompleteHandler(
+                                new FormPanel.SubmitCompleteHandler() {
+                                    public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
+                                        ProgressMonitor.get().hideProgressMonitor();
+                                        GWT.log("Submission of repo file is complete");
+                                        Log.info("Submission of repo file is complete");
+                                        GWT.log("result: "+event.getResults());
+                                        Log.info("result: "+event.getResults());
+
+                                        JSONValue value = JSONParser.parseLenient(event.getResults());
+                                        JSONObject object = value.isObject();
+                                        DocumentId documentId;
+                                        if (object == null)
+                                            documentId = new DocumentId("");
+                                        else {
+                                            JSONValue value1 = object.get(FileUploadResponseAttributes.UPLOAD_FILE_ID.name());
+                                            if (value1.isString() == null)
+                                                documentId = new DocumentId("");
+                                            else
+                                                documentId = new DocumentId(value1.isString().stringValue().trim());
+                                        }
+                                        if(documentId != null)
+                                            if(!documentId.getDocumentId().isEmpty()){
+                                                GWT.log("Successful clone and upload!");
+                                                Log.info("Successful clone and upload!");
+                                                resultHandler.handleFileUploaded(documentId);
+
+                                            }
+                                            else {
+                                                GWT.log("No document found");
+                                                Log.info("No document found");
+                                                resultHandler.handleFileUploadFailed("Clone failed!");
+                                            }
+                                        closer.hide();
+
+                                    }
+                                }
+                        );
+
+                        Log.info("action: "+uploadAndCloneForm.repoFormPanel.getAction());
+                        Log.info("encoding: "+uploadAndCloneForm.repoFormPanel.getEncoding());
+                        Log.info("method: "+uploadAndCloneForm.repoFormPanel.getMethod());
+                        uploadAndCloneForm.repoFormPanel.submit();
+                    } else {
+                        uploadAndCloneForm.errorLabel.setVisible(true);
+                        uploadAndCloneForm.errorLabel.setText(URLMessage);
+                    }
                 }
-
-
             }
         });
     }
