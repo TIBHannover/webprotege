@@ -2,6 +2,7 @@ package edu.stanford.bmir.protege.web.client.projectlist;
 
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
+import com.google.gwt.regexp.shared.RegExp;
 import edu.stanford.bmir.protege.web.client.action.AbstractUiAction;
 import edu.stanford.bmir.protege.web.client.projectmanager.*;
 import edu.stanford.bmir.protege.web.client.user.LoggedInUserProvider;
@@ -51,6 +52,9 @@ public class AvailableProjectPresenter {
 
     @Nonnull
     private LoadProjectInNewWindowRequestHandler loadProjectInNewWindowRequestHandler;
+
+    private RegExp urlValidator;
+    private RegExp urlPlusTldValidator;
 
     @Inject
     public AvailableProjectPresenter(@Nonnull AvailableProject project,
@@ -123,16 +127,9 @@ public class AvailableProjectPresenter {
         addDowloadAction();
         addTrashAction();
         addCommitAction();
-        addSwitchAction();
+        addDeleteAction();
     }
 
-    /**
-     * Author Nenad Krdzavac
-     * Email nenad.krdzavac@tib.eu
-     * Date 25.08.2022.
-     *
-     * Adds Github commit to a list of project actions.
-     */
     private void addCommitAction() {
         AbstractUiAction commitAction = new AbstractUiAction("Git Commit & Push") {
             @Override
@@ -140,18 +137,28 @@ public class AvailableProjectPresenter {
                commitProjectRequestHandler.handleCommitProjectRequest(project,loggedInUserProvider.getCurrentUserToken());
             }
         };
-        commitAction.setEnabled(true);
+        boolean enabled = false;
+        if(project.getRepoURI() != null && loggedInUserProvider.getCurrentUserToken() != null)
+            if(!project.getRepoURI().isEmpty())
+                if(isValidUrl(project.getRepoURI(),false))
+                    enabled = true;
+        commitAction.setEnabled(enabled);
         view.addAction(commitAction);
     }
 
-    private void addSwitchAction() {
+    private void addDeleteAction() {
         AbstractUiAction switchAction = new AbstractUiAction("Git Delete Branch") {
             @Override
             public void execute() {
                 deleteRemoteBranchHandler.handleDeleteRemoteBranchRequest(project,loggedInUserProvider.getCurrentUserToken());
             }
         };
-        switchAction.setEnabled(true);
+        boolean enabled = false;
+        if(project.getRepoURI() != null && loggedInUserProvider.getCurrentUserToken() != null)
+            if(!project.getRepoURI().isEmpty())
+                if(isValidUrl(project.getRepoURI(),false))
+                    enabled = true;
+        switchAction.setEnabled(enabled);
         view.addAction(switchAction);
     }
 
@@ -205,6 +212,14 @@ public class AvailableProjectPresenter {
         };
         view.addAction(trashAction);
         trashAction.setEnabled(project.isTrashable());
+    }
+
+    public boolean isValidUrl(String url, boolean topLevelDomainRequired) {
+        if (urlValidator == null || urlPlusTldValidator == null) {
+            urlValidator = RegExp.compile("^((ftp|http|https)://[\\w@.\\-\\_]+(:\\d{1,5})?(/[\\w#!:.?+=&%@!\\_\\-/]+)*){1}$");
+            urlPlusTldValidator = RegExp.compile("^((ftp|http|https)://[\\w@.\\-\\_]+\\.[a-zA-Z]{2,}(:\\d{1,5})?(/[\\w#!:.?+=&%@!\\_\\-/]+)*){1}$");
+        }
+        return (topLevelDomainRequired ? urlPlusTldValidator : urlValidator).exec(url) != null;
     }
 
 }
