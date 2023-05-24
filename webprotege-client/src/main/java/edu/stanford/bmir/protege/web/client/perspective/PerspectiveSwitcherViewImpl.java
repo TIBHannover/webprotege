@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import com.allen_sauer.gwt.log.client.Log;
 
 
 /**
@@ -101,6 +102,7 @@ public class PerspectiveSwitcherViewImpl extends Composite implements Perspectiv
 
     @UiHandler("newTabButton")
     protected void handleNewPerspectiveButtonClicked(ClickEvent clickEvent) {
+        Log.debug("This is a 'DEBUG' test message: Inside handleNewPerspectiveButtonClicked: " + addPerspectiveAllowed);
         if(!addPerspectiveAllowed) {
             return;
         }
