@@ -117,6 +117,7 @@ public class PerspectiveSwitcherViewImpl extends Composite implements Perspectiv
             action.setEnabled(!displayedPerspectives.contains(perspectiveDescriptor.getPerspectiveId()));
             popupMenu.addItem(action);
         }
+        Log.debug("handleNewPerspectiveButtonClicked: " + messages);
         popupMenu.addSeparator();
         popupMenu.addItem(messages.perspective_addBlankTab() + "\u2026",
                           () -> addBlankPerspectiveHandler.handleAddBlankPerspective());
@@ -205,7 +206,9 @@ public class PerspectiveSwitcherViewImpl extends Composite implements Perspectiv
     }
 
     public void setAddBlankPerspectiveHandler(AddBlankPerspectiveHandler handler) {
+        Log.debug("Inside setAddBlankPerspectiveHandler: " + handler);
         addBlankPerspectiveHandler = checkNotNull(handler);
+        Log.debug("addBlankPerspectiveHandler: " + addBlankPerspectiveHandler);
     }
 
     public void setRemoveFromFavoritePerspectivesHandler(RemoveFromFavoritePerspectivesHandler handler) {

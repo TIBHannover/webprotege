@@ -73,6 +73,7 @@ public class PerspectiveSwitcherPresenter implements HasDispose {
 
     public void start(AcceptsOneWidget container, EventBus eventBus, ProjectViewPlace place) {
         GWT.log("[PerspectiveSwitcherPresenter] start with place: " + place);
+        Log.debug("Inside PerspectiveSwitcherPresenter: " + place);
         container.setWidget(view);
         projectPerspectivesService.getPerspectives((perspectives, resettablePerspectives) -> {
             view.setResettablePerspectives(resettablePerspectives);
