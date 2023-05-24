@@ -267,6 +267,7 @@ public class PerspectiveSwitcherViewImpl extends Composite implements Perspectiv
 
     @Override
     public void setAddViewAllowed(boolean addViewAllowed) {
+        Log.debug("check if view is allowed: " + addViewAllowed);
         this.addViewAllowed = addViewAllowed;
     }
 

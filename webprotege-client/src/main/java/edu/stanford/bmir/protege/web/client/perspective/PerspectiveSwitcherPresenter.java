@@ -1,6 +1,7 @@
 package edu.stanford.bmir.protege.web.client.perspective;
 
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.common.collect.ImmutableList;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -23,6 +24,7 @@ import java.util.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static edu.stanford.bmir.protege.web.shared.access.BuiltInAction.*;
+import com.allen_sauer.gwt.log.client.Log;
 
 /**
  * @author Matthew Horridge, Stanford University, Bio-Medical Informatics Research Group, Date: 23/06/2014
@@ -83,6 +85,7 @@ public class PerspectiveSwitcherPresenter implements HasDispose {
         view.setManagePerspectivesAllowed(false);
         permissionChecker.hasPermission(ADD_OR_REMOVE_PERSPECTIVE,
                                         canAddRemove -> {
+                                            Log.debug("PerspectiveSwitcherPresenter: " + canAddRemove);
                                             view.setClosePerspectiveAllowed(canAddRemove);
                                             view.setAddPerspectiveAllowed(canAddRemove);
                                             view.setManagePerspectivesAllowed(canAddRemove);
@@ -106,6 +109,7 @@ public class PerspectiveSwitcherPresenter implements HasDispose {
      * @param perspectiveDescriptors The perspectives to display.
      */
     private void setUserProjectPerspectives(List<PerspectiveDescriptor> perspectiveDescriptors) {
+        Log.debug("Inside [PerspectiveSwitcherPresenter] setUserProjectPerspectives");
         GWT.log("[PerspectiveSwitcherPresenter] setUserProjectPerspectives");
         this.perspectiveDescriptors.clear();
         this.perspectiveDescriptors.addAll(perspectiveDescriptors);
