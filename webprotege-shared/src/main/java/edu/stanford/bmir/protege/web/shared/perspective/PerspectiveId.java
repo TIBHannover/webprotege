@@ -8,6 +8,7 @@ import com.google.common.annotations.GwtIncompatible;
 import com.google.common.base.MoreObjects;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import edu.stanford.bmir.protege.web.shared.util.UUIDUtil;
+import jdk.internal.org.jline.utils.Log;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
@@ -27,7 +28,9 @@ public abstract class PerspectiveId implements IsSerializable, Serializable {
     @JsonCreator
     @Nonnull
     public static PerspectiveId get(@Nonnull String id) {
+        Log.debug("PerspectiveId: " + id);
         if(!UUIDUtil.isWellFormed(id)) {
+            Log.debug("Malformed PerspectiveId.  PerspectiveIds must be UUIDs: " + id);
             throw new IllegalArgumentException("Malformed PerspectiveId.  PerspectiveIds must be UUIDs");
         }
         return new AutoValue_PerspectiveId(id);

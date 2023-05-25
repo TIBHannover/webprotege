@@ -25,7 +25,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static edu.stanford.bmir.protege.web.shared.access.BuiltInAction.*;
 import com.allen_sauer.gwt.log.client.Log;
-
 /**
  * @author Matthew Horridge, Stanford University, Bio-Medical Informatics Research Group, Date: 23/06/2014
  */
@@ -197,8 +196,10 @@ public class PerspectiveSwitcherPresenter implements HasDispose {
     }
 
     private void handleCreateNewPerspective() {
+        Log.debug("handleCreateNewPerspective  ===================== ");
         createFreshPerspectiveRequestHandler.createFreshPerspective(newPerspectiveDescriptor -> {
             GWT.log("[PerspectiveSwitcherPresenter] Create new perspective: " + newPerspectiveDescriptor);
+            Log.debug("[PerspectiveSwitcherPresenter] Create new perspective: " + newPerspectiveDescriptor);
             ArrayList<PerspectiveDescriptor> updatedList = new ArrayList<>(this.perspectiveDescriptors);
             updatedList.add(newPerspectiveDescriptor.withFavorite(true));
             projectPerspectivesService.setPerspectives(updatedList, (perspectives, resettablePerspectives) -> {

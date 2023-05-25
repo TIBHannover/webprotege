@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
+import com.allen_sauer.gwt.log.client.Log;
 /**
  * Matthew Horridge
  * Stanford Center for Biomedical Informatics Research
@@ -40,6 +40,7 @@ public class CreateFreshPerspectiveRequestHandlerImpl implements CreateFreshPers
 
     @Override
     public void createFreshPerspective(final Callback callback) {
+        Log.debug("trying to create fresh perspective");
         inputBox.showDialog("Enter tab name", false, "", input -> {
             GWT.log("[CreateFreshPerspectiveRequestHandlerImpl] Create perspective with name: " + input);
             String trimmedInput = input.trim();
@@ -52,6 +53,7 @@ public class CreateFreshPerspectiveRequestHandlerImpl implements CreateFreshPers
             PerspectiveDescriptor perspectiveDescriptor = PerspectiveDescriptor.get(perspectiveId,
                                                                                     label,
                                                                                     true);
+            Log.debug("trying to create fresh perspective" + perspectiveId + " : " + perspectiveDescriptor);
             callback.createNewPerspective(perspectiveDescriptor);
         });
     }
