@@ -13,6 +13,13 @@
 
     <dependencies>
 
+        <!-- https://mvnrepository.com/artifact/com.allen-sauer.gwt.log/gwt-log -->
+        <dependency>
+            <groupId>com.allen-sauer.gwt.log</groupId>
+            <artifactId>gwt-log</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
         <dependency>
             <groupId>edu.stanford.protege</groupId>
             <artifactId>webprotege-shared-core</artifactId>
@@ -122,11 +129,6 @@
             <artifactId>auto-value</artifactId>
             <version>${autovalue.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.allen-sauer.gwt.log</groupId>
-            <artifactId>gwt-log</artifactId>
-            <version>3.3.2</version>
         </dependency>
 
     </dependencies>

@@ -5,18 +5,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.auto.value.AutoValue;
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
-import com.google.common.base.MoreObjects;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import edu.stanford.bmir.protege.web.shared.util.UUIDUtil;
-import jdk.internal.org.jline.utils.Log;
+//import jdk.internal.org.jline.utils.Log;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.UUID;
 import com.allen_sauer.gwt.log.client.Log;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Matthew Horridge
  * Stanford Center for Biomedical Informatics Research
