@@ -26,10 +26,10 @@ public abstract class PerspectiveId implements IsSerializable, Serializable {
     @Nonnull
     public static PerspectiveId get(@Nonnull String id) {
         Log.debug("PerspectiveId: " + id);
-        if(!UUIDUtil.isWellFormed(id)) {
-            Log.debug("Malformed PerspectiveId.  PerspectiveIds must be UUIDs: " + id);
-            throw new IllegalArgumentException("Malformed PerspectiveId.  PerspectiveIds must be UUIDs");
-        }
+//        if(!UUIDUtil.isWellFormed(id)) {
+//            Log.debug("Malformed PerspectiveId.  PerspectiveIds must be UUIDs: " + id);
+//            throw new IllegalArgumentException("Malformed PerspectiveId.  PerspectiveIds must be UUIDs");
+//        }
         return new AutoValue_PerspectiveId(id);
     }
 

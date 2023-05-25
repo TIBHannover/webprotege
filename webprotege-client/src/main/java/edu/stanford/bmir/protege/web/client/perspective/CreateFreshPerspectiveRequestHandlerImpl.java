@@ -49,8 +49,8 @@ public class CreateFreshPerspectiveRequestHandlerImpl implements CreateFreshPers
                 Log.debug("am i ampty?");
                 return;
             }
-            Log.debug(" check whats happening here ");
-            PerspectiveId perspectiveId = PerspectiveId.get(uuidV4Provider.get());
+            Log.debug(" check whats happening here " + uuidV4Provider.get());
+            PerspectiveId perspectiveId = PerspectiveId.get(trimmedInput);
             Log.debug("lets see whats the perspective Id " + perspectiveId);
             String langTag = localeMapper.getCurrentLang();
             LanguageMap label = LanguageMap.of(langTag, trimmedInput);

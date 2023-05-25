@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import javax.inject.Inject;
 
 import static edu.stanford.bmir.protege.web.client.uuid.UuidV4.uuidv4;
-
+import com.allen_sauer.gwt.log.client.Log;
 public class UuidV4Provider {
 
     @Inject
@@ -17,6 +17,7 @@ public class UuidV4Provider {
      */
     @Nonnull
     public String get() {
+        Log.debug("Inside UUid provider");
         return uuidv4();
     }
 }
