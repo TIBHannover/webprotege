@@ -13,6 +13,7 @@ import jdk.internal.org.jline.utils.Log;
 import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.UUID;
+import com.allen_sauer.gwt.log.client.Log;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
