@@ -43,11 +43,15 @@ public class CreateFreshPerspectiveRequestHandlerImpl implements CreateFreshPers
         Log.debug("trying to create fresh perspective");
         inputBox.showDialog("Enter tab name", false, "", input -> {
             GWT.log("[CreateFreshPerspectiveRequestHandlerImpl] Create perspective with name: " + input);
+            Log.debug("[CreateFreshPerspectiveRequestHandlerImpl] Create perspective with name: " + input);
             String trimmedInput = input.trim();
             if(trimmedInput.isEmpty()) {
+                Log.debug("am i ampty?");
                 return;
             }
+            Log.debug(" check whats happening here ");
             PerspectiveId perspectiveId = PerspectiveId.get(uuidV4Provider.get());
+            Log.debug("lets see whats the perspective Id " + perspectiveId);
             String langTag = localeMapper.getCurrentLang();
             LanguageMap label = LanguageMap.of(langTag, trimmedInput);
             PerspectiveDescriptor perspectiveDescriptor = PerspectiveDescriptor.get(perspectiveId,
