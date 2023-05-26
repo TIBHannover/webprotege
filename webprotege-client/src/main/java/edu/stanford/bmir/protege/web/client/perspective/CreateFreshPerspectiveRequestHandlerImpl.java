@@ -1,6 +1,7 @@
 package edu.stanford.bmir.protege.web.client.perspective;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import edu.stanford.bmir.protege.web.client.form.LanguageMapCurrentLocaleMapper;
 import edu.stanford.bmir.protege.web.client.library.msgbox.InputBox;
 import edu.stanford.bmir.protege.web.client.uuid.UuidV4Provider;
@@ -46,7 +47,9 @@ public class CreateFreshPerspectiveRequestHandlerImpl implements CreateFreshPers
             if(trimmedInput.isEmpty()) {
                 return;
             }
-            PerspectiveId perspectiveId = PerspectiveId.get(uuidV4Provider.get());
+            String uuid = Document.get().createUniqueId();
+
+            PerspectiveId perspectiveId = PerspectiveId.get(uuid);
             String langTag = localeMapper.getCurrentLang();
             LanguageMap label = LanguageMap.of(langTag, trimmedInput);
             PerspectiveDescriptor perspectiveDescriptor = PerspectiveDescriptor.get(perspectiveId,
